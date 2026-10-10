@@ -1,0 +1,1612 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!-- =========================================================
+         DOCUMENT INFORMATION
+         ========================================================= -->
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="A professional responsive landing page built with HTML and CSS by Collins Redfellor."
+    >
+
+    <title>CSS Landing Page | Collins Redfellor</title>
+
+
+    <!-- =========================================================
+         CSS
+         ========================================================= -->
+
+    <style>
+
+        /* =====================================================
+           1. GLOBAL RESET
+           ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            min-height: 100vh;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #020617;
+
+            color: #ffffff;
+
+            line-height: 1.6;
+        }
+
+
+        a {
+            text-decoration: none;
+        }
+
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+
+        /* =====================================================
+           2. REUSABLE CONTAINER
+           ===================================================== */
+
+        .container {
+            width: min(1120px, 90%);
+
+            margin: 0 auto;
+        }
+
+
+        /* =====================================================
+           3. NAVIGATION
+           ===================================================== */
+
+        .navbar {
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+
+            width: 100%;
+
+            background:
+                rgba(2, 6, 23, 0.9);
+
+            border-bottom:
+                1px solid rgba(255, 255, 255, 0.08);
+
+            backdrop-filter: blur(15px);
+        }
+
+
+        .nav-container {
+            min-height: 75px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+
+        .logo {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            color: #ffffff;
+
+            font-size: 21px;
+
+            font-weight: 700;
+        }
+
+
+        .logo-mark {
+            width: 40px;
+            height: 40px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #38bdf8,
+                    #6366f1
+                );
+
+            font-size: 13px;
+        }
+
+
+        .nav-links {
+            display: flex;
+
+            align-items: center;
+
+            gap: 28px;
+
+            list-style: none;
+        }
+
+
+        .nav-links a {
+            position: relative;
+
+            color: #cbd5e1;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            transition:
+                color 0.3s ease;
+        }
+
+
+        .nav-links a:hover {
+            color: #ffffff;
+        }
+
+
+        .nav-links a::after {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+
+            bottom: -7px;
+
+            width: 0;
+
+            height: 2px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #38bdf8,
+                    #6366f1
+                );
+
+            transition:
+                width 0.3s ease;
+        }
+
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+
+        /* =====================================================
+           4. HERO SECTION
+           ===================================================== */
+
+        .hero {
+            position: relative;
+
+            min-height: 720px;
+
+            display: flex;
+
+            align-items: center;
+
+            overflow: hidden;
+
+            background:
+                radial-gradient(
+                    circle at 20% 30%,
+                    rgba(56, 189, 248, 0.14),
+                    transparent 30%
+                ),
+
+                radial-gradient(
+                    circle at 80% 70%,
+                    rgba(99, 102, 241, 0.14),
+                    transparent 30%
+                );
+        }
+
+
+        .hero-container {
+            display: grid;
+
+            grid-template-columns:
+                1.15fr
+                0.85fr;
+
+            gap: 70px;
+
+            align-items: center;
+
+            padding: 100px 0;
+        }
+
+
+        /* =====================================================
+           5. HERO CONTENT
+           ===================================================== */
+
+        .hero-content {
+            max-width: 680px;
+        }
+
+
+        .hero-label {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            margin-bottom: 22px;
+
+            padding: 8px 14px;
+
+            border:
+                1px solid rgba(56, 189, 248, 0.3);
+
+            border-radius: 50px;
+
+            background:
+                rgba(56, 189, 248, 0.08);
+
+            color: #7dd3fc;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+
+            text-transform: uppercase;
+        }
+
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #38bdf8;
+
+            box-shadow:
+                0 0 12px rgba(56, 189, 248, 0.8);
+        }
+
+
+        .hero h1 {
+            margin-bottom: 24px;
+
+            font-size:
+                clamp(46px, 6vw, 76px);
+
+            line-height: 1.03;
+
+            letter-spacing: -3px;
+        }
+
+
+        .hero h1 span {
+            background:
+                linear-gradient(
+                    90deg,
+                    #38bdf8,
+                    #818cf8
+                );
+
+            -webkit-background-clip: text;
+
+            background-clip: text;
+
+            color: transparent;
+        }
+
+
+        .hero-description {
+            max-width: 620px;
+
+            margin-bottom: 32px;
+
+            color: #94a3b8;
+
+            font-size: 17px;
+
+            line-height: 1.8;
+        }
+
+
+        /* =====================================================
+           6. HERO BUTTONS
+           ===================================================== */
+
+        .hero-buttons {
+            display: flex;
+
+            align-items: center;
+
+            flex-wrap: wrap;
+
+            gap: 14px;
+        }
+
+
+        .button {
+            display: inline-flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            min-height: 48px;
+
+            padding: 0 23px;
+
+            border-radius: 50px;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease,
+                background 0.3s ease;
+        }
+
+
+        .primary-button {
+            background:
+                linear-gradient(
+                    135deg,
+                    #38bdf8,
+                    #6366f1
+                );
+
+            color: #ffffff;
+
+            box-shadow:
+                0 12px 30px rgba(56, 189, 248, 0.2);
+        }
+
+
+        .secondary-button {
+            border:
+                1px solid rgba(255, 255, 255, 0.13);
+
+            background:
+                rgba(255, 255, 255, 0.04);
+
+            color: #ffffff;
+        }
+
+
+        .button:hover {
+            transform: translateY(-4px);
+        }
+
+
+        .primary-button:hover {
+            box-shadow:
+                0 18px 40px rgba(56, 189, 248, 0.35);
+        }
+
+
+        .secondary-button:hover {
+            background:
+                rgba(255, 255, 255, 0.09);
+        }
+
+
+        /* =====================================================
+           7. HERO VISUAL
+           ===================================================== */
+
+        .hero-visual {
+            position: relative;
+
+            min-height: 420px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+        }
+
+
+        .visual-card {
+            position: relative;
+
+            width: min(390px, 100%);
+
+            padding: 35px;
+
+            border:
+                1px solid rgba(255, 255, 255, 0.12);
+
+            border-radius: 30px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255, 255, 255, 0.09),
+                    rgba(255, 255, 255, 0.03)
+                );
+
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.4);
+
+            backdrop-filter: blur(18px);
+
+            transform:
+                rotate(3deg);
+
+            transition:
+                transform 0.5s ease;
+        }
+
+
+        .visual-card:hover {
+            transform:
+                rotate(0deg)
+                translateY(-8px);
+        }
+
+
+        .visual-top {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 35px;
+        }
+
+
+        .visual-dots {
+            display: flex;
+
+            gap: 6px;
+        }
+
+
+        .visual-dots span {
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: #64748b;
+        }
+
+
+        .visual-label {
+            color: #64748b;
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+        }
+
+
+        .code-lines {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 14px;
+        }
+
+
+        .code-line {
+            height: 10px;
+
+            border-radius: 10px;
+
+            background:
+                rgba(255, 255, 255, 0.1);
+        }
+
+
+        .code-line.short {
+            width: 45%;
+        }
+
+
+        .code-line.medium {
+            width: 70%;
+        }
+
+
+        .code-line.long {
+            width: 90%;
+        }
+
+
+        .code-highlight {
+            width: 60%;
+
+            height: 10px;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #38bdf8,
+                    #6366f1
+                );
+        }
+
+
+        /* =====================================================
+           8. FLOATING ELEMENTS
+           ===================================================== */
+
+        .floating-card {
+            position: absolute;
+
+            padding: 13px 17px;
+
+            border:
+                1px solid rgba(255, 255, 255, 0.1);
+
+            border-radius: 14px;
+
+            background:
+                rgba(15, 23, 42, 0.85);
+
+            box-shadow:
+                0 15px 35px rgba(0, 0, 0, 0.3);
+
+            backdrop-filter: blur(12px);
+
+            color: #cbd5e1;
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+
+        .floating-one {
+            top: 45px;
+
+            right: -10px;
+        }
+
+
+        .floating-two {
+            bottom: 45px;
+
+            left: -25px;
+        }
+
+
+        /* =====================================================
+           9. STATS SECTION
+           ===================================================== */
+
+        .stats {
+            padding: 30px 0 90px;
+        }
+
+
+        .stats-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 20px;
+        }
+
+
+        .stat-card {
+            padding: 28px;
+
+            border:
+                1px solid rgba(255, 255, 255, 0.08);
+
+            border-radius: 20px;
+
+            background:
+                rgba(255, 255, 255, 0.035);
+
+            text-align: center;
+
+            transition:
+                transform 0.3s ease,
+                background 0.3s ease;
+        }
+
+
+        .stat-card:hover {
+            transform: translateY(-6px);
+
+            background:
+                rgba(255, 255, 255, 0.06);
+        }
+
+
+        .stat-card h2 {
+            margin-bottom: 5px;
+
+            font-size: 34px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #38bdf8,
+                    #818cf8
+                );
+
+            -webkit-background-clip: text;
+
+            background-clip: text;
+
+            color: transparent;
+        }
+
+
+        .stat-card p {
+            color: #94a3b8;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           10. FEATURES SECTION
+           ===================================================== */
+
+        .features {
+            padding: 100px 0;
+        }
+
+
+        .section-heading {
+            max-width: 650px;
+
+            margin: 0 auto 55px;
+
+            text-align: center;
+        }
+
+
+        .section-label {
+            display: inline-block;
+
+            margin-bottom: 12px;
+
+            color: #38bdf8;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+        }
+
+
+        .section-heading h2 {
+            margin-bottom: 15px;
+
+            font-size:
+                clamp(32px, 5vw, 48px);
+
+            line-height: 1.1;
+        }
+
+
+        .section-heading p {
+            color: #94a3b8;
+
+            font-size: 15px;
+
+            line-height: 1.8;
+        }
+
+
+        /* =====================================================
+           11. FEATURE GRID
+           ===================================================== */
+
+        .features-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 22px;
+        }
+
+
+        .feature-card {
+            padding: 32px;
+
+            border:
+                1px solid rgba(255, 255, 255, 0.08);
+
+            border-radius: 22px;
+
+            background:
+                rgba(255, 255, 255, 0.035);
+
+            transition:
+                transform 0.3s ease,
+                border-color 0.3s ease,
+                background 0.3s ease;
+        }
+
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+
+            border-color:
+                rgba(56, 189, 248, 0.25);
+
+            background:
+                rgba(255, 255, 255, 0.06);
+        }
+
+
+        .feature-icon {
+            width: 52px;
+            height: 52px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            margin-bottom: 22px;
+
+            border-radius: 15px;
+
+            background:
+                rgba(56, 189, 248, 0.1);
+
+            color: #38bdf8;
+
+            font-size: 20px;
+
+            font-weight: bold;
+        }
+
+
+        .feature-card h3 {
+            margin-bottom: 10px;
+
+            font-size: 19px;
+        }
+
+
+        .feature-card p {
+            color: #94a3b8;
+
+            font-size: 14px;
+
+            line-height: 1.8;
+        }
+
+
+        /* =====================================================
+           12. CTA SECTION
+           ===================================================== */
+
+        .cta {
+            padding: 100px 0;
+        }
+
+
+        .cta-box {
+            position: relative;
+
+            overflow: hidden;
+
+            padding: 70px 40px;
+
+            border:
+                1px solid rgba(56, 189, 248, 0.15);
+
+            border-radius: 30px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(56, 189, 248, 0.1),
+                    rgba(99, 102, 241, 0.1)
+                );
+
+            text-align: center;
+        }
+
+
+        .cta-box h2 {
+            margin-bottom: 15px;
+
+            font-size:
+                clamp(30px, 5vw, 48px);
+        }
+
+
+        .cta-box p {
+            max-width: 600px;
+
+            margin: 0 auto 28px;
+
+            color: #94a3b8;
+
+            font-size: 15px;
+        }
+
+
+        /* =====================================================
+           13. FOOTER
+           ===================================================== */
+
+        footer {
+            padding: 35px 0;
+
+            border-top:
+                1px solid rgba(255, 255, 255, 0.08);
+
+            color: #64748b;
+
+            text-align: center;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           14. RESPONSIVE DESIGN
+           ===================================================== */
+
+        @media (max-width: 900px) {
+
+            .nav-links {
+                display: none;
+            }
+
+
+            .hero-container {
+                grid-template-columns: 1fr;
+
+                text-align: center;
+
+                gap: 40px;
+            }
+
+
+            .hero-content {
+                max-width: 750px;
+
+                margin: 0 auto;
+            }
+
+
+            .hero-description {
+                margin-left: auto;
+
+                margin-right: auto;
+            }
+
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+
+            .hero-visual {
+                min-height: 380px;
+            }
+
+
+            .features-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            .hero {
+                min-height: auto;
+            }
+
+
+            .hero-container {
+                padding: 80px 0;
+            }
+
+
+            .hero h1 {
+                letter-spacing: -2px;
+            }
+
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .visual-card {
+                transform: none;
+            }
+
+
+            .floating-one {
+                right: -5px;
+            }
+
+
+            .floating-two {
+                left: -5px;
+            }
+
+
+            .cta-box {
+                padding:
+                    55px 25px;
+            }
+
+        }
+
+
+        @media (max-width: 450px) {
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+
+            .button {
+                width: 100%;
+
+                max-width: 280px;
+            }
+
+
+            .hero-visual {
+                min-height: 330px;
+            }
+
+
+            .visual-card {
+                padding: 25px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================================
+         NAVIGATION
+         ========================================================= -->
+
+    <header class="navbar">
+
+        <div class="container nav-container">
+
+
+            <!-- Logo -->
+
+            <a
+                href="index.html"
+                class="logo"
+            >
+
+                <span class="logo-mark">
+                    CR
+                </span>
+
+                Collins Redfellor
+
+            </a>
+
+
+            <!-- Navigation -->
+
+            <nav>
+
+                <ul class="nav-links">
+
+                    <li>
+                        <a href="#home">
+                            Home
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#features">
+                            Features
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#about">
+                            About
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#contact">
+                            Contact
+                        </a>
+                    </li>
+
+                </ul>
+
+            </nav>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================================================
+         HERO SECTION
+         ========================================================= -->
+
+    <main>
+
+
+        <section
+            class="hero"
+            id="home"
+        >
+
+            <div class="container hero-container">
+
+
+                <!-- Hero Text -->
+
+                <div class="hero-content">
+
+
+                    <div class="hero-label">
+
+                        <span class="status-dot"></span>
+
+                        CSS Project 03
+
+                    </div>
+
+
+                    <h1>
+
+                        Turning ideas into
+                        <span>digital experiences.</span>
+
+                    </h1>
+
+
+                    <p class="hero-description">
+
+                        Welcome to my CSS landing page project.
+                        This project demonstrates how modern layouts,
+                        typography, spacing, gradients, cards,
+                        responsive design and CSS Grid can work
+                        together to create a professional web
+                        experience.
+
+                    </p>
+
+
+                    <div class="hero-buttons">
+
+                        <a
+                            href="#features"
+                            class="button primary-button"
+                        >
+                            Explore Features
+                        </a>
+
+
+                        <a
+                            href="css-navigation-bar.html"
+                            class="button secondary-button"
+                        >
+                            Previous Project
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Hero Visual -->
+
+                <div class="hero-visual">
+
+
+                    <div class="floating-card floating-one">
+                        HTML + CSS
+                    </div>
+
+
+                    <div class="visual-card">
+
+
+                        <div class="visual-top">
+
+                            <div class="visual-dots">
+
+                                <span></span>
+                                <span></span>
+                                <span></span>
+
+                            </div>
+
+
+                            <span class="visual-label">
+                                landing-page.css
+                            </span>
+
+                        </div>
+
+
+                        <div class="code-lines">
+
+                            <div class="code-line short"></div>
+
+                            <div class="code-line long"></div>
+
+                            <div class="code-highlight"></div>
+
+                            <div class="code-line medium"></div>
+
+                            <div class="code-line long"></div>
+
+                            <div class="code-line short"></div>
+
+                            <div class="code-highlight"></div>
+
+                            <div class="code-line medium"></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="floating-card floating-two">
+                        Responsive Design
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             STATS
+             ===================================================== -->
+
+        <section class="stats">
+
+            <div class="container">
+
+                <div class="stats-grid">
+
+
+                    <div class="stat-card">
+
+                        <h2>03</h2>
+
+                        <p>
+                            CSS Projects Completed
+                        </p>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <h2>100%</h2>
+
+                        <p>
+                            Built With HTML & CSS
+                        </p>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <h2>01</h2>
+
+                        <p>
+                            Developer Journey
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             FEATURES
+             ===================================================== -->
+
+        <section
+            class="features"
+            id="features"
+        >
+
+            <div class="container">
+
+
+                <div class="section-heading">
+
+                    <span class="section-label">
+                        What I'm Learning
+                    </span>
+
+
+                    <h2>
+                        Building strong CSS foundations.
+                    </h2>
+
+
+                    <p>
+
+                        Every project is designed to introduce
+                        another important concept that can later
+                        be combined into larger real-world
+                        applications.
+
+                    </p>
+
+                </div>
+
+
+
+                <div class="features-grid">
+
+
+                    <!-- Feature 1 -->
+
+                    <article class="feature-card">
+
+                        <div class="feature-icon">
+                            01
+                        </div>
+
+
+                        <h3>
+                            Responsive Design
+                        </h3>
+
+
+                        <p>
+
+                            Learn how websites adapt to phones,
+                            tablets and desktop screens using
+                            CSS media queries and flexible layouts.
+
+                        </p>
+
+                    </article>
+
+
+
+                    <!-- Feature 2 -->
+
+                    <article class="feature-card">
+
+                        <div class="feature-icon">
+                            02
+                        </div>
+
+
+                        <h3>
+                            CSS Grid
+                        </h3>
+
+
+                        <p>
+
+                            Create powerful two-dimensional
+                            layouts using rows, columns and
+                            responsive grid structures.
+
+                        </p>
+
+                    </article>
+
+
+
+                    <!-- Feature 3 -->
+
+                    <article class="feature-card">
+
+                        <div class="feature-icon">
+                            03
+                        </div>
+
+
+                        <h3>
+                            Flexbox
+                        </h3>
+
+
+                        <p>
+
+                            Align and distribute elements
+                            efficiently using the modern
+                            CSS Flexbox layout system.
+
+                        </p>
+
+                    </article>
+
+
+
+                    <!-- Feature 4 -->
+
+                    <article class="feature-card">
+
+                        <div class="feature-icon">
+                            04
+                        </div>
+
+
+                        <h3>
+                            Visual Design
+                        </h3>
+
+
+                        <p>
+
+                            Combine colors, gradients, borders,
+                            shadows and typography to create
+                            polished interfaces.
+
+                        </p>
+
+                    </article>
+
+
+
+                    <!-- Feature 5 -->
+
+                    <article class="feature-card">
+
+                        <div class="feature-icon">
+                            05
+                        </div>
+
+
+                        <h3>
+                            Interactions
+                        </h3>
+
+
+                        <p>
+
+                            Use hover states and transitions
+                            to create interfaces that respond
+                            smoothly to user interaction.
+
+                        </p>
+
+                    </article>
+
+
+
+                    <!-- Feature 6 -->
+
+                    <article class="feature-card">
+
+                        <div class="feature-icon">
+                            06
+                        </div>
+
+
+                        <h3>
+                            Clean Structure
+                        </h3>
+
+
+                        <p>
+
+                            Organize HTML and CSS into logical
+                            sections that are easier to read,
+                            understand and maintain.
+
+                        </p>
+
+                    </article>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             ABOUT SECTION
+             ===================================================== -->
+
+        <section
+            class="features"
+            id="about"
+        >
+
+            <div class="container">
+
+
+                <div class="section-heading">
+
+                    <span class="section-label">
+                        My Journey
+                    </span>
+
+
+                    <h2>
+                        Learning by building.
+                    </h2>
+
+
+                    <p>
+
+                        This project is part of my programming
+                        journey. I am progressing from Python
+                        fundamentals into HTML, CSS and
+                        JavaScript before moving toward backend
+                        development, AI and cybersecurity.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             CALL TO ACTION
+             ===================================================== -->
+
+        <section
+            class="cta"
+            id="contact"
+        >
+
+            <div class="container">
+
+
+                <div class="cta-box">
+
+
+                    <h2>
+                        More projects are coming.
+                    </h2>
+
+
+                    <p>
+
+                        This is only the beginning. Each project
+                        builds another layer of knowledge toward
+                        becoming a developer capable of creating
+                        real-world applications.
+
+                    </p>
+
+
+                    <a
+                        href="index.html"
+                        class="button primary-button"
+                    >
+                        Return To Portfolio
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =========================================================
+         FOOTER
+         ========================================================= -->
+
+    <footer>
+
+        <div class="container">
+
+            <p>
+                © 2026 Collins Redfellor.
+                CSS Project 03 — Professional Landing Page.
+            </p>
+
+        </div>
+
+    </footer>
+
+
+</body>
+
+</html>
+```
