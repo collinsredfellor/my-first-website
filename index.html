@@ -1,12 +1,8 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
-    <!-- =========================================================
-         DOCUMENT INFORMATION
-    ========================================================== -->
 
     <meta charset="UTF-8">
 
@@ -17,7 +13,7 @@
 
     <meta
         name="description"
-        content="Collins Redfellor's programming journey, projects, skills, CSS experiments, HTML projects, and software development roadmap."
+        content="Collins Redfellor — Software development portfolio, programming journey, projects, skills, JavaScript applications, and development roadmap."
     >
 
     <meta
@@ -27,27 +23,72 @@
 
     <meta
         name="keywords"
-        content="Collins Redfellor, programming, software development, HTML, CSS, Python, JavaScript, web development"
+        content="Collins Redfellor, software developer, programmer, Python, HTML, CSS, JavaScript, web development, portfolio, GitHub"
     >
 
     <meta
         name="theme-color"
-        content="#020617"
+        content="#070b16"
     >
 
     <title>
-        Collins Redfellor | Programming Journey
+        Collins Redfellor | Software Developer Portfolio
     </title>
-
-
-    <!-- =========================================================
-         INTERNAL CSS
-    ========================================================== -->
 
     <style>
 
         /* =========================================================
-           1. RESET
+           01. ROOT VARIABLES
+        ========================================================= */
+
+        :root {
+
+            --bg: #050816;
+            --bg-soft: #0b1020;
+            --bg-card: rgba(255,255,255,0.055);
+
+            --text: #f7f8ff;
+            --muted: #a8b1c7;
+
+            --primary: #7c5cff;
+            --primary-light: #9d86ff;
+
+            --secondary: #00d4ff;
+            --accent: #00f5a0;
+
+            --danger: #ff5577;
+
+            --border: rgba(255,255,255,0.12);
+
+            --shadow:
+                0 25px 80px rgba(0,0,0,0.35);
+
+            --radius: 22px;
+
+            --max-width: 1200px;
+
+            --transition: 0.3s ease;
+        }
+
+
+        body.light {
+
+            --bg: #f4f7fc;
+            --bg-soft: #ffffff;
+            --bg-card: rgba(255,255,255,0.8);
+
+            --text: #172033;
+            --muted: #5d687c;
+
+            --border: rgba(20,30,50,0.1);
+
+            --shadow:
+                0 25px 70px rgba(30,50,80,0.12);
+        }
+
+
+        /* =========================================================
+           02. RESET
         ========================================================= */
 
         * {
@@ -57,75 +98,17 @@
         }
 
 
-        /* =========================================================
-           2. GLOBAL VARIABLES
-        ========================================================= */
-
-        :root {
-
-            --background:
-                #020617;
-
-            --background-secondary:
-                #0f172a;
-
-            --surface:
-                rgba(255, 255, 255, 0.05);
-
-            --surface-hover:
-                rgba(255, 255, 255, 0.09);
-
-            --border:
-                rgba(255, 255, 255, 0.12);
-
-            --text:
-                #f8fafc;
-
-            --text-secondary:
-                #cbd5e1;
-
-            --text-muted:
-                #94a3b8;
-
-            --blue:
-                #38bdf8;
-
-            --blue-light:
-                #7dd3fc;
-
-            --purple:
-                #8b5cf6;
-
-            --green:
-                #22c55e;
-
-            --yellow:
-                #facc15;
-
-            --max-width:
-                1200px;
-
-            --radius:
-                20px;
-
-            --transition:
-                0.3s ease;
-        }
-
-
-        /* =========================================================
-           3. BASE
-        ========================================================= */
-
         html {
             scroll-behavior: smooth;
         }
+
 
         body {
 
             min-height: 100vh;
 
             font-family:
+                Inter,
                 Arial,
                 Helvetica,
                 sans-serif;
@@ -135,272 +118,306 @@
             background:
                 radial-gradient(
                     circle at 10% 10%,
-                    rgba(56, 189, 248, 0.10),
+                    rgba(124,92,255,0.16),
                     transparent 30%
                 ),
 
                 radial-gradient(
-                    circle at 90% 20%,
-                    rgba(139, 92, 246, 0.10),
+                    circle at 90% 30%,
+                    rgba(0,212,255,0.11),
                     transparent 30%
                 ),
 
-                linear-gradient(
-                    135deg,
-                    #020617,
-                    #0f172a,
-                    #020617
-                );
+                radial-gradient(
+                    circle at 50% 100%,
+                    rgba(0,245,160,0.07),
+                    transparent 35%
+                ),
+
+                var(--bg);
 
             line-height: 1.6;
 
             overflow-x: hidden;
+
+            transition:
+                background var(--transition),
+                color var(--transition);
         }
+
+
+        body.no-scroll {
+            overflow: hidden;
+        }
+
 
         a {
             color: inherit;
+            text-decoration: none;
         }
 
-        button {
+
+        button,
+        input,
+        textarea {
             font: inherit;
         }
 
 
-        /* =========================================================
-           4. BACKGROUND EFFECTS
-        ========================================================== */
-
-        body::before {
-
-            content: "";
-
-            position: fixed;
-
-            width: 500px;
-            height: 500px;
-
-            top: -250px;
-            left: -250px;
-
-            border-radius: 50%;
-
-            background:
-                rgba(56, 189, 248, 0.08);
-
-            filter: blur(100px);
-
-            pointer-events: none;
-
-            z-index: -1;
-        }
-
-        body::after {
-
-            content: "";
-
-            position: fixed;
-
-            width: 500px;
-            height: 500px;
-
-            right: -250px;
-            bottom: -250px;
-
-            border-radius: 50%;
-
-            background:
-                rgba(139, 92, 246, 0.08);
-
-            filter: blur(100px);
-
-            pointer-events: none;
-
-            z-index: -1;
+        button {
+            border: none;
+            cursor: pointer;
         }
 
 
-        /* =========================================================
-           5. CONTAINER
-        ========================================================== */
+        img {
+            max-width: 100%;
+        }
+
+
+        ::selection {
+            background: var(--primary);
+            color: white;
+        }
+
 
         .container {
 
-            width:
-                min(
-                    var(--max-width),
-                    calc(100% - 40px)
-                );
+            width: min(
+                var(--max-width),
+                92%
+            );
 
-            margin: 0 auto;
+            margin: auto;
+        }
+
+
+        .section {
+
+            padding: 110px 0;
+
+            position: relative;
         }
 
 
         /* =========================================================
-           6. HEADER / NAVIGATION
-        ========================================================== */
+           03. BACKGROUND EFFECTS
+        ========================================================= */
 
-        .site-header {
+        .background-orb {
 
-            position: sticky;
+            position: fixed;
+
+            width: 350px;
+            height: 350px;
+
+            border-radius: 50%;
+
+            filter: blur(100px);
+
+            opacity: 0.14;
+
+            pointer-events: none;
+
+            z-index: -1;
+        }
+
+
+        .orb-one {
+
+            top: -150px;
+            left: -120px;
+
+            background: var(--primary);
+        }
+
+
+        .orb-two {
+
+            right: -150px;
+            top: 40%;
+
+            background: var(--secondary);
+        }
+
+
+        .orb-three {
+
+            bottom: -180px;
+            left: 40%;
+
+            background: var(--accent);
+        }
+
+
+        /* =========================================================
+           04. NAVIGATION
+        ========================================================= */
+
+        header.site-header {
+
+            position: fixed;
 
             top: 0;
+            left: 0;
 
-            z-index: 100;
+            width: 100%;
 
-            border-bottom:
-                1px solid
-                var(--border);
+            z-index: 1000;
 
             background:
-                rgba(2, 6, 23, 0.82);
+                rgba(5,8,22,0.72);
 
             backdrop-filter:
                 blur(18px);
 
-            -webkit-backdrop-filter:
-                blur(18px);
+            border-bottom:
+                1px solid var(--border);
         }
 
-        .nav-container {
 
-            min-height: 75px;
+        body.light header.site-header {
+
+            background:
+                rgba(255,255,255,0.78);
+        }
+
+
+        .nav {
+
+            min-height: 76px;
 
             display: flex;
 
-            justify-content: space-between;
-
             align-items: center;
+
+            justify-content: space-between;
 
             gap: 25px;
         }
 
-        .brand {
+
+        .logo {
+
+            font-size: 1.3rem;
+
+            font-weight: 900;
+
+            letter-spacing: -0.5px;
+        }
+
+
+        .logo span {
+            color: var(--primary);
+        }
+
+
+        .nav-links {
 
             display: flex;
 
             align-items: center;
 
-            gap: 12px;
+            gap: 24px;
 
-            text-decoration: none;
-
-            white-space: nowrap;
+            list-style: none;
         }
 
-        .brand-logo {
+
+        .nav-links a {
+
+            color: var(--muted);
+
+            font-size: 0.9rem;
+
+            font-weight: 700;
+
+            transition:
+                color var(--transition);
+        }
+
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+
+        .nav-actions {
+
+            display: flex;
+
+            gap: 8px;
+        }
+
+
+        .icon-button {
 
             width: 42px;
             height: 42px;
 
-            display: flex;
+            display: grid;
 
-            justify-content: center;
-            align-items: center;
+            place-items: center;
 
-            border-radius: 12px;
+            border-radius: 50%;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--blue),
-                    var(--purple)
-                );
+            background: var(--bg-card);
 
-            font-size: 15px;
-
-            font-weight: 900;
-
-            box-shadow:
-                0 8px 25px
-                rgba(56, 189, 248, 0.18);
-        }
-
-        .brand-text strong {
-
-            display: block;
-
-            font-size: 14px;
-        }
-
-        .brand-text span {
-
-            display: block;
-
-            color: var(--text-muted);
-
-            font-size: 10px;
-
-            letter-spacing: 1px;
-
-            text-transform: uppercase;
-        }
-
-        .main-nav {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 5px;
-
-            flex-wrap: wrap;
-
-            justify-content: flex-end;
-        }
-
-        .main-nav a {
-
-            padding: 9px 12px;
-
-            border-radius: 8px;
-
-            color: var(--text-muted);
-
-            text-decoration: none;
-
-            font-size: 13px;
-
-            transition:
-                color var(--transition),
-                background var(--transition);
-        }
-
-        .main-nav a:hover {
+            border:
+                1px solid var(--border);
 
             color: var(--text);
 
+            transition:
+                transform var(--transition),
+                background var(--transition);
+        }
+
+
+        .icon-button:hover {
+
+            transform:
+                translateY(-3px);
+
             background:
-                rgba(255, 255, 255, 0.06);
+                rgba(124,92,255,0.15);
+        }
+
+
+        .menu-button {
+            display: none;
         }
 
 
         /* =========================================================
-           7. HERO
-        ========================================================== */
+           05. HERO
+        ========================================================= */
 
         .hero {
 
-            min-height:
-                calc(100vh - 75px);
+            min-height: 100vh;
+
+            padding-top: 130px;
+
+            display: flex;
+
+            align-items: center;
+        }
+
+
+        .hero-grid {
 
             display: grid;
 
             grid-template-columns:
-                1.2fr 0.8fr;
-
-            align-items: center;
+                1.2fr
+                0.8fr;
 
             gap: 70px;
 
-            padding:
-                90px 0;
+            align-items: center;
         }
 
-        .hero-content {
-
-            animation:
-                fadeUp 0.8s ease forwards;
-        }
 
         .hero-badge {
 
@@ -408,129 +425,141 @@
 
             align-items: center;
 
-            gap: 8px;
+            gap: 9px;
 
             padding:
-                8px 14px;
+                8px
+                15px;
 
             margin-bottom: 22px;
 
-            border:
-                1px solid
-                rgba(56, 189, 248, 0.22);
-
             border-radius: 50px;
 
+            border:
+                1px solid var(--border);
+
             background:
-                rgba(56, 189, 248, 0.07);
+                var(--bg-card);
 
-            color:
-                var(--blue-light);
+            color: var(--muted);
 
-            font-size: 11px;
+            font-size: 0.82rem;
 
-            font-weight: bold;
-
-            letter-spacing: 1.5px;
-
-            text-transform: uppercase;
+            font-weight: 700;
         }
+
 
         .status-dot {
 
-            width: 7px;
-            height: 7px;
+            width: 9px;
+            height: 9px;
 
             border-radius: 50%;
 
-            background:
-                var(--green);
+            background: var(--accent);
 
             box-shadow:
-                0 0 12px
-                var(--green);
+                0 0 18px var(--accent);
         }
+
 
         .hero h1 {
 
-            max-width: 850px;
-
             font-size:
                 clamp(
-                    3rem,
-                    7vw,
+                    3.3rem,
+                    8vw,
                     6.5rem
                 );
 
-            line-height: 0.98;
+            line-height: 0.95;
 
-            letter-spacing: -4px;
+            letter-spacing: -5px;
 
             margin-bottom: 25px;
         }
+
 
         .gradient-text {
 
             background:
                 linear-gradient(
                     90deg,
-                    var(--blue),
-                    #818cf8,
-                    #c084fc
+                    var(--primary),
+                    var(--secondary),
+                    var(--accent)
                 );
 
             -webkit-background-clip: text;
+
             background-clip: text;
 
             color: transparent;
         }
 
+
+        .hero-subtitle {
+
+            font-size:
+                clamp(
+                    1.2rem,
+                    2vw,
+                    1.65rem
+                );
+
+            font-weight: 800;
+
+            margin-bottom: 18px;
+        }
+
+
         .hero-description {
 
-            max-width: 700px;
+            max-width: 680px;
 
-            color:
-                var(--text-secondary);
+            color: var(--muted);
 
-            font-size: 17px;
+            font-size: 1.05rem;
 
-            line-height: 1.8;
+            line-height: 1.85;
 
             margin-bottom: 32px;
         }
+
 
         .hero-buttons {
 
             display: flex;
 
-            gap: 12px;
-
             flex-wrap: wrap;
+
+            gap: 13px;
         }
+
 
         .button {
 
             display: inline-flex;
 
-            justify-content: center;
             align-items: center;
 
+            justify-content: center;
+
+            gap: 8px;
+
             padding:
-                13px 20px;
+                13px
+                20px;
 
-            border-radius: 10px;
+            border-radius: 12px;
 
-            text-decoration: none;
-
-            font-size: 13px;
-
-            font-weight: bold;
+            font-weight: 800;
 
             transition:
                 transform var(--transition),
-                box-shadow var(--transition),
-                background var(--transition);
+                box-shadow var(--transition);
         }
+
 
         .button:hover {
 
@@ -538,206 +567,252 @@
                 translateY(-3px);
         }
 
+
         .button-primary {
+
+            color: white;
 
             background:
                 linear-gradient(
                     135deg,
-                    var(--blue),
-                    #6366f1
+                    var(--primary),
+                    var(--secondary)
                 );
 
-            color: white;
-
             box-shadow:
-                0 10px 30px
-                rgba(56, 189, 248, 0.18);
+                0 15px 35px
+                rgba(124,92,255,0.25);
         }
 
-        .button-primary:hover {
-
-            box-shadow:
-                0 15px 40px
-                rgba(56, 189, 248, 0.28);
-        }
 
         .button-secondary {
 
+            background:
+                var(--bg-card);
+
             border:
-                1px solid
-                var(--border);
+                1px solid var(--border);
 
-            background:
-                rgba(255, 255, 255, 0.04);
-
-            color:
-                var(--text-secondary);
-        }
-
-        .button-secondary:hover {
-
-            background:
-                rgba(255, 255, 255, 0.08);
+            color: var(--text);
         }
 
 
         /* =========================================================
-           8. HERO CODE WINDOW
-        ========================================================== */
+           06. HERO PROFILE CARD
+        ========================================================= */
 
-        .code-window {
+        .hero-card {
+
+            padding: 32px;
+
+            border-radius: 30px;
+
+            background:
+                var(--bg-card);
 
             border:
-                1px solid
-                var(--border);
+                1px solid var(--border);
+
+            backdrop-filter:
+                blur(20px);
+
+            box-shadow:
+                var(--shadow);
+
+            animation:
+                floating 6s ease-in-out infinite;
+        }
+
+
+        @keyframes floating {
+
+            0%,
+            100% {
+                transform:
+                    translateY(0);
+            }
+
+            50% {
+                transform:
+                    translateY(-12px);
+            }
+        }
+
+
+        .avatar {
+
+            width: 125px;
+            height: 125px;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 32px;
+
+            margin-bottom: 22px;
+
+            color: white;
+
+            font-size: 2.5rem;
+
+            font-weight: 900;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--secondary)
+                );
+
+            box-shadow:
+                0 20px 45px
+                rgba(124,92,255,0.3);
+        }
+
+
+        .hero-card h2 {
+
+            font-size: 1.8rem;
+
+            margin-bottom: 5px;
+        }
+
+
+        .hero-card > p {
+
+            color: var(--muted);
+
+            margin-bottom: 25px;
+        }
+
+
+        .profile-list {
+
+            list-style: none;
+
+            display: grid;
+
+            gap: 13px;
+        }
+
+
+        .profile-list li {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding-bottom: 12px;
+
+            border-bottom:
+                1px solid var(--border);
+
+            color: var(--muted);
+        }
+
+
+        .profile-list strong {
+            color: var(--text);
+        }
+
+
+        /* =========================================================
+           07. STATS
+        ========================================================= */
+
+        .stats-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4,1fr);
+
+            gap: 18px;
+        }
+
+
+        .stat-card {
+
+            padding: 28px;
 
             border-radius:
                 var(--radius);
 
             background:
-                rgba(15, 23, 42, 0.72);
+                var(--bg-card);
 
-            box-shadow:
-                0 30px 80px
-                rgba(0, 0, 0, 0.3);
+            border:
+                1px solid var(--border);
 
-            overflow: hidden;
-
-            animation:
-                floatWindow 6s ease-in-out infinite;
+            transition:
+                transform var(--transition);
         }
 
-        .window-header {
 
-            display: flex;
-
-            align-items: center;
-
-            gap: 7px;
-
-            padding:
-                14px 17px;
-
-            border-bottom:
-                1px solid
-                var(--border);
-
-            background:
-                rgba(255, 255, 255, 0.025);
+        .stat-card:hover {
+            transform:
+                translateY(-7px);
         }
 
-        .window-dot {
 
-            width: 9px;
-            height: 9px;
+        .stat-number {
 
-            border-radius: 50%;
+            display: block;
 
-            background:
-                #475569;
+            font-size: 2.7rem;
+
+            font-weight: 900;
         }
 
-        .window-title {
 
-            margin-left: 8px;
+        .stat-label {
 
-            color:
-                var(--text-muted);
+            color: var(--muted);
 
-            font-size: 10px;
-
-            font-family:
-                monospace;
-        }
-
-        .code-content {
-
-            padding:
-                25px;
-
-            font-family:
-                "Courier New",
-                monospace;
-
-            font-size: 13px;
-
-            line-height: 2;
-
-            color:
-                #cbd5e1;
-        }
-
-        .code-blue {
-            color:
-                var(--blue);
-        }
-
-        .code-purple {
-            color:
-                #c084fc;
-        }
-
-        .code-green {
-            color:
-                #86efac;
-        }
-
-        .code-yellow {
-            color:
-                #fde68a;
-        }
-
-        .code-muted {
-            color:
-                #64748b;
+            font-size: 0.9rem;
         }
 
 
         /* =========================================================
-           9. SECTION SYSTEM
-        ========================================================== */
-
-        section {
-
-            padding:
-                100px 0;
-
-            scroll-margin-top:
-                80px;
-        }
+           08. SECTION HEADINGS
+        ========================================================= */
 
         .section-heading {
 
-            max-width: 750px;
+            max-width: 760px;
 
-            margin-bottom: 45px;
+            margin-bottom: 48px;
         }
 
-        .section-label {
+
+        .section-heading span {
 
             display: inline-block;
 
-            margin-bottom: 10px;
+            color: var(--secondary);
 
-            color:
-                var(--blue);
+            font-size: 0.8rem;
 
-            font-size: 11px;
-
-            font-weight: bold;
+            font-weight: 900;
 
             letter-spacing: 2px;
 
             text-transform: uppercase;
+
+            margin-bottom: 10px;
         }
+
 
         .section-heading h2 {
 
             font-size:
                 clamp(
-                    2rem,
-                    4vw,
-                    3.3rem
+                    2.2rem,
+                    5vw,
+                    3.5rem
                 );
 
             line-height: 1.1;
@@ -745,288 +820,384 @@
             margin-bottom: 15px;
         }
 
+
         .section-heading p {
 
-            color:
-                var(--text-muted);
-
-            font-size: 15px;
+            color: var(--muted);
 
             line-height: 1.8;
         }
 
 
         /* =========================================================
-           10. STATS
-        ========================================================== */
+           09. ABOUT
+        ========================================================= */
 
-        .stats-grid {
+        .about-grid {
 
             display: grid;
 
             grid-template-columns:
-                repeat(4, 1fr);
+                1fr
+                1fr;
 
-            gap: 15px;
-
-            margin-bottom: 30px;
+            gap: 25px;
         }
 
-        .stat-card {
 
-            padding:
-                25px;
+        .about-card {
+
+            padding: 30px;
 
             border:
-                1px solid
-                var(--border);
+                1px solid var(--border);
 
             border-radius:
                 var(--radius);
 
             background:
-                var(--surface);
+                var(--bg-card);
+        }
+
+
+        .about-card h3 {
+
+            margin-bottom: 12px;
+
+            font-size: 1.35rem;
+        }
+
+
+        .about-card p {
+
+            color: var(--muted);
+
+            line-height: 1.8;
+        }
+
+
+        /* =========================================================
+           10. TECHNOLOGY STACK
+        ========================================================= */
+
+        .stack-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4,1fr);
+
+            gap: 18px;
+        }
+
+
+        .stack-card {
+
+            padding: 25px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                var(--radius);
+
+            background:
+                var(--bg-card);
 
             transition:
                 transform var(--transition),
                 background var(--transition);
         }
 
-        .stat-card:hover {
 
-            transform:
-                translateY(-5px);
-
-            background:
-                var(--surface-hover);
-        }
-
-        .stat-number {
-
-            display: block;
-
-            font-size: 34px;
-
-            font-weight: 900;
-
-            color:
-                var(--blue-light);
-
-            margin-bottom: 3px;
-        }
-
-        .stat-label {
-
-            color:
-                var(--text-muted);
-
-            font-size: 12px;
-        }
-
-
-        /* =========================================================
-           11. SKILLS
-        ========================================================== */
-
-        .skills-grid {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(4, 1fr);
-
-            gap: 15px;
-        }
-
-        .skill-card {
-
-            padding:
-                25px;
-
-            border:
-                1px solid
-                var(--border);
-
-            border-radius:
-                var(--radius);
-
-            background:
-                var(--surface);
-
-            transition:
-                transform var(--transition),
-                border-color var(--transition);
-        }
-
-        .skill-card:hover {
+        .stack-card:hover {
 
             transform:
                 translateY(-6px);
 
-            border-color:
-                rgba(56, 189, 248, 0.3);
-        }
-
-        .skill-icon {
-
-            width: 45px;
-            height: 45px;
-
-            display: flex;
-
-            justify-content: center;
-            align-items: center;
-
-            margin-bottom: 18px;
-
-            border-radius: 12px;
-
             background:
-                rgba(56, 189, 248, 0.09);
-
-            color:
-                var(--blue);
-
-            font-weight: 900;
-
-            font-size: 13px;
+                rgba(124,92,255,0.1);
         }
 
-        .skill-card h3 {
 
-            font-size: 16px;
+        .stack-icon {
 
-            margin-bottom: 8px;
+            font-size: 2rem;
+
+            margin-bottom: 15px;
         }
 
-        .skill-card p {
 
-            color:
-                var(--text-muted);
+        .stack-card h3 {
+            margin-bottom: 7px;
+        }
 
-            font-size: 12px;
 
-            line-height: 1.7;
+        .stack-card p {
+
+            color: var(--muted);
+
+            font-size: 0.9rem;
+
+            line-height: 1.6;
         }
 
 
         /* =========================================================
-           12. PROJECT CARDS
-        ========================================================== */
+           11. JAVASCRIPT SECTION
+        ========================================================= */
+
+        .javascript-banner {
+
+            padding: 35px;
+
+            margin-bottom: 35px;
+
+            border-radius:
+                28px;
+
+            border:
+                1px solid var(--border);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(124,92,255,0.12),
+                    rgba(0,212,255,0.07)
+                );
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 30px;
+        }
+
+
+        .javascript-banner h3 {
+
+            font-size: 1.8rem;
+
+            margin-bottom: 7px;
+        }
+
+
+        .javascript-banner p {
+
+            color: var(--muted);
+        }
+
+
+        .js-badge {
+
+            flex-shrink: 0;
+
+            padding:
+                13px
+                18px;
+
+            border-radius: 12px;
+
+            background:
+                rgba(255,255,255,0.07);
+
+            border:
+                1px solid var(--border);
+
+            font-weight: 900;
+        }
+
+
+        /* =========================================================
+           12. PROJECT CONTROLS
+        ========================================================= */
+
+        .project-controls {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+
+            margin-bottom: 30px;
+        }
+
+
+        .filter-buttons {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 8px;
+        }
+
+
+        .filter-button {
+
+            padding:
+                9px
+                14px;
+
+            border-radius: 10px;
+
+            border:
+                1px solid var(--border);
+
+            background:
+                var(--bg-card);
+
+            color: var(--muted);
+
+            font-weight: 700;
+
+            transition:
+                var(--transition);
+        }
+
+
+        .filter-button:hover,
+        .filter-button.active {
+
+            color: white;
+
+            background:
+                var(--primary);
+
+            border-color:
+                var(--primary);
+        }
+
+
+        .project-search {
+
+            min-width: 260px;
+
+            padding:
+                11px
+                15px;
+
+            border-radius: 10px;
+
+            border:
+                1px solid var(--border);
+
+            background:
+                var(--bg-card);
+
+            color: var(--text);
+
+            outline: none;
+        }
+
+
+        .project-search:focus {
+
+            border-color:
+                var(--secondary);
+        }
+
+
+        /* =========================================================
+           13. PROJECT GRID
+        ========================================================= */
 
         .projects-grid {
 
             display: grid;
 
             grid-template-columns:
-                repeat(2, 1fr);
+                repeat(3,1fr);
 
             gap: 20px;
         }
 
+
         .project-card {
 
-            position: relative;
+            min-height: 330px;
 
             display: flex;
 
             flex-direction: column;
 
-            min-height: 300px;
-
-            padding:
-                30px;
-
-            border:
-                1px solid
-                var(--border);
+            padding: 25px;
 
             border-radius:
                 var(--radius);
 
             background:
-                var(--surface);
+                var(--bg-card);
 
-            overflow: hidden;
+            border:
+                1px solid var(--border);
 
             transition:
                 transform var(--transition),
-                border-color var(--transition),
                 background var(--transition);
         }
 
-        .project-card::before {
-
-            content: "";
-
-            position: absolute;
-
-            width: 180px;
-            height: 180px;
-
-            top: -100px;
-            right: -100px;
-
-            border-radius: 50%;
-
-            background:
-                rgba(56, 189, 248, 0.08);
-
-            filter: blur(30px);
-
-            transition:
-                transform 0.5s ease;
-        }
 
         .project-card:hover {
 
             transform:
-                translateY(-7px);
-
-            border-color:
-                rgba(56, 189, 248, 0.28);
+                translateY(-8px);
 
             background:
-                var(--surface-hover);
+                rgba(124,92,255,0.09);
         }
 
-        .project-card:hover::before {
-
-            transform:
-                scale(2);
-        }
 
         .project-number {
 
+            width: 47px;
+            height: 47px;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 14px;
+
+            margin-bottom: 20px;
+
+            background:
+                rgba(124,92,255,0.13);
+
             color:
-                var(--blue);
+                var(--secondary);
 
-            font-family:
-                monospace;
-
-            font-size: 12px;
-
-            margin-bottom: 18px;
+            font-weight: 900;
         }
+
 
         .project-card h3 {
 
-            font-size: 21px;
+            font-size: 1.15rem;
 
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
+
 
         .project-card p {
 
-            color:
-                var(--text-muted);
+            color: var(--muted);
 
-            font-size: 13px;
+            line-height: 1.7;
 
-            line-height: 1.8;
+            font-size: 0.9rem;
 
             margin-bottom: 20px;
         }
+
 
         .project-tags {
 
@@ -1041,264 +1212,211 @@
             margin-bottom: 20px;
         }
 
-        .tag {
+
+        .project-tag {
 
             padding:
-                5px 9px;
+                5px
+                9px;
 
-            border-radius: 6px;
+            border-radius: 7px;
 
             background:
-                rgba(255, 255, 255, 0.06);
+                rgba(0,212,255,0.08);
 
             color:
-                var(--text-secondary);
+                var(--secondary);
 
-            font-size: 10px;
+            font-size: 0.73rem;
 
-            font-family:
-                monospace;
+            font-weight: 800;
         }
+
 
         .project-link {
 
-            display: inline-flex;
-
-            align-items: center;
-
-            gap: 7px;
-
             color:
-                var(--blue-light);
+                var(--text);
 
-            text-decoration: none;
+            font-weight: 800;
 
-            font-size: 12px;
-
-            font-weight: bold;
+            font-size: 0.9rem;
         }
 
-        .project-link:hover {
 
-            text-decoration:
-                underline;
+        .project-link:hover {
+            color: var(--secondary);
+        }
+
+
+        .empty-state {
+
+            grid-column: 1/-1;
+
+            text-align: center;
+
+            padding: 60px;
+
+            color: var(--muted);
+
+            border:
+                1px dashed var(--border);
+
+            border-radius:
+                var(--radius);
         }
 
 
         /* =========================================================
-           13. CSS PROJECTS
-        ========================================================== */
+           14. JAVASCRIPT TOPICS
+        ========================================================= */
 
-        .css-projects {
+        .topics-grid {
 
             display: grid;
 
             grid-template-columns:
-                repeat(3, 1fr);
+                repeat(3,1fr);
 
-            gap: 20px;
+            gap: 18px;
         }
 
-        .css-project {
 
-            position: relative;
+        .topic-card {
 
-            padding:
-                28px;
+            padding: 24px;
 
             border:
-                1px solid
-                var(--border);
+                1px solid var(--border);
 
             border-radius:
                 var(--radius);
 
             background:
-                linear-gradient(
-                    145deg,
-                    rgba(56, 189, 248, 0.07),
-                    rgba(255, 255, 255, 0.03)
-                );
-
-            transition:
-                transform var(--transition),
-                border-color var(--transition);
+                var(--bg-card);
         }
 
-        .css-project:hover {
 
-            transform:
-                translateY(-8px);
+        .topic-number {
 
-            border-color:
-                rgba(139, 92, 246, 0.35);
+            color:
+                var(--secondary);
+
+            font-size: 0.8rem;
+
+            font-weight: 900;
+
+            letter-spacing: 1px;
         }
 
-        .css-project-number {
 
-            width: 38px;
-            height: 38px;
+        .topic-card h3 {
+
+            margin:
+                7px 0;
+
+            font-size: 1.05rem;
+        }
+
+
+        .topic-card p {
+
+            color:
+                var(--muted);
+
+            font-size: 0.88rem;
+
+            line-height: 1.65;
+        }
+
+
+        /* =========================================================
+           15. SKILLS
+        ========================================================= */
+
+        .skills-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr
+                1fr;
+
+            gap: 18px;
+        }
+
+
+        .skill-card {
+
+            padding: 25px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                var(--radius);
+
+            background:
+                var(--bg-card);
+        }
+
+
+        .skill-header {
 
             display: flex;
 
-            justify-content: center;
-            align-items: center;
-
-            margin-bottom: 20px;
-
-            border-radius: 10px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--blue),
-                    var(--purple)
-                );
-
-            font-size: 12px;
-
-            font-weight: bold;
-        }
-
-        .css-project h3 {
-
-            font-size: 18px;
+            justify-content:
+                space-between;
 
             margin-bottom: 10px;
         }
 
-        .css-project p {
+
+        .skill-header span {
 
             color:
-                var(--text-muted);
+                var(--secondary);
 
-            font-size: 12px;
-
-            line-height: 1.7;
-
-            margin-bottom: 18px;
+            font-weight: 900;
         }
 
-        .css-project ul {
 
-            list-style: none;
+        .progress {
 
-            display: flex;
+            height: 9px;
 
-            flex-direction: column;
+            overflow: hidden;
 
-            gap: 7px;
+            border-radius: 50px;
 
-            margin-bottom: 20px;
+            background:
+                rgba(255,255,255,0.07);
         }
 
-        .css-project li {
 
-            color:
-                var(--text-secondary);
+        .progress-bar {
 
-            font-size: 11px;
-        }
+            width: 0;
 
-        .css-project li::before {
+            height: 100%;
 
-            content:
-                "✓";
+            border-radius: inherit;
 
-            color:
-                var(--blue);
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--primary),
+                    var(--secondary)
+                );
 
-            margin-right: 7px;
-
-            font-weight: bold;
+            transition:
+                width 1.4s ease;
         }
 
 
         /* =========================================================
-           14. CSS LEARNING LAB
-        ========================================================== */
-
-        .lab {
-
-            display: grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
-            gap: 20px;
-        }
-
-        .lab-card {
-
-            padding:
-                30px;
-
-            border:
-                1px solid
-                var(--border);
-
-            border-radius:
-                var(--radius);
-
-            background:
-                var(--surface);
-        }
-
-        .lab-card h3 {
-
-            font-size: 19px;
-
-            margin-bottom: 12px;
-        }
-
-        .lab-card > p {
-
-            color:
-                var(--text-muted);
-
-            font-size: 13px;
-
-            line-height: 1.8;
-
-            margin-bottom: 20px;
-        }
-
-        .concept-list {
-
-            display: flex;
-
-            flex-wrap: wrap;
-
-            gap: 8px;
-        }
-
-        .concept {
-
-            padding:
-                8px 11px;
-
-            border:
-                1px solid
-                var(--border);
-
-            border-radius: 8px;
-
-            background:
-                rgba(255, 255, 255, 0.035);
-
-            color:
-                var(--text-secondary);
-
-            font-size: 11px;
-
-            font-family:
-                monospace;
-        }
-
-
-        /* =========================================================
-           15. ROADMAP
-        ========================================================== */
+           16. ROADMAP
+        ========================================================= */
 
         .roadmap {
 
@@ -1306,8 +1424,9 @@
 
             max-width: 900px;
 
-            margin: 0 auto;
+            margin: auto;
         }
+
 
         .roadmap::before {
 
@@ -1315,7 +1434,7 @@
 
             position: absolute;
 
-            left: 19px;
+            left: 20px;
 
             top: 0;
             bottom: 0;
@@ -1323,422 +1442,550 @@
             width: 2px;
 
             background:
-                linear-gradient(
-                    var(--blue),
-                    var(--purple),
-                    transparent
-                );
-
-            opacity: 0.35;
+                var(--border);
         }
+
 
         .roadmap-item {
 
             position: relative;
 
-            display: grid;
-
-            grid-template-columns:
-                40px 1fr;
-
-            gap: 25px;
+            padding-left: 65px;
 
             margin-bottom: 30px;
         }
 
-        .roadmap-marker {
 
-            width: 40px;
-            height: 40px;
+        .roadmap-dot {
 
-            display: flex;
+            position: absolute;
 
-            justify-content: center;
-            align-items: center;
+            left: 11px;
 
-            border:
-                2px solid
-                var(--blue);
+            top: 5px;
+
+            width: 20px;
+            height: 20px;
 
             border-radius: 50%;
 
             background:
-                var(--background);
-
-            color:
-                var(--blue);
-
-            font-size: 11px;
-
-            font-weight: bold;
-
-            z-index: 2;
-        }
-
-        .roadmap-content {
-
-            padding:
-                22px;
+                var(--primary);
 
             border:
-                1px solid
-                var(--border);
+                5px solid var(--bg);
+
+            box-shadow:
+                0 0 20px
+                rgba(124,92,255,0.5);
+        }
+
+
+        .roadmap-card {
+
+            padding: 25px;
+
+            border:
+                1px solid var(--border);
 
             border-radius:
-                15px;
+                var(--radius);
 
             background:
-                var(--surface);
+                var(--bg-card);
         }
 
-        .roadmap-content h3 {
 
-            font-size: 17px;
-
-            margin-bottom: 6px;
-        }
-
-        .roadmap-content p {
+        .roadmap-card small {
 
             color:
-                var(--text-muted);
+                var(--secondary);
 
-            font-size: 12px;
+            font-weight: 900;
+
+            letter-spacing: 1px;
+        }
+
+
+        .roadmap-card h3 {
+
+            margin:
+                7px 0;
+        }
+
+
+        .roadmap-card p {
+
+            color:
+                var(--muted);
 
             line-height: 1.7;
         }
 
+
         .completed {
 
             border-color:
-                rgba(34, 197, 94, 0.25);
+                rgba(0,245,160,0.25);
         }
 
-        .completed .roadmap-marker {
 
-            border-color:
-                var(--green);
-
-            color:
-                var(--green);
-        }
-
-        .current {
-
-            border-color:
-                rgba(56, 189, 248, 0.35);
+        .completed .roadmap-dot {
 
             background:
-                rgba(56, 189, 248, 0.05);
+                var(--accent);
         }
 
 
         /* =========================================================
-           16. ABOUT
-        ========================================================== */
+           17. CONTACT
+        ========================================================= */
 
-        .about-grid {
+        .contact-grid {
 
             display: grid;
 
             grid-template-columns:
-                1fr 1fr;
+                0.8fr
+                1.2fr;
 
             gap: 25px;
         }
 
-        .about-card {
 
-            padding:
-                32px;
+        .contact-card {
+
+            padding: 30px;
 
             border:
-                1px solid
-                var(--border);
+                1px solid var(--border);
 
             border-radius:
                 var(--radius);
 
             background:
-                var(--surface);
-        }
-
-        .about-card h3 {
-
-            font-size: 20px;
-
-            margin-bottom: 15px;
-        }
-
-        .about-card p {
-
-            color:
-                var(--text-muted);
-
-            font-size: 13px;
-
-            line-height: 1.9;
-
-            margin-bottom: 15px;
-        }
-
-        .about-card p:last-child {
-
-            margin-bottom: 0;
+                var(--bg-card);
         }
 
 
-        /* =========================================================
-           17. ACHIEVEMENT
-        ========================================================== */
+        .contact-card h3 {
 
-        .achievement {
-
-            padding:
-                40px;
-
-            border:
-                1px solid
-                rgba(56, 189, 248, 0.22);
-
-            border-radius:
-                var(--radius);
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(56, 189, 248, 0.08),
-                    rgba(139, 92, 246, 0.07)
-                );
-
-            text-align: center;
-        }
-
-        .achievement-icon {
-
-            font-size: 42px;
-
-            margin-bottom: 15px;
-        }
-
-        .achievement h2 {
-
-            font-size: 27px;
+            font-size: 1.5rem;
 
             margin-bottom: 12px;
         }
 
-        .achievement p {
 
-            max-width: 700px;
-
-            margin:
-                0 auto;
+        .contact-card > p {
 
             color:
-                var(--text-muted);
-
-            font-size: 13px;
+                var(--muted);
 
             line-height: 1.8;
+
+            margin-bottom: 25px;
         }
 
 
-        /* =========================================================
-           18. CONTACT
-        ========================================================== */
+        .contact-list {
 
-        .contact {
+            list-style: none;
 
-            text-align: center;
+            display: grid;
 
-            padding:
-                80px 30px;
+            gap: 14px;
+        }
 
-            border:
-                1px solid
-                var(--border);
 
-            border-radius:
-                var(--radius);
+        .contact-list li {
+
+            padding: 14px;
+
+            border-radius: 12px;
 
             background:
-                linear-gradient(
-                    135deg,
-                    rgba(56, 189, 248, 0.06),
-                    rgba(139, 92, 246, 0.06)
-                );
+                rgba(255,255,255,0.035);
         }
 
-        .contact h2 {
 
-            font-size:
-                clamp(
-                    2rem,
-                    5vw,
-                    3.5rem
-                );
+        .contact-list span {
 
-            margin-bottom: 15px;
-        }
-
-        .contact p {
-
-            max-width: 650px;
-
-            margin:
-                0 auto 25px;
+            display: block;
 
             color:
-                var(--text-muted);
+                var(--muted);
 
-            font-size: 14px;
+            font-size: 0.78rem;
+        }
 
-            line-height: 1.8;
+
+        .contact-list strong {
+            font-size: 0.95rem;
+        }
+
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+
+        .form-group label {
+
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-size: 0.85rem;
+
+            font-weight: 800;
+        }
+
+
+        .form-group input,
+        .form-group textarea {
+
+            width: 100%;
+
+            padding:
+                13px
+                15px;
+
+            border-radius: 11px;
+
+            border:
+                1px solid var(--border);
+
+            background:
+                rgba(255,255,255,0.035);
+
+            color:
+                var(--text);
+
+            outline: none;
+        }
+
+
+        .form-group textarea {
+
+            min-height: 140px;
+
+            resize: vertical;
+        }
+
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+
+            border-color:
+                var(--secondary);
+        }
+
+
+        .error {
+
+            min-height: 16px;
+
+            color:
+                var(--danger);
+
+            font-size: 0.78rem;
+        }
+
+
+        .success {
+
+            display: none;
+
+            margin-top: 15px;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            color:
+                var(--accent);
+
+            background:
+                rgba(0,245,160,0.08);
         }
 
 
         /* =========================================================
-           19. FOOTER
-        ========================================================== */
+           18. FOOTER
+        ========================================================= */
 
         footer {
 
-            margin-top:
-                60px;
-
             padding:
-                35px 0;
+                50px 0;
 
             border-top:
-                1px solid
-                var(--border);
+                1px solid var(--border);
 
             text-align: center;
-        }
-
-        footer p {
 
             color:
-                var(--text-muted);
-
-            font-size: 11px;
-
-            margin-bottom: 5px;
+                var(--muted);
         }
+
 
         footer strong {
+            color: var(--text);
+        }
+
+
+        .footer-links {
+
+            display: flex;
+
+            justify-content: center;
+
+            flex-wrap: wrap;
+
+            gap: 18px;
+
+            margin:
+                18px 0;
+        }
+
+
+        .footer-links a:hover {
 
             color:
-                var(--text-secondary);
+                var(--secondary);
         }
 
 
         /* =========================================================
-           20. ANIMATIONS
-        ========================================================== */
+           19. MODAL
+        ========================================================= */
 
-        @keyframes fadeUp {
+        .modal {
 
-            from {
+            position: fixed;
 
-                opacity: 0;
+            inset: 0;
 
-                transform:
-                    translateY(25px);
-            }
+            display: none;
 
-            to {
+            place-items: center;
 
-                opacity: 1;
+            padding: 20px;
 
-                transform:
-                    translateY(0);
-            }
+            background:
+                rgba(0,0,0,0.75);
+
+            backdrop-filter:
+                blur(8px);
+
+            z-index: 3000;
         }
 
-        @keyframes floatWindow {
 
-            0%,
-            100% {
+        .modal.active {
+            display: grid;
+        }
 
-                transform:
-                    translateY(0);
-            }
 
-            50% {
+        .modal-content {
 
-                transform:
-                    translateY(-10px);
-            }
+            width:
+                min(
+                    650px,
+                    100%
+                );
+
+            max-height:
+                90vh;
+
+            overflow-y:
+                auto;
+
+            padding: 30px;
+
+            border-radius:
+                25px;
+
+            background:
+                var(--bg-soft);
+
+            border:
+                1px solid var(--border);
+
+            box-shadow:
+                var(--shadow);
+        }
+
+
+        .modal-header {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            gap: 20px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .close-modal {
+
+            width: 40px;
+            height: 40px;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+
+            background:
+                var(--bg-card);
+
+            border:
+                1px solid var(--border);
+
+            color:
+                var(--text);
+        }
+
+
+        .modal-content p {
+
+            color:
+                var(--muted);
+
+            line-height: 1.8;
+
+            margin-bottom: 20px;
         }
 
 
         /* =========================================================
-           21. RESPONSIVE DESIGN
-        ========================================================== */
+           20. REVEAL ANIMATION
+        ========================================================= */
 
-        @media (max-width: 1000px) {
+        .reveal {
 
-            .hero {
+            opacity: 0;
+
+            transform:
+                translateY(25px);
+
+            transition:
+                opacity 0.7s ease,
+                transform 0.7s ease;
+        }
+
+
+        .reveal.visible {
+
+            opacity: 1;
+
+            transform:
+                translateY(0);
+        }
+
+
+        /* =========================================================
+           21. RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 1050px) {
+
+            .hero-grid {
 
                 grid-template-columns:
                     1fr;
-
-                gap: 45px;
-
-                padding:
-                    70px 0;
             }
 
-            .hero-content {
 
-                text-align: center;
+            .hero-card {
+
+                max-width: 600px;
             }
 
-            .hero-description {
 
-                margin-left: auto;
-                margin-right: auto;
+            .projects-grid {
+
+                grid-template-columns:
+                    repeat(2,1fr);
             }
 
-            .hero-buttons {
 
-                justify-content: center;
+            .topics-grid {
+
+                grid-template-columns:
+                    repeat(2,1fr);
             }
+
+
+            .stack-grid {
+
+                grid-template-columns:
+                    repeat(2,1fr);
+            }
+
 
             .stats-grid {
 
                 grid-template-columns:
-                    repeat(2, 1fr);
+                    repeat(2,1fr);
             }
 
-            .skills-grid {
-
-                grid-template-columns:
-                    repeat(2, 1fr);
-            }
-
-            .css-projects {
-
-                grid-template-columns:
-                    repeat(2, 1fr);
-            }
         }
 
 
-        @media (max-width: 750px) {
+        @media (max-width: 800px) {
 
-            .site-header {
+            .nav-links {
 
-                position:
-                    relative;
+                position: absolute;
+
+                top: 76px;
+
+                left: 4%;
+                right: 4%;
+
+                padding: 20px;
+
+                display: none;
+
+                flex-direction: column;
+
+                align-items:
+                    flex-start;
+
+                background:
+                    var(--bg-soft);
+
+                border:
+                    1px solid var(--border);
+
+                border-radius: 16px;
             }
 
-            .nav-container {
 
-                padding:
-                    15px 0;
+            .nav-links.active {
+                display: flex;
+            }
+
+
+            .menu-button {
+                display: grid;
+            }
+
+
+            .about-grid,
+            .contact-grid,
+            .skills-grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .javascript-banner {
 
                 flex-direction:
                     column;
@@ -1747,114 +1994,67 @@
                     flex-start;
             }
 
-            .main-nav {
-
-                width: 100%;
-
-                justify-content:
-                    flex-start;
-
-                overflow-x: auto;
-
-                flex-wrap: nowrap;
-
-                padding-bottom: 5px;
-            }
-
-            .hero h1 {
-
-                letter-spacing:
-                    -2px;
-            }
-
-            .projects-grid {
-
-                grid-template-columns:
-                    1fr;
-            }
-
-            .lab {
-
-                grid-template-columns:
-                    1fr;
-            }
-
-            .about-grid {
-
-                grid-template-columns:
-                    1fr;
-            }
         }
 
 
-        @media (max-width: 600px) {
+        @media (max-width: 650px) {
 
-            .container {
-
-                width:
-                    min(
-                        var(--max-width),
-                        calc(100% - 28px)
-                    );
+            .section {
+                padding: 80px 0;
             }
 
-            section {
-
-                padding:
-                    70px 0;
-            }
-
-            .stats-grid {
-
-                grid-template-columns:
-                    1fr 1fr;
-            }
-
-            .skills-grid {
-
-                grid-template-columns:
-                    1fr;
-            }
-
-            .css-projects {
-
-                grid-template-columns:
-                    1fr;
-            }
-
-            .achievement {
-
-                padding:
-                    30px 20px;
-            }
-
-            .contact {
-
-                padding:
-                    60px 20px;
-            }
-        }
-
-
-        @media (max-width: 420px) {
-
-            .stats-grid {
-
-                grid-template-columns:
-                    1fr;
-            }
-
-            .hero {
-
-                padding:
-                    55px 0;
-            }
 
             .hero h1 {
 
                 font-size:
-                    2.8rem;
+                    clamp(
+                        3rem,
+                        15vw,
+                        5rem
+                    );
+
+                letter-spacing:
+                    -3px;
             }
+
+
+            .projects-grid,
+            .topics-grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .stats-grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .stack-grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .project-controls {
+
+                align-items:
+                    stretch;
+            }
+
+
+            .project-search {
+
+                width: 100%;
+
+                min-width:
+                    0;
+            }
+
 
             .hero-buttons {
 
@@ -1862,10 +2062,12 @@
                     column;
             }
 
+
             .button {
 
                 width: 100%;
             }
+
         }
 
     </style>
@@ -1875,83 +2077,120 @@
 
 <body>
 
+    <!-- =========================================================
+         BACKGROUND
+    ========================================================= -->
+
+    <div
+        class="background-orb orb-one"
+        aria-hidden="true"
+    ></div>
+
+    <div
+        class="background-orb orb-two"
+        aria-hidden="true"
+    ></div>
+
+    <div
+        class="background-orb orb-three"
+        aria-hidden="true"
+    ></div>
+
 
     <!-- =========================================================
-         HEADER
-    ========================================================== -->
+         NAVIGATION
+    ========================================================= -->
 
     <header class="site-header">
 
-        <div class="container nav-container">
+        <div class="container nav">
 
             <a
                 href="#home"
-                class="brand"
+                class="logo"
             >
-
-                <span class="brand-logo">
-                    CR
-                </span>
-
-                <span class="brand-text">
-
-                    <strong>
-                        Collins Redfellor
-                    </strong>
-
-                    <span>
-                        Programming Journey
-                    </span>
-
-                </span>
-
+                Collins<span>.</span>
             </a>
 
 
-            <nav
-                class="main-nav"
-                aria-label="Main navigation"
-            >
+            <nav aria-label="Main navigation">
 
-                <a href="#home">
-                    Home
-                </a>
+                <ul
+                    class="nav-links"
+                    id="navLinks"
+                >
 
-                <a href="#skills">
-                    Skills
-                </a>
+                    <li>
+                        <a href="#home">
+                            Home
+                        </a>
+                    </li>
 
-                <a href="#projects">
-                    Projects
-                </a>
+                    <li>
+                        <a href="#about">
+                            About
+                        </a>
+                    </li>
 
-                <a href="#css-lab">
-                    CSS Lab
-                </a>
+                    <li>
+                        <a href="#skills">
+                            Skills
+                        </a>
+                    </li>
 
-                <a href="#roadmap">
-                    Roadmap
-                </a>
+                    <li>
+                        <a href="#projects">
+                            Projects
+                        </a>
+                    </li>
 
-                <a href="#about">
-                    About
-                </a>
+                    <li>
+                        <a href="#roadmap">
+                            Roadmap
+                        </a>
+                    </li>
 
-                <a href="#contact">
-                    Contact
-                </a>
+                    <li>
+                        <a href="#contact">
+                            Contact
+                        </a>
+                    </li>
+
+                </ul>
 
             </nav>
+
+
+            <div class="nav-actions">
+
+                <button
+                    class="icon-button"
+                    id="themeButton"
+                    type="button"
+                    aria-label="Toggle theme"
+                >
+                    🌙
+                </button>
+
+                <button
+                    class="icon-button menu-button"
+                    id="menuButton"
+                    type="button"
+                    aria-label="Open navigation"
+                >
+                    ☰
+                </button>
+
+            </div>
 
         </div>
 
     </header>
 
 
-
     <!-- =========================================================
          MAIN
-    ========================================================== -->
+    ========================================================= -->
 
     <main>
 
@@ -1961,250 +2200,210 @@
         ====================================================== -->
 
         <section
-            id="home"
             class="hero"
+            id="home"
         >
 
-            <div class="container hero-content">
+            <div class="container hero-grid">
 
-                <span class="hero-badge">
+                <div class="reveal">
 
-                    <span class="status-dot"></span>
+                    <div class="hero-badge">
 
-                    Currently Learning Web Development
+                        <span class="status-dot"></span>
 
-                </span>
-
-
-                <h1>
-
-                    Building My
-
-                    <span class="gradient-text">
-                        Programming Future.
-                    </span>
-
-                </h1>
+                        JavaScript Journey Completed
+                    </div>
 
 
-                <p class="hero-description">
+                    <h1>
 
-                    Welcome to my programming journey.
-                    I am progressing from programming fundamentals
-                    into HTML, CSS, JavaScript, backend development,
-                    artificial intelligence, cybersecurity, and
-                    eventually startup building.
+                        Building My
 
-                    Every project represents another step toward
-                    becoming capable of designing and building
-                    real-world software.
-
-                </p>
-
-
-                <div class="hero-buttons">
-
-                    <a
-                        href="#projects"
-                        class="button button-primary"
-                    >
-                        Explore My Projects →
-                    </a>
-
-                    <a
-                        href="#roadmap"
-                        class="button button-secondary"
-                    >
-                        View My Roadmap
-                    </a>
-
-                </div>
-
-            </div>
-
-
-            <!-- =================================================
-                 CODE WINDOW
-            ================================================== -->
-
-            <div class="container">
-
-                <div class="code-window">
-
-                    <div class="window-header">
-
-                        <span class="window-dot"></span>
-                        <span class="window-dot"></span>
-                        <span class="window-dot"></span>
-
-                        <span class="window-title">
-                            programming-journey.html
+                        <span class="gradient-text">
+                            Future
                         </span>
 
+                        Through Code.
+
+                    </h1>
+
+
+                    <div class="hero-subtitle">
+
+                        Collins Redfellor
+                        —
+                        Software Developer in Progress
+
                     </div>
 
 
-                    <div class="code-content">
+                    <p class="hero-description">
 
-                        <div>
-                            <span class="code-purple">
-                                &lt;developer&gt;
-                            </span>
-                        </div>
+                        Welcome to my professional programming portfolio.
 
-                        <div>
-                            &nbsp;&nbsp;
-                            <span class="code-blue">
-                                name
-                            </span>:
+                        I am building my software development skills
+                        from the fundamentals upward — beginning with
+                        Python, progressing through HTML, CSS and
+                        JavaScript, and continuing toward backend
+                        development, advanced development, artificial
+                        intelligence, cybersecurity and startup building.
 
-                            <span class="code-green">
-                                "Collins Redfellor"
-                            </span>
-                        </div>
+                        Every project represents another step toward
+                        becoming capable of designing, building,
+                        deploying and maintaining real-world software.
 
-                        <div>
-                            &nbsp;&nbsp;
-                            <span class="code-blue">
-                                current_stack
-                            </span>:
-                        </div>
+                    </p>
 
-                        <div>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            [
-                        </div>
 
-                        <div>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <span class="code-green">
-                                "Python"
-                            </span>,
-                        </div>
+                    <div class="hero-buttons">
 
-                        <div>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <span class="code-green">
-                                "HTML"
-                            </span>,
-                        </div>
+                        <a
+                            href="#projects"
+                            class="button button-primary"
+                        >
+                            Explore My Work →
+                        </a>
 
-                        <div>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <span class="code-green">
-                                "CSS"
-                            </span>
-                        </div>
-
-                        <div>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            ]
-                        </div>
-
-                        <div>
-                            &nbsp;&nbsp;
-                            <span class="code-blue">
-                                next
-                            </span>:
-
-                            <span class="code-yellow">
-                                "JavaScript"
-                            </span>
-                        </div>
-
-                        <div>
-                            &nbsp;&nbsp;
-                            <span class="code-blue">
-                                mission
-                            </span>:
-
-                            <span class="code-green">
-                                "Build Real Software"
-                            </span>
-                        </div>
-
-                        <div>
-                            <span class="code-purple">
-                                &lt;/developer&gt;
-                            </span>
-                        </div>
-
-                        <br>
-
-                        <div class="code-muted">
-                            // One project at a time.
-                        </div>
+                        <a
+                            href="#roadmap"
+                            class="button button-secondary"
+                        >
+                            View My Roadmap
+                        </a>
 
                     </div>
 
                 </div>
+
+
+                <aside
+                    class="hero-card reveal"
+                >
+
+                    <div class="avatar">
+                        CR
+                    </div>
+
+
+                    <h2>
+                        Collins Redfellor
+                    </h2>
+
+
+                    <p>
+                        Programming Journey
+                    </p>
+
+
+                    <ul class="profile-list">
+
+                        <li>
+                            <span>Python</span>
+                            <strong>Completed</strong>
+                        </li>
+
+                        <li>
+                            <span>HTML</span>
+                            <strong>Completed</strong>
+                        </li>
+
+                        <li>
+                            <span>CSS</span>
+                            <strong>Completed</strong>
+                        </li>
+
+                        <li>
+                            <span>JavaScript</span>
+                            <strong>20 Projects</strong>
+                        </li>
+
+                        <li>
+                            <span>Next Stage</span>
+                            <strong>Backend</strong>
+                        </li>
+
+                    </ul>
+
+                </aside>
 
             </div>
 
         </section>
 
 
-
         <!-- =====================================================
-             PROGRESS STATISTICS
+             STATS
         ====================================================== -->
 
-        <section>
+        <section class="section">
 
             <div class="container">
 
                 <div class="stats-grid">
 
-                    <div class="stat-card">
+                    <article class="stat-card reveal">
 
-                        <span class="stat-number">
-                            10
+                        <span
+                            class="stat-number counter"
+                            data-target="20"
+                        >
+                            0
                         </span>
 
                         <span class="stat-label">
-                            Major Projects
+                            JavaScript Projects
                         </span>
 
-                    </div>
+                    </article>
 
 
-                    <div class="stat-card">
+                    <article class="stat-card reveal">
 
-                        <span class="stat-number">
-                            5
-                        </span>
-
-                        <span class="stat-label">
-                            HTML Projects
-                        </span>
-
-                    </div>
-
-
-                    <div class="stat-card">
-
-                        <span class="stat-number">
-                            5
+                        <span
+                            class="stat-number counter"
+                            data-target="3"
+                        >
+                            0
                         </span>
 
                         <span class="stat-label">
-                            CSS Projects
+                            Major Frontend Technologies
                         </span>
 
-                    </div>
+                    </article>
 
 
-                    <div class="stat-card">
+                    <article class="stat-card reveal">
 
-                        <span class="stat-number">
-                            ∞
+                        <span
+                            class="stat-number counter"
+                            data-target="4"
+                        >
+                            0
                         </span>
 
                         <span class="stat-label">
-                            More To Build
+                            Development Stages Completed
                         </span>
 
-                    </div>
+                    </article>
+
+
+                    <article class="stat-card reveal">
+
+                        <span
+                            class="stat-number counter"
+                            data-target="100"
+                        >
+                            0
+                        </span>
+
+                        <span class="stat-label">
+                            Commitment to the Journey %
+                        </span>
+
+                    </article>
 
                 </div>
 
@@ -2213,42 +2412,157 @@
         </section>
 
 
-
         <!-- =====================================================
-             SKILLS
+             ABOUT
         ====================================================== -->
 
-        <section id="skills">
+        <section
+            class="section"
+            id="about"
+        >
 
             <div class="container">
 
-                <div class="section-heading">
+                <div class="section-heading reveal">
 
-                    <span class="section-label">
-                        What I'm Learning
+                    <span>
+                        About Me
                     </span>
 
                     <h2>
-                        Building My Development Foundation
+                        Learning with a long-term vision.
                     </h2>
 
                     <p>
-                        My current learning stage focuses on
-                        understanding how websites are structured,
-                        styled, and made responsive before moving
-                        deeper into JavaScript and backend development.
+                        This portfolio is more than a collection of
+                        webpages. It is a record of my development as
+                        a programmer and software developer.
                     </p>
 
                 </div>
 
 
-                <div class="skills-grid">
+                <div class="about-grid">
+
+                    <article class="about-card reveal">
+
+                        <h3>
+                            My Philosophy
+                        </h3>
+
+                        <p>
+
+                            I believe the best way to learn software
+                            development is to combine theory with
+                            practical projects.
+
+                            Instead of only studying syntax, I am
+                            continuously building applications,
+                            solving problems, experimenting with
+                            interfaces and learning how individual
+                            technologies work together.
+
+                        </p>
+
+                    </article>
 
 
-                    <article class="skill-card">
+                    <article class="about-card reveal">
 
-                        <div class="skill-icon">
-                            PY
+                        <h3>
+                            My Objective
+                        </h3>
+
+                        <p>
+
+                            My goal is to become capable of taking an
+                            idea from concept to a working real-world
+                            product — designing the interface,
+                            developing the application logic,
+                            connecting backend systems, working with
+                            databases and eventually integrating
+                            intelligent and secure systems.
+
+                        </p>
+
+                    </article>
+
+
+                    <article class="about-card reveal">
+
+                        <h3>
+                            My Approach
+                        </h3>
+
+                        <p>
+
+                            Every project gives me an opportunity to
+                            understand a new concept, encounter a
+                            problem, solve it and improve the quality
+                            of my development work.
+
+                        </p>
+
+                    </article>
+
+
+                    <article class="about-card reveal">
+
+                        <h3>
+                            Where I'm Going
+                        </h3>
+
+                        <p>
+
+                            The journey continues beyond frontend
+                            development into backend engineering,
+                            advanced software development, AI,
+                            cybersecurity and eventually building
+                            technology products and startups.
+
+                        </p>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             TECHNOLOGY STACK
+        ====================================================== -->
+
+        <section class="section">
+
+            <div class="container">
+
+                <div class="section-heading reveal">
+
+                    <span>
+                        Technology Stack
+                    </span>
+
+                    <h2>
+                        Foundations I've built.
+                    </h2>
+
+                    <p>
+                        The technologies currently forming the
+                        foundation of my software development journey.
+                    </p>
+
+                </div>
+
+
+                <div class="stack-grid">
+
+                    <article class="stack-card reveal">
+
+                        <div class="stack-icon">
+                            🐍
                         </div>
 
                         <h3>
@@ -2257,18 +2571,17 @@
 
                         <p>
                             Programming fundamentals, functions,
-                            data structures, object-oriented
-                            programming, modules, packages,
-                            and beginner projects.
+                            data structures, OOP, modules,
+                            authentication and beginner projects.
                         </p>
 
                     </article>
 
 
-                    <article class="skill-card">
+                    <article class="stack-card reveal">
 
-                        <div class="skill-icon">
-                            HT
+                        <div class="stack-icon">
+                            🌐
                         </div>
 
                         <h3>
@@ -2277,17 +2590,17 @@
 
                         <p>
                             Semantic structure, forms, navigation,
-                            tables, links, sections, multimedia,
+                            sections, tables, content organization
                             and complete webpage architecture.
                         </p>
 
                     </article>
 
 
-                    <article class="skill-card">
+                    <article class="stack-card reveal">
 
-                        <div class="skill-icon">
-                            CS
+                        <div class="stack-icon">
+                            🎨
                         </div>
 
                         <h3>
@@ -2295,18 +2608,18 @@
                         </h3>
 
                         <p>
-                            Responsive layouts, Flexbox, Grid,
-                            animations, transitions, gradients,
-                            glassmorphism, forms, cards, and UI design.
+                            Responsive layouts, gradients,
+                            animations, cards, modern interfaces,
+                            effects and professional visual design.
                         </p>
 
                     </article>
 
 
-                    <article class="skill-card">
+                    <article class="stack-card reveal">
 
-                        <div class="skill-icon">
-                            JS
+                        <div class="stack-icon">
+                            ⚡
                         </div>
 
                         <h3>
@@ -2314,9 +2627,9 @@
                         </h3>
 
                         <p>
-                            Next on the roadmap: programming logic,
-                            DOM manipulation, events, APIs,
-                            interactivity, and dynamic applications.
+                            Dynamic interfaces, DOM manipulation,
+                            APIs, async programming, localStorage,
+                            validation, games and applications.
                         </p>
 
                     </article>
@@ -2328,599 +2641,506 @@
         </section>
 
 
-
         <!-- =====================================================
-             PROJECTS
+             JAVASCRIPT PORTFOLIO
         ====================================================== -->
 
-        <section id="projects">
+        <section
+            class="section"
+            id="projects"
+        >
 
             <div class="container">
 
-                <div class="section-heading">
+                <div class="section-heading reveal">
 
-                    <span class="section-label">
-                        Project Portfolio
+                    <span>
+                        JavaScript Portfolio
                     </span>
 
                     <h2>
-                        What I've Built
+                        20 projects. One major milestone.
                     </h2>
 
                     <p>
-                        Every project is part of the learning process.
-                        I use projects to turn concepts into practical
-                        skills and document what I discover.
+                        My complete JavaScript project journey,
+                        from programming fundamentals to API-powered
+                        applications and a professional portfolio.
                     </p>
 
                 </div>
 
 
-                <!-- =================================================
-                     HTML PROJECTS
-                ================================================== -->
+                <div class="javascript-banner reveal">
 
-                <div class="section-heading">
+                    <div>
 
-                    <span class="section-label">
-                        HTML Collection
-                    </span>
+                        <h3>
+                            JavaScript Journey — Completed
+                        </h3>
 
-                    <h2>
-                        HTML Projects
-                    </h2>
+                        <p>
+                            Fundamentals → DOM → Applications →
+                            Local Storage → APIs → Async JavaScript
+                            → Portfolio Development
+                        </p>
+
+                    </div>
+
+
+                    <div class="js-badge">
+                        20 / 20 COMPLETE ✓
+                    </div>
 
                 </div>
 
 
-                <div class="projects-grid">
+                <div class="project-controls">
 
+                    <div class="filter-buttons">
 
-                    <article class="project-card">
-
-                        <span class="project-number">
-                            HTML / 01
-                        </span>
-
-                        <h3>
-                            Profile Page
-                        </h3>
-
-                        <p>
-                            My first structured HTML webpage,
-                            introducing headings, paragraphs,
-                            links, lists, sections, and navigation.
-                        </p>
-
-                        <div class="project-tags">
-
-                            <span class="tag">
-                                HTML
-                            </span>
-
-                            <span class="tag">
-                                Structure
-                            </span>
-
-                            <span class="tag">
-                                Navigation
-                            </span>
-
-                        </div>
-
-                        <a
-                            href="projects/profile-page/index.html"
-                            class="project-link"
+                        <button
+                            class="filter-button active"
+                            data-filter="all"
                         >
-                            View Project →
-                        </a>
+                            All
+                        </button>
 
-                    </article>
-
-
-                    <article class="project-card">
-
-                        <span class="project-number">
-                            HTML / 02
-                        </span>
-
-                        <h3>
-                            Personal Portfolio
-                        </h3>
-
-                        <p>
-                            A developer portfolio structure for
-                            organizing skills, interests, projects,
-                            and personal information.
-                        </p>
-
-                        <div class="project-tags">
-
-                            <span class="tag">
-                                HTML
-                            </span>
-
-                            <span class="tag">
-                                Portfolio
-                            </span>
-
-                            <span class="tag">
-                                Semantic HTML
-                            </span>
-
-                        </div>
-
-                        <a
-                            href="projects/personal-portfolio/index.html"
-                            class="project-link"
+                        <button
+                            class="filter-button"
+                            data-filter="fundamentals"
                         >
-                            View Project →
-                        </a>
+                            Fundamentals
+                        </button>
 
-                    </article>
-
-
-                    <article class="project-card">
-
-                        <span class="project-number">
-                            HTML / 03
-                        </span>
-
-                        <h3>
-                            Registration Form
-                        </h3>
-
-                        <p>
-                            A complete registration interface
-                            demonstrating inputs, passwords,
-                            radio buttons, checkboxes, dropdowns,
-                            text areas, and buttons.
-                        </p>
-
-                        <div class="project-tags">
-
-                            <span class="tag">
-                                HTML Forms
-                            </span>
-
-                            <span class="tag">
-                                Inputs
-                            </span>
-
-                            <span class="tag">
-                                Validation
-                            </span>
-
-                        </div>
-
-                        <a
-                            href="projects/registration-form/index.html"
-                            class="project-link"
+                        <button
+                            class="filter-button"
+                            data-filter="applications"
                         >
-                            View Project →
-                        </a>
+                            Applications
+                        </button>
 
-                    </article>
-
-
-                    <article class="project-card">
-
-                        <span class="project-number">
-                            HTML / 04
-                        </span>
-
-                        <h3>
-                            Developer Landing Page
-                        </h3>
-
-                        <p>
-                            A larger developer-focused webpage
-                            combining semantic HTML, navigation,
-                            tables, figures, resources, and a roadmap.
-                        </p>
-
-                        <div class="project-tags">
-
-                            <span class="tag">
-                                HTML
-                            </span>
-
-                            <span class="tag">
-                                Layout
-                            </span>
-
-                            <span class="tag">
-                                Sections
-                            </span>
-
-                        </div>
-
-                        <a
-                            href="projects/developer-landing-page/index.html"
-                            class="project-link"
+                        <button
+                            class="filter-button"
+                            data-filter="advanced"
                         >
-                            View Project →
-                        </a>
+                            Advanced
+                        </button>
 
-                    </article>
+                    </div>
 
 
-                    <article class="project-card">
-
-                        <span class="project-number">
-                            HTML / 05
-                        </span>
-
-                        <h3>
-                            HTML Capstone Website
-                        </h3>
-
-                        <p>
-                            My largest HTML project so far,
-                            combining many concepts into one
-                            complete website.
-                        </p>
-
-                        <div class="project-tags">
-
-                            <span class="tag">
-                                HTML
-                            </span>
-
-                            <span class="tag">
-                                Capstone
-                            </span>
-
-                            <span class="tag">
-                                Architecture
-                            </span>
-
-                        </div>
-
-                        <a
-                            href="projects/multi-page-website/index.html"
-                            class="project-link"
-                        >
-                            View Project →
-                        </a>
-
-                    </article>
+                    <input
+                        type="search"
+                        id="projectSearch"
+                        class="project-search"
+                        placeholder="Search JavaScript projects..."
+                        aria-label="Search JavaScript projects"
+                    >
 
                 </div>
 
-
-
-                <!-- =================================================
-                     CSS PROJECTS
-                ================================================== -->
 
                 <div
-                    style="
-                        margin-top: 90px;
-                    "
-                >
+                    class="projects-grid"
+                    id="projectsGrid"
+                ></div>
 
-                    <div class="section-heading">
+            </div>
 
-                        <span class="section-label">
-                            CSS Collection
+        </section>
+
+
+        <!-- =====================================================
+             JAVASCRIPT TOPICS
+        ====================================================== -->
+
+        <section class="section">
+
+            <div class="container">
+
+                <div class="section-heading reveal">
+
+                    <span>
+                        JavaScript Knowledge
+                    </span>
+
+                    <h2>
+                        What the 20 projects taught me.
+                    </h2>
+
+                    <p>
+                        The project journey covered the major concepts
+                        required to begin building interactive
+                        JavaScript applications.
+                    </p>
+
+                </div>
+
+
+                <div class="topics-grid">
+
+                    <article class="topic-card reveal">
+
+                        <span class="topic-number">
+                            01
                         </span>
 
-                        <h2>
-                            CSS Projects
-                        </h2>
+                        <h3>
+                            Variables & Data Types
+                        </h3>
 
                         <p>
-                            My first CSS projects are focused on
-                            transforming plain HTML structures into
-                            responsive, animated, modern interfaces.
+                            Working with strings, numbers, booleans,
+                            arrays, objects and JavaScript values.
                         </p>
 
-                    </div>
+                    </article>
 
 
-                    <div class="css-projects">
+                    <article class="topic-card reveal">
 
+                        <span class="topic-number">
+                            02
+                        </span>
 
-                        <!-- CSS PROJECT 1 -->
+                        <h3>
+                            Conditions & Logic
+                        </h3>
 
-                        <article class="css-project">
+                        <p>
+                            if statements, comparisons, logical
+                            operators and decision-making systems.
+                        </p>
 
-                            <div class="css-project-number">
-                                01
-                            </div>
+                    </article>
 
-                            <h3>
-                                CSS Fundamentals
-                            </h3>
 
-                            <p>
-                                My first step into styling webpages
-                                and understanding how CSS changes
-                                the appearance of HTML.
-                            </p>
+                    <article class="topic-card reveal">
 
-                            <ul>
+                        <span class="topic-number">
+                            03
+                        </span>
 
-                                <li>
-                                    Selectors
-                                </li>
+                        <h3>
+                            Loops
+                        </h3>
 
-                                <li>
-                                    Colors & Typography
-                                </li>
+                        <p>
+                            Repeating operations using loops to
+                            generate tables, process data and build
+                            interactive applications.
+                        </p>
 
-                                <li>
-                                    Spacing & Borders
-                                </li>
+                    </article>
 
-                                <li>
-                                    Basic Layout
-                                </li>
 
-                            </ul>
+                    <article class="topic-card reveal">
 
-                            <a
-                                href="css-project-1.html"
-                                class="project-link"
-                            >
-                                View Project →
-                            </a>
+                        <span class="topic-number">
+                            04
+                        </span>
 
-                        </article>
+                        <h3>
+                            Functions
+                        </h3>
 
+                        <p>
+                            Reusable blocks of logic that make
+                            applications organized and maintainable.
+                        </p>
 
-                        <!-- CSS PROJECT 2 -->
+                    </article>
 
-                        <article class="css-project">
 
-                            <div class="css-project-number">
-                                02
-                            </div>
+                    <article class="topic-card reveal">
 
-                            <h3>
-                                CSS Layout Design
-                            </h3>
+                        <span class="topic-number">
+                            05
+                        </span>
 
-                            <p>
-                                A practical project focused on
-                                arranging elements into structured
-                                and visually balanced layouts.
-                            </p>
+                        <h3>
+                            Arrays & Objects
+                        </h3>
 
-                            <ul>
+                        <p>
+                            Structuring application data and using
+                            array methods to transform and manage it.
+                        </p>
 
-                                <li>
-                                    Flexbox
-                                </li>
+                    </article>
 
-                                <li>
-                                    Alignment
-                                </li>
 
-                                <li>
-                                    Spacing
-                                </li>
+                    <article class="topic-card reveal">
 
-                                <li>
-                                    Responsive Layout
-                                </li>
+                        <span class="topic-number">
+                            06
+                        </span>
 
-                            </ul>
+                        <h3>
+                            DOM Manipulation
+                        </h3>
 
-                            <a
-                                href="css-project-2.html"
-                                class="project-link"
-                            >
-                                View Project →
-                            </a>
+                        <p>
+                            Dynamically creating, updating and
+                            controlling webpage elements.
+                        </p>
 
-                        </article>
+                    </article>
 
 
-                        <!-- CSS PROJECT 3 -->
+                    <article class="topic-card reveal">
 
-                        <article class="css-project">
+                        <span class="topic-number">
+                            07
+                        </span>
 
-                            <div class="css-project-number">
-                                03
-                            </div>
+                        <h3>
+                            Events
+                        </h3>
 
-                            <h3>
-                                CSS Responsive Interface
-                            </h3>
+                        <p>
+                            Handling clicks, keyboard actions,
+                            form submissions and user interaction.
+                        </p>
 
-                            <p>
-                                A project exploring responsive
-                                design and how interfaces adapt
-                                to different screen sizes.
-                            </p>
+                    </article>
 
-                            <ul>
 
-                                <li>
-                                    Media Queries
-                                </li>
+                    <article class="topic-card reveal">
 
-                                <li>
-                                    Responsive Units
-                                </li>
+                        <span class="topic-number">
+                            08
+                        </span>
 
-                                <li>
-                                    Mobile Layouts
-                                </li>
+                        <h3>
+                            Form Validation
+                        </h3>
 
-                                <li>
-                                    Flexible Components
-                                </li>
+                        <p>
+                            Checking user input and providing
+                            meaningful feedback before processing data.
+                        </p>
 
-                            </ul>
+                    </article>
 
-                            <a
-                                href="css-project-3.html"
-                                class="project-link"
-                            >
-                                View Project →
-                            </a>
 
-                        </article>
+                    <article class="topic-card reveal">
 
+                        <span class="topic-number">
+                            09
+                        </span>
 
-                        <!-- CSS PROJECT 4 -->
+                        <h3>
+                            CRUD Operations
+                        </h3>
 
-                        <article class="css-project">
+                        <p>
+                            Creating, reading, updating and deleting
+                            application data.
+                        </p>
 
-                            <div class="css-project-number">
-                                04
-                            </div>
+                    </article>
 
-                            <h3>
-                                Animated Login Form
-                            </h3>
 
-                            <p>
-                                A modern glassmorphism login interface
-                                combining forms, animations, gradients,
-                                focus states, and interactive styling.
-                            </p>
+                    <article class="topic-card reveal">
 
-                            <ul>
+                        <span class="topic-number">
+                            10
+                        </span>
 
-                                <li>
-                                    Glassmorphism
-                                </li>
+                        <h3>
+                            Local Storage
+                        </h3>
 
-                                <li>
-                                    CSS Animations
-                                </li>
+                        <p>
+                            Persisting application data inside the
+                            browser between sessions.
+                        </p>
 
-                                <li>
-                                    Gradients
-                                </li>
+                    </article>
 
-                                <li>
-                                    Form Styling
-                                </li>
 
-                                <li>
-                                    Hover & Focus States
-                                </li>
+                    <article class="topic-card reveal">
 
-                            </ul>
+                        <span class="topic-number">
+                            11
+                        </span>
 
-                            <a
-                                href="css-animated-login.html"
-                                class="project-link"
-                            >
-                                View Project →
-                            </a>
+                        <h3>
+                            JSON
+                        </h3>
 
-                        </article>
+                        <p>
+                            Converting structured JavaScript data
+                            into a format suitable for storage and APIs.
+                        </p>
 
+                    </article>
 
-                        <!-- CSS PROJECT 5 -->
 
-                        <article class="css-project">
+                    <article class="topic-card reveal">
 
-                            <div class="css-project-number">
-                                05
-                            </div>
+                        <span class="topic-number">
+                            12
+                        </span>
 
-                            <h3>
-                                Modern Pricing Cards
-                            </h3>
+                        <h3>
+                            Search & Filtering
+                        </h3>
 
-                            <p>
-                                A responsive pricing interface using
-                                CSS Grid, glassmorphism, gradients,
-                                hover effects, and responsive design.
-                            </p>
+                        <p>
+                            Finding and organizing dynamic data using
+                            search fields and category filters.
+                        </p>
 
-                            <ul>
+                    </article>
 
-                                <li>
-                                    CSS Grid
-                                </li>
 
-                                <li>
-                                    Pricing Cards
-                                </li>
+                    <article class="topic-card reveal">
 
-                                <li>
-                                    Hover Animations
-                                </li>
+                        <span class="topic-number">
+                            13
+                        </span>
 
-                                <li>
-                                    Responsive Breakpoints
-                                </li>
+                        <h3>
+                            Timers & Dates
+                        </h3>
 
-                                <li>
-                                    Modern UI Design
-                                </li>
+                        <p>
+                            Working with intervals, countdowns,
+                            clocks and JavaScript Date objects.
+                        </p>
 
-                            </ul>
+                    </article>
 
-                            <a
-                                href="css-pricing-cards.html"
-                                class="project-link"
-                            >
-                                View Project →
-                            </a>
 
-                        </article>
+                    <article class="topic-card reveal">
 
+                        <span class="topic-number">
+                            14
+                        </span>
 
-                        <!-- FUTURE -->
+                        <h3>
+                            Randomization
+                        </h3>
 
-                        <article class="css-project">
+                        <p>
+                            Generating random values for games,
+                            passwords and interactive systems.
+                        </p>
 
-                            <div class="css-project-number">
-                                +
-                            </div>
+                    </article>
 
-                            <h3>
-                                More CSS Projects
-                            </h3>
 
-                            <p>
-                                The CSS journey is continuing.
-                                More advanced interfaces, animations,
-                                components, layouts, and UI systems
-                                will be added here as I progress.
-                            </p>
+                    <article class="topic-card reveal">
 
-                            <ul>
+                        <span class="topic-number">
+                            15
+                        </span>
 
-                                <li>
-                                    Advanced Animations
-                                </li>
+                        <h3>
+                            Fetch API
+                        </h3>
 
-                                <li>
-                                    Complex Layouts
-                                </li>
+                        <p>
+                            Requesting external data from public APIs
+                            and processing responses.
+                        </p>
 
-                                <li>
-                                    UI Components
-                                </li>
+                    </article>
 
-                                <li>
-                                    Design Systems
-                                </li>
 
-                            </ul>
+                    <article class="topic-card reveal">
 
-                            <span
-                                class="project-link"
-                                style="
-                                    color: var(--text-muted);
-                                "
-                            >
-                                Coming Soon...
-                            </span>
+                        <span class="topic-number">
+                            16
+                        </span>
 
-                        </article>
+                        <h3>
+                            Async / Await
+                        </h3>
 
-                    </div>
+                        <p>
+                            Managing asynchronous operations in a
+                            cleaner and more readable way.
+                        </p>
+
+                    </article>
+
+
+                    <article class="topic-card reveal">
+
+                        <span class="topic-number">
+                            17
+                        </span>
+
+                        <h3>
+                            Error Handling
+                        </h3>
+
+                        <p>
+                            Detecting errors, handling failed
+                            operations and creating useful feedback.
+                        </p>
+
+                    </article>
+
+
+                    <article class="topic-card reveal">
+
+                        <span class="topic-number">
+                            18
+                        </span>
+
+                        <h3>
+                            Dynamic Interfaces
+                        </h3>
+
+                        <p>
+                            Generating interface components from
+                            JavaScript data instead of hard-coding
+                            every element.
+                        </p>
+
+                    </article>
+
+
+                    <article class="topic-card reveal">
+
+                        <span class="topic-number">
+                            19
+                        </span>
+
+                        <h3>
+                            Responsive Applications
+                        </h3>
+
+                        <p>
+                            Combining JavaScript behavior with
+                            responsive CSS layouts for different
+                            screen sizes.
+                        </p>
+
+                    </article>
+
+
+                    <article class="topic-card reveal">
+
+                        <span class="topic-number">
+                            20
+                        </span>
+
+                        <h3>
+                            Portfolio Architecture
+                        </h3>
+
+                        <p>
+                            Combining everything into a professional
+                            interactive application and portfolio.
+                        </p>
+
+                    </article>
 
                 </div>
 
@@ -2929,204 +3149,188 @@
         </section>
 
 
-
         <!-- =====================================================
-             CSS LEARNING LAB
+             SKILLS
         ====================================================== -->
 
-        <section id="css-lab">
+        <section
+            class="section"
+            id="skills"
+        >
 
             <div class="container">
 
-                <div class="section-heading">
+                <div class="section-heading reveal">
 
-                    <span class="section-label">
-                        CSS Learning Lab
+                    <span>
+                        Skills
                     </span>
 
                     <h2>
-                        What These Projects Are Teaching Me
+                        My current development foundation.
                     </h2>
 
                     <p>
-                        These projects are not just webpages.
-                        Each one is an opportunity to understand
-                        a specific CSS concept and learn how that
-                        concept can be applied to real interfaces.
+                        These percentages represent learning
+                        confidence rather than professional
+                        certification or employment experience.
                     </p>
 
                 </div>
 
 
-                <div class="lab">
+                <div class="skills-grid">
 
+                    <article class="skill-card reveal">
 
-                    <article class="lab-card">
+                        <div class="skill-header">
 
-                        <h3>
-                            Layout & Structure
-                        </h3>
+                            <strong>
+                                Python Fundamentals
+                            </strong>
 
-                        <p>
-                            Learning how CSS controls the position,
-                            size, alignment, spacing, and relationship
-                            between elements.
-                        </p>
-
-                        <div class="concept-list">
-
-                            <span class="concept">
-                                Flexbox
+                            <span>
+                                85%
                             </span>
 
-                            <span class="concept">
-                                Grid
-                            </span>
+                        </div>
 
-                            <span class="concept">
-                                width
-                            </span>
+                        <div class="progress">
 
-                            <span class="concept">
-                                height
-                            </span>
-
-                            <span class="concept">
-                                margin
-                            </span>
-
-                            <span class="concept">
-                                padding
-                            </span>
-
-                            <span class="concept">
-                                gap
-                            </span>
+                            <div
+                                class="progress-bar"
+                                data-width="85%"
+                            ></div>
 
                         </div>
 
                     </article>
 
 
-                    <article class="lab-card">
+                    <article class="skill-card reveal">
 
-                        <h3>
-                            Visual Design
-                        </h3>
+                        <div class="skill-header">
 
-                        <p>
-                            Learning how colors, typography,
-                            gradients, borders, shadows, and
-                            transparency create a visual identity.
-                        </p>
+                            <strong>
+                                HTML
+                            </strong>
 
-                        <div class="concept-list">
-
-                            <span class="concept">
-                                gradients
+                            <span>
+                                92%
                             </span>
 
-                            <span class="concept">
-                                colors
-                            </span>
+                        </div>
 
-                            <span class="concept">
-                                shadows
-                            </span>
+                        <div class="progress">
 
-                            <span class="concept">
-                                borders
-                            </span>
-
-                            <span class="concept">
-                                opacity
-                            </span>
-
-                            <span class="concept">
-                                backdrop-filter
-                            </span>
+                            <div
+                                class="progress-bar"
+                                data-width="92%"
+                            ></div>
 
                         </div>
 
                     </article>
 
 
-                    <article class="lab-card">
+                    <article class="skill-card reveal">
 
-                        <h3>
-                            Interaction & Motion
-                        </h3>
+                        <div class="skill-header">
 
-                        <p>
-                            Learning how CSS can make interfaces
-                            feel alive through hover effects,
-                            transitions, transforms, and animations.
-                        </p>
+                            <strong>
+                                CSS
+                            </strong>
 
-                        <div class="concept-list">
-
-                            <span class="concept">
-                                :hover
+                            <span>
+                                90%
                             </span>
 
-                            <span class="concept">
-                                :focus
-                            </span>
+                        </div>
 
-                            <span class="concept">
-                                transition
-                            </span>
+                        <div class="progress">
 
-                            <span class="concept">
-                                transform
-                            </span>
-
-                            <span class="concept">
-                                @keyframes
-                            </span>
-
-                            <span class="concept">
-                                animation
-                            </span>
+                            <div
+                                class="progress-bar"
+                                data-width="90%"
+                            ></div>
 
                         </div>
 
                     </article>
 
 
-                    <article class="lab-card">
+                    <article class="skill-card reveal">
 
-                        <h3>
-                            Responsive Design
-                        </h3>
+                        <div class="skill-header">
 
-                        <p>
-                            Learning how to make interfaces adapt
-                            to desktops, tablets, and mobile devices
-                            instead of designing for only one screen.
-                        </p>
+                            <strong>
+                                JavaScript
+                            </strong>
 
-                        <div class="concept-list">
-
-                            <span class="concept">
-                                media queries
+                            <span>
+                                88%
                             </span>
 
-                            <span class="concept">
-                                min()
+                        </div>
+
+                        <div class="progress">
+
+                            <div
+                                class="progress-bar"
+                                data-width="88%"
+                            ></div>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="skill-card reveal">
+
+                        <div class="skill-header">
+
+                            <strong>
+                                DOM & Events
+                            </strong>
+
+                            <span>
+                                90%
                             </span>
 
-                            <span class="concept">
-                                max()
+                        </div>
+
+                        <div class="progress">
+
+                            <div
+                                class="progress-bar"
+                                data-width="90%"
+                            ></div>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="skill-card reveal">
+
+                        <div class="skill-header">
+
+                            <strong>
+                                APIs & Async JavaScript
+                            </strong>
+
+                            <span>
+                                82%
                             </span>
 
-                            <span class="concept">
-                                clamp()
-                            </span>
+                        </div>
 
-                            <span class="concept">
-                                flexible units
-                            </span>
+                        <div class="progress">
+
+                            <div
+                                class="progress-bar"
+                                data-width="82%"
+                            ></div>
 
                         </div>
 
@@ -3137,111 +3341,32 @@
             </div>
 
         </section>
-
-
-
-        <!-- =====================================================
-             ABOUT
-        ====================================================== -->
-
-        <section id="about">
-
-            <div class="container">
-
-                <div class="section-heading">
-
-                    <span class="section-label">
-                        About The Journey
-                    </span>
-
-                    <h2>
-                        Learning By Building
-                    </h2>
-
-                    <p>
-                        The purpose of this website is to document
-                        the development of my technical skills over time.
-                    </p>
-
-                </div>
-
-
-                <div class="about-grid">
-
-
-                    <article class="about-card">
-
-                        <h3>
-                            Why I'm Learning
-                        </h3>
-
-                        <p>
-                            I am learning software development by
-                            starting with the fundamentals and gradually
-                            progressing toward more advanced technologies.
-                        </p>
-
-                        <p>
-                            My goal is not simply to memorize programming
-                            syntax. I want to understand how real-world
-                            applications are designed, built, deployed,
-                            maintained, and improved.
-                        </p>
-
-                    </article>
-
-
-                    <article class="about-card">
-
-                        <h3>
-                            My Learning Philosophy
-                        </h3>
-
-                        <p>
-                            Every project becomes another practical
-                            experiment. Instead of only reading about
-                            a concept, I try to use it to build something.
-                        </p>
-
-                        <p>
-                            Problems, mistakes, improvements, and
-                            completed projects all become part of the
-                            journey.
-                        </p>
-
-                    </article>
-
-                </div>
-
-            </div>
-
-        </section>
-
 
 
         <!-- =====================================================
              ROADMAP
         ====================================================== -->
 
-        <section id="roadmap">
+        <section
+            class="section"
+            id="roadmap"
+        >
 
             <div class="container">
 
-                <div class="section-heading">
+                <div class="section-heading reveal">
 
-                    <span class="section-label">
-                        Long-Term Roadmap
+                    <span>
+                        Development Roadmap
                     </span>
 
                     <h2>
-                        Where I'm Going
+                        Where the journey is going.
                     </h2>
 
                     <p>
-                        My development roadmap moves from programming
-                        fundamentals toward building complete,
-                        intelligent, secure, and eventually
-                        commercially useful software.
+                        The long-term roadmap I am following as I
+                        progress toward advanced software development.
                     </p>
 
                 </div>
@@ -3250,17 +3375,17 @@
                 <div class="roadmap">
 
 
-                    <!-- PYTHON -->
-
                     <article
-                        class="roadmap-item completed"
+                        class="roadmap-item completed reveal"
                     >
 
-                        <div class="roadmap-marker">
-                            ✓
-                        </div>
+                        <div class="roadmap-dot"></div>
 
-                        <div class="roadmap-content">
+                        <div class="roadmap-card">
+
+                            <small>
+                                STAGE 01 · COMPLETED
+                            </small>
 
                             <h3>
                                 Python
@@ -3268,10 +3393,9 @@
 
                             <p>
                                 Programming fundamentals, variables,
-                                conditions, loops, functions,
-                                data structures, object-oriented
-                                programming, modules, packages,
-                                and beginner projects.
+                                conditions, loops, functions, data
+                                structures, object-oriented programming,
+                                modules, packages and projects.
                             </p>
 
                         </div>
@@ -3279,26 +3403,26 @@
                     </article>
 
 
-                    <!-- HTML -->
-
                     <article
-                        class="roadmap-item completed"
+                        class="roadmap-item completed reveal"
                     >
 
-                        <div class="roadmap-marker">
-                            ✓
-                        </div>
+                        <div class="roadmap-dot"></div>
 
-                        <div class="roadmap-content">
+                        <div class="roadmap-card">
+
+                            <small>
+                                STAGE 02 · COMPLETED
+                            </small>
 
                             <h3>
                                 HTML
                             </h3>
 
                             <p>
-                                Semantic structure, webpages,
-                                navigation, forms, tables, sections,
-                                links, and complete website architecture.
+                                Semantic webpage structure, forms,
+                                navigation, sections, content
+                                organization and complete websites.
                             </p>
 
                         </div>
@@ -3306,27 +3430,27 @@
                     </article>
 
 
-                    <!-- CSS -->
-
                     <article
-                        class="roadmap-item current"
+                        class="roadmap-item completed reveal"
                     >
 
-                        <div class="roadmap-marker">
-                            ●
-                        </div>
+                        <div class="roadmap-dot"></div>
 
-                        <div class="roadmap-content">
+                        <div class="roadmap-card">
+
+                            <small>
+                                STAGE 03 · COMPLETED
+                            </small>
 
                             <h3>
-                                CSS — Current Focus
+                                CSS
                             </h3>
 
                             <p>
-                                Responsive design, Flexbox, Grid,
-                                animations, transitions, gradients,
-                                glassmorphism, forms, cards,
-                                UI design, and visual interfaces.
+                                Responsive design, layouts,
+                                animations, modern cards, gradients,
+                                visual effects and professional
+                                interface styling.
                             </p>
 
                         </div>
@@ -3334,24 +3458,28 @@
                     </article>
 
 
-                    <!-- JAVASCRIPT -->
+                    <article
+                        class="roadmap-item completed reveal"
+                    >
 
-                    <article class="roadmap-item">
+                        <div class="roadmap-dot"></div>
 
-                        <div class="roadmap-marker">
-                            04
-                        </div>
+                        <div class="roadmap-card">
 
-                        <div class="roadmap-content">
+                            <small>
+                                STAGE 04 · COMPLETED
+                            </small>
 
                             <h3>
                                 JavaScript
                             </h3>
 
                             <p>
-                                Programming logic, DOM manipulation,
-                                events, APIs, asynchronous programming,
-                                and dynamic web applications.
+                                20 projects covering fundamentals,
+                                DOM manipulation, events, applications,
+                                local storage, APIs, asynchronous
+                                programming, validation and dynamic
+                                interfaces.
                             </p>
 
                         </div>
@@ -3359,15 +3487,17 @@
                     </article>
 
 
-                    <!-- BACKEND -->
+                    <article
+                        class="roadmap-item reveal"
+                    >
 
-                    <article class="roadmap-item">
+                        <div class="roadmap-dot"></div>
 
-                        <div class="roadmap-marker">
-                            05
-                        </div>
+                        <div class="roadmap-card">
 
-                        <div class="roadmap-content">
+                            <small>
+                                STAGE 05 · NEXT
+                            </small>
 
                             <h3>
                                 Backend Development
@@ -3375,8 +3505,9 @@
 
                             <p>
                                 Servers, APIs, authentication,
-                                databases, application logic,
-                                deployment, and backend architecture.
+                                databases, backend architecture,
+                                application logic and connecting
+                                frontend applications to real systems.
                             </p>
 
                         </div>
@@ -3384,25 +3515,27 @@
                     </article>
 
 
-                    <!-- ADVANCED -->
+                    <article
+                        class="roadmap-item reveal"
+                    >
 
-                    <article class="roadmap-item">
+                        <div class="roadmap-dot"></div>
 
-                        <div class="roadmap-marker">
-                            06
-                        </div>
+                        <div class="roadmap-card">
 
-                        <div class="roadmap-content">
+                            <small>
+                                STAGE 06
+                            </small>
 
                             <h3>
                                 Advanced Development
                             </h3>
 
                             <p>
-                                Larger applications, software
-                                architecture, advanced development
-                                practices, testing, performance,
-                                and maintainability.
+                                Larger applications, architecture,
+                                scalability, performance, deployment,
+                                testing and professional engineering
+                                practices.
                             </p>
 
                         </div>
@@ -3410,24 +3543,26 @@
                     </article>
 
 
-                    <!-- AI -->
+                    <article
+                        class="roadmap-item reveal"
+                    >
 
-                    <article class="roadmap-item">
+                        <div class="roadmap-dot"></div>
 
-                        <div class="roadmap-marker">
-                            07
-                        </div>
+                        <div class="roadmap-card">
 
-                        <div class="roadmap-content">
+                            <small>
+                                STAGE 07
+                            </small>
 
                             <h3>
                                 Artificial Intelligence
                             </h3>
 
                             <p>
-                                Exploring AI systems, machine learning,
-                                intelligent applications, automation,
-                                and AI-powered software.
+                                Exploring machine learning, AI systems,
+                                intelligent applications and practical
+                                AI integration.
                             </p>
 
                         </div>
@@ -3435,23 +3570,26 @@
                     </article>
 
 
-                    <!-- CYBERSECURITY -->
+                    <article
+                        class="roadmap-item reveal"
+                    >
 
-                    <article class="roadmap-item">
+                        <div class="roadmap-dot"></div>
 
-                        <div class="roadmap-marker">
-                            08
-                        </div>
+                        <div class="roadmap-card">
 
-                        <div class="roadmap-content">
+                            <small>
+                                STAGE 08
+                            </small>
 
                             <h3>
                                 Cybersecurity
                             </h3>
 
                             <p>
-                                Learning how to protect applications,
-                                systems, networks, data, and users.
+                                Learning how to design and protect
+                                applications, systems, networks and
+                                information.
                             </p>
 
                         </div>
@@ -3459,104 +3597,229 @@
                     </article>
 
 
-                    <!-- STARTUP -->
+                    <article
+                        class="roadmap-item reveal"
+                    >
 
-                    <article class="roadmap-item">
+                        <div class="roadmap-dot"></div>
 
-                        <div class="roadmap-marker">
-                            09
-                        </div>
+                        <div class="roadmap-card">
 
-                        <div class="roadmap-content">
+                            <small>
+                                STAGE 09 · LONG-TERM
+                            </small>
 
                             <h3>
                                 Startup Building
                             </h3>
 
                             <p>
-                                Turning technical skills, ideas,
-                                products, and software into real-world
-                                businesses and useful solutions.
+                                Turning software skills, technical
+                                knowledge and ideas into real-world
+                                products and technology businesses.
                             </p>
 
                         </div>
 
                     </article>
 
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =====================================================
-             ACHIEVEMENT
-        ====================================================== -->
-
-        <section>
-
-            <div class="container">
-
-                <div class="achievement">
-
-                    <div class="achievement-icon">
-                        🚀
-                    </div>
-
-                    <h2>
-                        Current Milestone
-                    </h2>
-
-                    <p>
-                        I have completed my first major HTML collection
-                        and my first five CSS projects. The journey is
-                        now moving from simply structuring webpages to
-                        designing complete, responsive, modern interfaces.
-                    </p>
 
                 </div>
 
             </div>
 
         </section>
-
 
 
         <!-- =====================================================
              CONTACT
         ====================================================== -->
 
-        <section id="contact">
+        <section
+            class="section"
+            id="contact"
+        >
 
             <div class="container">
 
-                <div class="contact">
+                <div class="section-heading reveal">
 
-                    <span class="section-label">
-                        Let's Connect
+                    <span>
+                        Contact
                     </span>
 
                     <h2>
-                        Follow The Journey
+                        Let's build the future.
                     </h2>
 
                     <p>
-                        My GitHub is where the actual work lives.
-                        Explore my repositories, projects, experiments,
-                        and future progress as I continue developing
-                        my software engineering skills.
+                        This section also demonstrates JavaScript
+                        form validation and interactive feedback.
                     </p>
 
-                    <a
-                        href="https://github.com/collinsredfellor"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="button button-primary"
+                </div>
+
+
+                <div class="contact-grid">
+
+
+                    <article class="contact-card reveal">
+
+                        <h3>
+                            Collins Redfellor
+                        </h3>
+
+                        <p>
+
+                            I am currently building my software
+                            development foundation and progressing
+                            toward backend development.
+
+                            Follow the journey as the portfolio
+                            continues to evolve.
+
+                        </p>
+
+
+                        <ul class="contact-list">
+
+                            <li>
+
+                                <span>
+                                    Current Stage
+                                </span>
+
+                                <strong>
+                                    JavaScript Completed
+                                </strong>
+
+                            </li>
+
+
+                            <li>
+
+                                <span>
+                                    Next Stage
+                                </span>
+
+                                <strong>
+                                    Backend Development
+                                </strong>
+
+                            </li>
+
+
+                            <li>
+
+                                <span>
+                                    Main Platform
+                                </span>
+
+                                <strong>
+                                    GitHub
+                                </strong>
+
+                            </li>
+
+                        </ul>
+
+
+                        <br>
+
+
+                        <a
+                            href="https://github.com/collinsredfellor"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="button button-primary"
+                        >
+                            Visit My GitHub →
+                        </a>
+
+                    </article>
+
+
+                    <form
+                        class="contact-card reveal"
+                        id="contactForm"
+                        novalidate
                     >
-                        Visit My GitHub →
-                    </a>
+
+                        <div class="form-group">
+
+                            <label for="contactName">
+                                Your Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="contactName"
+                                placeholder="Enter your name"
+                            >
+
+                            <div
+                                class="error"
+                                id="nameError"
+                            ></div>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="contactEmail">
+                                Email Address
+                            </label>
+
+                            <input
+                                type="email"
+                                id="contactEmail"
+                                placeholder="Enter your email"
+                            >
+
+                            <div
+                                class="error"
+                                id="emailError"
+                            ></div>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="contactMessage">
+                                Message
+                            </label>
+
+                            <textarea
+                                id="contactMessage"
+                                placeholder="Write your message..."
+                            ></textarea>
+
+                            <div
+                                class="error"
+                                id="messageError"
+                            ></div>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="button button-primary"
+                        >
+                            Validate Message
+                        </button>
+
+
+                        <div
+                            class="success"
+                            id="successMessage"
+                        >
+                            ✓ Message validated successfully.
+                        </div>
+
+                    </form>
 
                 </div>
 
@@ -3567,28 +3830,57 @@
     </main>
 
 
-
     <!-- =========================================================
          FOOTER
-    ========================================================== -->
+    ========================================================= -->
 
     <footer>
 
         <div class="container">
 
             <p>
-                © 2026
+                Built by
                 <strong>
                     Collins Redfellor
                 </strong>
             </p>
 
-            <p>
-                My Programming Journey.
-            </p>
+
+            <div class="footer-links">
+
+                <a href="#home">
+                    Home
+                </a>
+
+                <a href="#about">
+                    About
+                </a>
+
+                <a href="#projects">
+                    Projects
+                </a>
+
+                <a href="#roadmap">
+                    Roadmap
+                </a>
+
+                <a href="#contact">
+                    Contact
+                </a>
+
+            </div>
+
 
             <p>
-                Built with HTML & CSS.
+                Python → HTML → CSS → JavaScript →
+                Backend → Advanced Development →
+                AI → Cybersecurity → Startup Building
+            </p>
+
+
+            <p style="margin-top:10px;">
+                © 2026 Collins Redfellor.
+                All rights reserved.
             </p>
 
         </div>
@@ -3596,6 +3888,1326 @@
     </footer>
 
 
+    <!-- =========================================================
+         PROJECT MODAL
+    ========================================================= -->
+
+    <div
+        class="modal"
+        id="projectModal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitle"
+    >
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <small
+                        id="modalNumber"
+                        style="color:var(--secondary);font-weight:900;"
+                    ></small>
+
+                    <h2 id="modalTitle"></h2>
+
+                </div>
+
+
+                <button
+                    class="close-modal"
+                    id="closeModal"
+                    type="button"
+                    aria-label="Close project details"
+                >
+                    ✕
+                </button>
+
+            </div>
+
+
+            <p id="modalDescription"></p>
+
+
+            <div
+                class="project-tags"
+                id="modalTags"
+            ></div>
+
+
+            <a
+                href="#"
+                id="modalLink"
+                class="button button-primary"
+                style="display:inline-flex;margin-top:10px;"
+            >
+                Open Project →
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+    ========================================================= -->
+
+    <script>
+
+        /* =========================================================
+           01. PROJECT DATABASE
+        ========================================================= */
+
+        const projects = [
+
+            {
+                id: 1,
+                title: "JavaScript Fundamentals Dashboard",
+                category: "fundamentals",
+                description:
+                    "Introduction to JavaScript variables, data types, operators, conditions, functions, arrays and objects.",
+                tags: [
+                    "Variables",
+                    "Functions",
+                    "Arrays"
+                ],
+                file:
+                    "javascript-project-1.html"
+            },
+
+            {
+                id: 2,
+                title: "Number Analyzer",
+                category: "fundamentals",
+                description:
+                    "Analyze numbers using conditions, comparisons, mathematical operations and logical expressions.",
+                tags: [
+                    "Conditions",
+                    "Math",
+                    "Logic"
+                ],
+                file:
+                    "javascript-project-2.html"
+            },
+
+            {
+                id: 3,
+                title: "Multiplication Table Generator",
+                category: "fundamentals",
+                description:
+                    "Generate multiplication tables dynamically using loops, forms and DOM manipulation.",
+                tags: [
+                    "Loops",
+                    "DOM",
+                    "Forms"
+                ],
+                file:
+                    "javascript-project-3.html"
+            },
+
+            {
+                id: 4,
+                title: "Smart Calculator",
+                category: "applications",
+                description:
+                    "Interactive calculator supporting arithmetic operations, keyboard input, history and validation.",
+                tags: [
+                    "Events",
+                    "Math",
+                    "DOM"
+                ],
+                file:
+                    "javascript-project-4.html"
+            },
+
+            {
+                id: 5,
+                title: "Number Guessing Game",
+                category: "applications",
+                description:
+                    "Interactive guessing game using random numbers, difficulty levels, hints and attempts.",
+                tags: [
+                    "Random",
+                    "Game",
+                    "Logic"
+                ],
+                file:
+                    "javascript-project-5.html"
+            },
+
+            {
+                id: 6,
+                title: "Student Grade Manager",
+                category: "applications",
+                description:
+                    "Manage student records, grades, averages, pass rates and performance statistics.",
+                tags: [
+                    "Arrays",
+                    "Objects",
+                    "CRUD"
+                ],
+                file:
+                    "javascript-project-6.html"
+            },
+
+            {
+                id: 7,
+                title: "Personal Expense Tracker",
+                category: "applications",
+                description:
+                    "Track income and expenses while calculating balances, categories and financial summaries.",
+                tags: [
+                    "Forms",
+                    "Arrays",
+                    "DOM"
+                ],
+                file:
+                    "javascript-project-7.html"
+            },
+
+            {
+                id: 8,
+                title: "Contact Manager",
+                category: "applications",
+                description:
+                    "Create, search, filter and remove contacts using JavaScript data structures.",
+                tags: [
+                    "CRUD",
+                    "Search",
+                    "Objects"
+                ],
+                file:
+                    "javascript-project-8.html"
+            },
+
+            {
+                id: 9,
+                title: "Quiz Application",
+                category: "applications",
+                description:
+                    "Timed interactive quiz with questions, answers, progress tracking, feedback and results.",
+                tags: [
+                    "Timer",
+                    "Events",
+                    "Logic"
+                ],
+                file:
+                    "javascript-project-9.html"
+            },
+
+            {
+                id: 10,
+                title: "Random Password Generator",
+                category: "applications",
+                description:
+                    "Generate strong random passwords with configurable character options and strength feedback.",
+                tags: [
+                    "Random",
+                    "Security",
+                    "Forms"
+                ],
+                file:
+                    "javascript-project-10.html"
+            },
+
+            {
+                id: 11,
+                title: "Interactive Counter",
+                category: "fundamentals",
+                description:
+                    "Interactive counter demonstrating state changes, events and DOM updates.",
+                tags: [
+                    "Events",
+                    "DOM",
+                    "State"
+                ],
+                file:
+                    "javascript-project-11.html"
+            },
+
+            {
+                id: 12,
+                title: "Digital Clock",
+                category: "applications",
+                description:
+                    "Real-time digital clock using JavaScript Date objects and timed updates.",
+                tags: [
+                    "Date",
+                    "Time",
+                    "Intervals"
+                ],
+                file:
+                    "javascript-project-12.html"
+            },
+
+            {
+                id: 13,
+                title: "To-Do List",
+                category: "applications",
+                description:
+                    "Interactive task manager supporting task creation, completion and removal.",
+                tags: [
+                    "CRUD",
+                    "DOM",
+                    "Events"
+                ],
+                file:
+                    "javascript-project-13.html"
+            },
+
+            {
+                id: 14,
+                title: "Form Validation System",
+                category: "applications",
+                description:
+                    "Client-side validation system providing immediate feedback for user input.",
+                tags: [
+                    "Validation",
+                    "Forms",
+                    "Events"
+                ],
+                file:
+                    "javascript-project-14.html"
+            },
+
+            {
+                id: 15,
+                title: "Dark/Light Mode Website",
+                category: "advanced",
+                description:
+                    "Theme-switching website demonstrating user preferences and persistent browser storage.",
+                tags: [
+                    "Themes",
+                    "Storage",
+                    "UI"
+                ],
+                file:
+                    "javascript-project-15.html"
+            },
+
+            {
+                id: 16,
+                title: "Notes Application",
+                category: "advanced",
+                description:
+                    "Persistent notes application using localStorage, CRUD operations, categories, search and themes.",
+                tags: [
+                    "localStorage",
+                    "CRUD",
+                    "Search"
+                ],
+                file:
+                    "javascript-project-16.html"
+            },
+
+            {
+                id: 17,
+                title: "Expense Tracker Pro",
+                category: "advanced",
+                description:
+                    "Advanced expense management application with persistence, filtering and financial analytics.",
+                tags: [
+                    "Storage",
+                    "Analytics",
+                    "DOM"
+                ],
+                file:
+                    "javascript-project-17.html"
+            },
+
+            {
+                id: 18,
+                title: "Weather Application",
+                category: "advanced",
+                description:
+                    "Weather application demonstrating fetch, APIs, async/await, loading states and dynamic data.",
+                tags: [
+                    "API",
+                    "Fetch",
+                    "Async"
+                ],
+                file:
+                    "javascript-project-18.html"
+            },
+
+            {
+                id: 19,
+                title: "Movie Search Application",
+                category: "advanced",
+                description:
+                    "Dynamic entertainment search application using a public API, asynchronous requests and filtering.",
+                tags: [
+                    "API",
+                    "Search",
+                    "Async"
+                ],
+                file:
+                    "javascript-project-19.html"
+            },
+
+            {
+                id: 20,
+                title: "Final JavaScript Portfolio Dashboard",
+                category: "advanced",
+                description:
+                    "Capstone JavaScript project combining dynamic interfaces, filtering, themes, forms, validation, animations and project data.",
+                tags: [
+                    "Portfolio",
+                    "DOM",
+                    "Capstone"
+                ],
+                file:
+                    "javascript-project-20.html"
+            }
+
+        ];
+
+
+        /* =========================================================
+           02. DOM REFERENCES
+        ========================================================= */
+
+        const projectsGrid =
+            document.getElementById(
+                "projectsGrid"
+            );
+
+
+        const projectSearch =
+            document.getElementById(
+                "projectSearch"
+            );
+
+
+        const filterButtons =
+            document.querySelectorAll(
+                ".filter-button"
+            );
+
+
+        const themeButton =
+            document.getElementById(
+                "themeButton"
+            );
+
+
+        const menuButton =
+            document.getElementById(
+                "menuButton"
+            );
+
+
+        const navLinks =
+            document.getElementById(
+                "navLinks"
+            );
+
+
+        const projectModal =
+            document.getElementById(
+                "projectModal"
+            );
+
+
+        const closeModal =
+            document.getElementById(
+                "closeModal"
+            );
+
+
+        const modalNumber =
+            document.getElementById(
+                "modalNumber"
+            );
+
+
+        const modalTitle =
+            document.getElementById(
+                "modalTitle"
+            );
+
+
+        const modalDescription =
+            document.getElementById(
+                "modalDescription"
+            );
+
+
+        const modalTags =
+            document.getElementById(
+                "modalTags"
+            );
+
+
+        const modalLink =
+            document.getElementById(
+                "modalLink"
+            );
+
+
+        let currentFilter = "all";
+
+
+        /* =========================================================
+           03. SAFE HTML
+        ========================================================= */
+
+        function escapeHTML(value) {
+
+            return String(value)
+
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+        }
+
+
+        /* =========================================================
+           04. PROJECT PATH
+        ========================================================= */
+
+        function projectPath(file) {
+
+            return (
+                "JavaScript%20projects/" +
+                encodeURIComponent(file)
+            );
+        }
+
+
+        /* =========================================================
+           05. RENDER PROJECTS
+        ========================================================= */
+
+        function renderProjects() {
+
+            const search =
+                projectSearch.value
+                    .trim()
+                    .toLowerCase();
+
+
+            const filtered =
+                projects.filter(
+                    project => {
+
+                        const categoryMatch =
+                            currentFilter === "all" ||
+                            project.category ===
+                                currentFilter;
+
+
+                        const searchable =
+                            [
+                                project.title,
+                                project.description,
+                                ...project.tags
+                            ]
+                                .join(" ")
+                                .toLowerCase();
+
+
+                        const searchMatch =
+                            searchable.includes(
+                                search
+                            );
+
+
+                        return (
+                            categoryMatch &&
+                            searchMatch
+                        );
+                    }
+                );
+
+
+            if (!filtered.length) {
+
+                projectsGrid.innerHTML = `
+
+                    <div class="empty-state">
+
+                        <h3>
+                            No projects found
+                        </h3>
+
+                        <p>
+                            Try another search term
+                            or category.
+                        </p>
+
+                    </div>
+
+                `;
+
+                return;
+            }
+
+
+            projectsGrid.innerHTML =
+                filtered.map(
+                    project => {
+
+                        const tags =
+                            project.tags
+                                .map(
+                                    tag => `
+                                        <span class="project-tag">
+                                            ${escapeHTML(tag)}
+                                        </span>
+                                    `
+                                )
+                                .join("");
+
+
+                        return `
+
+                            <article
+                                class="project-card reveal visible"
+                            >
+
+                                <div class="project-number">
+
+                                    ${String(
+                                        project.id
+                                    ).padStart(2,"0")}
+
+                                </div>
+
+
+                                <h3>
+                                    ${escapeHTML(
+                                        project.title
+                                    )}
+                                </h3>
+
+
+                                <p>
+                                    ${escapeHTML(
+                                        project.description
+                                    )}
+                                </p>
+
+
+                                <div class="project-tags">
+                                    ${tags}
+                                </div>
+
+
+                                <div
+                                    style="
+                                        display:flex;
+                                        gap:15px;
+                                        flex-wrap:wrap;
+                                    "
+                                >
+
+                                    <button
+                                        type="button"
+                                        class="project-link details-button"
+                                        data-id="${project.id}"
+                                    >
+                                        Details →
+                                    </button>
+
+
+                                    <a
+                                        class="project-link"
+                                        href="${projectPath(
+                                            project.file
+                                        )}"
+                                    >
+                                        Open →
+                                    </a>
+
+                                </div>
+
+                            </article>
+
+                        `;
+                    }
+                ).join("");
+
+
+            document
+                .querySelectorAll(
+                    ".details-button"
+                )
+                .forEach(
+                    button => {
+
+                        button.addEventListener(
+                            "click",
+                            () => {
+
+                                openProject(
+                                    Number(
+                                        button.dataset.id
+                                    )
+                                );
+
+                            }
+                        );
+
+                    }
+                );
+        }
+
+
+        /* =========================================================
+           06. FILTERING
+        ========================================================= */
+
+        filterButtons.forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        filterButtons.forEach(
+                            item => {
+
+                                item.classList.remove(
+                                    "active"
+                                );
+
+                            }
+                        );
+
+
+                        button.classList.add(
+                            "active"
+                        );
+
+
+                        currentFilter =
+                            button.dataset.filter;
+
+
+                        renderProjects();
+
+                    }
+                );
+
+            }
+        );
+
+
+        projectSearch.addEventListener(
+            "input",
+            renderProjects
+        );
+
+
+        /* =========================================================
+           07. PROJECT MODAL
+        ========================================================= */
+
+        function openProject(id) {
+
+            const project =
+                projects.find(
+                    item =>
+                        item.id === id
+                );
+
+
+            if (!project) {
+                return;
+            }
+
+
+            modalNumber.textContent =
+                `PROJECT ${String(
+                    project.id
+                ).padStart(2,"0")}`;
+
+
+            modalTitle.textContent =
+                project.title;
+
+
+            modalDescription.textContent =
+                project.description;
+
+
+            modalTags.innerHTML =
+                project.tags
+                    .map(
+                        tag => `
+                            <span class="project-tag">
+                                ${escapeHTML(tag)}
+                            </span>
+                        `
+                    )
+                    .join("");
+
+
+            modalLink.href =
+                projectPath(
+                    project.file
+                );
+
+
+            projectModal.classList.add(
+                "active"
+            );
+
+
+            document.body.classList.add(
+                "no-scroll"
+            );
+        }
+
+
+        function closeProjectModal() {
+
+            projectModal.classList.remove(
+                "active"
+            );
+
+
+            document.body.classList.remove(
+                "no-scroll"
+            );
+        }
+
+
+        closeModal.addEventListener(
+            "click",
+            closeProjectModal
+        );
+
+
+        projectModal.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target ===
+                    projectModal
+                ) {
+
+                    closeProjectModal();
+                }
+
+            }
+        );
+
+
+        document.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key ===
+                    "Escape"
+                ) {
+
+                    closeProjectModal();
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           08. THEME SYSTEM
+        ========================================================= */
+
+        const savedTheme =
+            localStorage.getItem(
+                "collinsPortfolioTheme"
+            );
+
+
+        if (
+            savedTheme ===
+            "light"
+        ) {
+
+            document.body.classList.add(
+                "light"
+            );
+
+            themeButton.textContent =
+                "☀️";
+        }
+
+
+        themeButton.addEventListener(
+            "click",
+            () => {
+
+                document.body.classList.toggle(
+                    "light"
+                );
+
+
+                const lightMode =
+                    document.body.classList.contains(
+                        "light"
+                    );
+
+
+                localStorage.setItem(
+                    "collinsPortfolioTheme",
+                    lightMode
+                        ? "light"
+                        : "dark"
+                );
+
+
+                themeButton.textContent =
+                    lightMode
+                        ? "☀️"
+                        : "🌙";
+            }
+        );
+
+
+        /* =========================================================
+           09. MOBILE NAVIGATION
+        ========================================================= */
+
+        menuButton.addEventListener(
+            "click",
+            () => {
+
+                navLinks.classList.toggle(
+                    "active"
+                );
+
+
+                menuButton.textContent =
+                    navLinks.classList.contains(
+                        "active"
+                    )
+                        ? "✕"
+                        : "☰";
+            }
+        );
+
+
+        document
+            .querySelectorAll(
+                ".nav-links a"
+            )
+            .forEach(
+                link => {
+
+                    link.addEventListener(
+                        "click",
+                        () => {
+
+                            navLinks.classList.remove(
+                                "active"
+                            );
+
+                            menuButton.textContent =
+                                "☰";
+
+                        }
+                    );
+
+                }
+            );
+
+
+        /* =========================================================
+           10. COUNTERS
+        ========================================================= */
+
+        const counters =
+            document.querySelectorAll(
+                ".counter"
+            );
+
+
+        let countersStarted =
+            false;
+
+
+        function animateCounters() {
+
+            if (countersStarted) {
+                return;
+            }
+
+
+            const stats =
+                document.querySelector(
+                    ".stats-grid"
+                );
+
+
+            const position =
+                stats.getBoundingClientRect();
+
+
+            if (
+                position.top <
+                window.innerHeight * 0.85
+            ) {
+
+                countersStarted =
+                    true;
+
+
+                counters.forEach(
+                    counter => {
+
+                        const target =
+                            Number(
+                                counter.dataset.target
+                            );
+
+
+                        let current = 0;
+
+
+                        const increment =
+                            Math.max(
+                                1,
+                                Math.ceil(
+                                    target / 50
+                                )
+                            );
+
+
+                        const timer =
+                            setInterval(
+                                () => {
+
+                                    current +=
+                                        increment;
+
+
+                                    if (
+                                        current >=
+                                        target
+                                    ) {
+
+                                        current =
+                                            target;
+
+                                        clearInterval(
+                                            timer
+                                        );
+                                    }
+
+
+                                    counter.textContent =
+                                        current;
+
+                                },
+                                25
+                            );
+
+                    }
+                );
+            }
+        }
+
+
+        /* =========================================================
+           11. SKILL BARS
+        ========================================================= */
+
+        let skillsAnimated =
+            false;
+
+
+        function animateSkills() {
+
+            if (skillsAnimated) {
+                return;
+            }
+
+
+            const skills =
+                document.getElementById(
+                    "skills"
+                );
+
+
+            const position =
+                skills.getBoundingClientRect();
+
+
+            if (
+                position.top <
+                window.innerHeight * 0.8
+            ) {
+
+                skillsAnimated =
+                    true;
+
+
+                document
+                    .querySelectorAll(
+                        ".progress-bar"
+                    )
+                    .forEach(
+                        bar => {
+
+                            bar.style.width =
+                                bar.dataset.width;
+
+                        }
+                    );
+            }
+        }
+
+
+        /* =========================================================
+           12. SCROLL REVEAL
+        ========================================================= */
+
+        const revealElements =
+            document.querySelectorAll(
+                ".reveal"
+            );
+
+
+        const revealObserver =
+            new IntersectionObserver(
+                entries => {
+
+                    entries.forEach(
+                        entry => {
+
+                            if (
+                                entry.isIntersecting
+                            ) {
+
+                                entry.target.classList.add(
+                                    "visible"
+                                );
+
+
+                                revealObserver.unobserve(
+                                    entry.target
+                                );
+                            }
+
+                        }
+                    );
+
+                },
+                {
+                    threshold: 0.12
+                }
+            );
+
+
+        revealElements.forEach(
+            element => {
+
+                revealObserver.observe(
+                    element
+                );
+
+            }
+        );
+
+
+        window.addEventListener(
+            "scroll",
+            () => {
+
+                animateCounters();
+
+                animateSkills();
+
+            },
+            {
+                passive: true
+            }
+        );
+
+
+        /* =========================================================
+           13. CONTACT FORM VALIDATION
+        ========================================================= */
+
+        const contactForm =
+            document.getElementById(
+                "contactForm"
+            );
+
+
+        const contactName =
+            document.getElementById(
+                "contactName"
+            );
+
+
+        const contactEmail =
+            document.getElementById(
+                "contactEmail"
+            );
+
+
+        const contactMessage =
+            document.getElementById(
+                "contactMessage"
+            );
+
+
+        const nameError =
+            document.getElementById(
+                "nameError"
+            );
+
+
+        const emailError =
+            document.getElementById(
+                "emailError"
+            );
+
+
+        const messageError =
+            document.getElementById(
+                "messageError"
+            );
+
+
+        const successMessage =
+            document.getElementById(
+                "successMessage"
+            );
+
+
+        contactForm.addEventListener(
+            "submit",
+            event => {
+
+                event.preventDefault();
+
+
+                nameError.textContent =
+                    "";
+
+                emailError.textContent =
+                    "";
+
+                messageError.textContent =
+                    "";
+
+                successMessage.style.display =
+                    "none";
+
+
+                let valid = true;
+
+
+                const name =
+                    contactName.value.trim();
+
+
+                const email =
+                    contactEmail.value.trim();
+
+
+                const message =
+                    contactMessage.value.trim();
+
+
+                if (
+                    name.length <
+                    2
+                ) {
+
+                    nameError.textContent =
+                        "Please enter your name.";
+
+                    valid = false;
+                }
+
+
+                const emailPattern =
+                    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+                if (
+                    !emailPattern.test(
+                        email
+                    )
+                ) {
+
+                    emailError.textContent =
+                        "Please enter a valid email address.";
+
+                    valid = false;
+                }
+
+
+                if (
+                    message.length <
+                    10
+                ) {
+
+                    messageError.textContent =
+                        "Message must contain at least 10 characters.";
+
+                    valid = false;
+                }
+
+
+                if (!valid) {
+                    return;
+                }
+
+
+                successMessage.style.display =
+                    "block";
+
+
+                contactForm.reset();
+
+            }
+        );
+
+
+        /* =========================================================
+           14. INITIALIZATION
+        ========================================================= */
+
+        renderProjects();
+
+        animateCounters();
+
+        animateSkills();
+
+    </script>
+
 </body>
 
 </html>
+```
