@@ -1,0 +1,860 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="A modern animated login form created with HTML and CSS.">
+    <meta name="author" content="Collins Redfellor">
+
+    <title>Animated Login Form | Collins Redfellor</title>
+
+    <style>
+        /* =========================================================
+           1. RESET & GLOBAL STYLES
+        ========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(circle at top left, #243b55, transparent 40%),
+                radial-gradient(circle at bottom right, #141e30, transparent 45%),
+                linear-gradient(135deg, #0f172a, #111827, #020617);
+            color: #ffffff;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            overflow: hidden;
+            position: relative;
+        }
+
+
+        /* =========================================================
+           2. ANIMATED BACKGROUND
+        ========================================================= */
+
+        body::before,
+        body::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(10px);
+            opacity: 0.35;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        body::before {
+            width: 280px;
+            height: 280px;
+            background: #38bdf8;
+            top: -100px;
+            left: -100px;
+        }
+
+        body::after {
+            width: 320px;
+            height: 320px;
+            background: #8b5cf6;
+            bottom: -130px;
+            right: -100px;
+            animation-delay: -4s;
+        }
+
+
+        /* =========================================================
+           3. BACKGROUND PARTICLES
+        ========================================================= */
+
+        .background {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .background span {
+            position: absolute;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            animation: moveParticle 12s linear infinite;
+        }
+
+        .background span:nth-child(1) {
+            left: 10%;
+            animation-delay: 0s;
+            animation-duration: 10s;
+        }
+
+        .background span:nth-child(2) {
+            left: 25%;
+            width: 35px;
+            height: 35px;
+            animation-delay: -3s;
+            animation-duration: 14s;
+        }
+
+        .background span:nth-child(3) {
+            left: 40%;
+            width: 15px;
+            height: 15px;
+            animation-delay: -6s;
+            animation-duration: 9s;
+        }
+
+        .background span:nth-child(4) {
+            left: 60%;
+            width: 45px;
+            height: 45px;
+            animation-delay: -2s;
+            animation-duration: 16s;
+        }
+
+        .background span:nth-child(5) {
+            left: 75%;
+            width: 25px;
+            height: 25px;
+            animation-delay: -5s;
+            animation-duration: 11s;
+        }
+
+        .background span:nth-child(6) {
+            left: 90%;
+            width: 40px;
+            height: 40px;
+            animation-delay: -8s;
+            animation-duration: 15s;
+        }
+
+
+        /* =========================================================
+           4. LOGIN CONTAINER
+        ========================================================= */
+
+        .login-container {
+            width: min(92%, 430px);
+            position: relative;
+            z-index: 2;
+
+            padding: 45px 40px;
+
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 24px;
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 25px 60px rgba(0, 0, 0, 0.45),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+            animation: containerAppear 1s ease forwards;
+        }
+
+
+        /* =========================================================
+           5. LOGO
+        ========================================================= */
+
+        .logo {
+            width: 75px;
+            height: 75px;
+
+            margin: 0 auto 20px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            border-radius: 50%;
+
+            background: linear-gradient(
+                135deg,
+                #38bdf8,
+                #6366f1
+            );
+
+            box-shadow:
+                0 0 25px rgba(56, 189, 248, 0.35);
+
+            font-size: 32px;
+            font-weight: bold;
+
+            animation: logoPulse 3s ease-in-out infinite;
+        }
+
+
+        /* =========================================================
+           6. HEADINGS
+        ========================================================= */
+
+        .login-container h1 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #cbd5e1;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+
+        /* =========================================================
+           7. FORM GROUP
+        ========================================================= */
+
+        .form-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px 15px;
+
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 12px;
+
+            outline: none;
+
+            background: rgba(15, 23, 42, 0.55);
+            color: #ffffff;
+
+            font-size: 15px;
+
+            transition:
+                border-color 0.3s ease,
+                box-shadow 0.3s ease,
+                background 0.3s ease;
+        }
+
+        .form-group label {
+            position: absolute;
+            left: 15px;
+            top: 16px;
+
+            color: #94a3b8;
+            font-size: 15px;
+
+            pointer-events: none;
+
+            transition:
+                top 0.3s ease,
+                font-size 0.3s ease,
+                color 0.3s ease,
+                background 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #38bdf8;
+
+            box-shadow:
+                0 0 0 3px rgba(56, 189, 248, 0.12);
+
+            background: rgba(15, 23, 42, 0.75);
+        }
+
+        .form-group input:focus + label,
+        .form-group input:not(:placeholder-shown) + label {
+            top: -9px;
+            left: 12px;
+
+            padding: 0 5px;
+
+            font-size: 12px;
+            color: #38bdf8;
+
+            background: #111827;
+        }
+
+
+        /* =========================================================
+           8. PASSWORD VISIBILITY
+        ========================================================= */
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 50px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+
+            transform: translateY(-50%);
+
+            border: none;
+            background: transparent;
+
+            color: #94a3b8;
+
+            cursor: pointer;
+            font-size: 18px;
+
+            transition: color 0.3s ease;
+        }
+
+        .toggle-password:hover {
+            color: #38bdf8;
+        }
+
+
+        /* =========================================================
+           9. FORM OPTIONS
+        ========================================================= */
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin: 5px 0 25px;
+
+            font-size: 13px;
+        }
+
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            color: #cbd5e1;
+        }
+
+        .remember input {
+            accent-color: #38bdf8;
+            cursor: pointer;
+        }
+
+        .forgot-password {
+            color: #38bdf8;
+            text-decoration: none;
+
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            color: #7dd3fc;
+            text-decoration: underline;
+        }
+
+
+        /* =========================================================
+           10. LOGIN BUTTON
+        ========================================================= */
+
+        .login-button {
+            width: 100%;
+            padding: 15px;
+
+            border: none;
+            border-radius: 12px;
+
+            background: linear-gradient(
+                135deg,
+                #38bdf8,
+                #6366f1
+            );
+
+            color: #ffffff;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            position: relative;
+            overflow: hidden;
+
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        .login-button::before {
+            content: "";
+
+            position: absolute;
+            top: 0;
+            left: -100%;
+
+            width: 100%;
+            height: 100%;
+
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.25),
+                transparent
+            );
+
+            transition: left 0.5s ease;
+        }
+
+        .login-button:hover::before {
+            left: 100%;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 10px 25px rgba(56, 189, 248, 0.25);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+
+        /* =========================================================
+           11. DIVIDER
+        ========================================================= */
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+
+            margin: 28px 0;
+
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+
+            height: 1px;
+
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+
+        /* =========================================================
+           12. SOCIAL LOGIN BUTTONS
+        ========================================================= */
+
+        .social-login {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .social-button {
+            padding: 12px;
+
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 10px;
+
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+
+            cursor: pointer;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            transition:
+                background 0.3s ease,
+                border-color 0.3s ease,
+                transform 0.3s ease;
+        }
+
+        .social-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.25);
+
+            transform: translateY(-2px);
+        }
+
+
+        /* =========================================================
+           13. REGISTER SECTION
+        ========================================================= */
+
+        .register {
+            text-align: center;
+
+            margin-top: 28px;
+
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        .register a {
+            color: #38bdf8;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .register a:hover {
+            text-decoration: underline;
+        }
+
+
+        /* =========================================================
+           14. FOOTER
+        ========================================================= */
+
+        .footer {
+            text-align: center;
+
+            margin-top: 22px;
+
+            color: #64748b;
+            font-size: 11px;
+        }
+
+
+        /* =========================================================
+           15. ANIMATIONS
+        ========================================================= */
+
+        @keyframes containerAppear {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.96);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes logoPulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.06);
+            }
+        }
+
+        @keyframes float {
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(30px, 30px);
+            }
+        }
+
+        @keyframes moveParticle {
+            0% {
+                transform: translateY(110vh) rotate(0deg);
+                opacity: 0;
+            }
+
+            15% {
+                opacity: 1;
+            }
+
+            85% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-120vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+
+        /* =========================================================
+           16. RESPONSIVE DESIGN
+        ========================================================= */
+
+        @media (max-width: 480px) {
+
+            .login-container {
+                padding: 35px 25px;
+                border-radius: 20px;
+            }
+
+            .login-container h1 {
+                font-size: 27px;
+            }
+
+            .social-login {
+                grid-template-columns: 1fr;
+            }
+
+            .form-options {
+                font-size: 12px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================================================
+         ANIMATED BACKGROUND PARTICLES
+    ========================================================== -->
+
+    <div class="background" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+
+    <!-- =========================================================
+         LOGIN FORM
+    ========================================================== -->
+
+    <main class="login-container">
+
+        <div class="logo">
+            CR
+        </div>
+
+        <h1>Welcome Back</h1>
+
+        <p class="subtitle">
+            Sign in to continue to your account
+        </p>
+
+
+        <form id="loginForm">
+
+            <!-- EMAIL -->
+
+            <div class="form-group">
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder=" "
+                    autocomplete="email"
+                    required
+                >
+
+                <label for="email">
+                    Email Address
+                </label>
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="form-group password-wrapper">
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder=" "
+                    autocomplete="current-password"
+                    required
+                >
+
+                <label for="password">
+                    Password
+                </label>
+
+                <button
+                    type="button"
+                    class="toggle-password"
+                    id="togglePassword"
+                    aria-label="Show password"
+                >
+                    👁
+                </button>
+
+            </div>
+
+
+            <!-- OPTIONS -->
+
+            <div class="form-options">
+
+                <label class="remember">
+
+                    <input
+                        type="checkbox"
+                        id="remember"
+                        name="remember"
+                    >
+
+                    <span>Remember me</span>
+
+                </label>
+
+                <a href="#" class="forgot-password">
+                    Forgot password?
+                </a>
+
+            </div>
+
+
+            <!-- LOGIN BUTTON -->
+
+            <button
+                type="submit"
+                class="login-button"
+            >
+                Sign In
+            </button>
+
+        </form>
+
+
+        <!-- DIVIDER -->
+
+        <div class="divider">
+            OR
+        </div>
+
+
+        <!-- SOCIAL LOGIN -->
+
+        <div class="social-login">
+
+            <button
+                type="button"
+                class="social-button"
+            >
+                🌐 Google
+            </button>
+
+            <button
+                type="button"
+                class="social-button"
+            >
+                💻 GitHub
+            </button>
+
+        </div>
+
+
+        <!-- REGISTER -->
+
+        <p class="register">
+            Don't have an account?
+            <a href="#">
+                Create one
+            </a>
+        </p>
+
+
+        <!-- FOOTER -->
+
+        <p class="footer">
+            CSS Project 04 • Collins Redfellor
+        </p>
+
+    </main>
+
+
+    <!-- =========================================================
+         SMALL JAVASCRIPT INTERACTIONS
+         The main project remains CSS-focused.
+    ========================================================== -->
+
+    <script>
+
+        // ---------------------------------------------------------
+        // PASSWORD VISIBILITY
+        // ---------------------------------------------------------
+
+        const passwordInput =
+            document.getElementById("password");
+
+        const togglePassword =
+            document.getElementById("togglePassword");
+
+        togglePassword.addEventListener("click", function () {
+
+            const isPassword =
+                passwordInput.type === "password";
+
+            passwordInput.type =
+                isPassword ? "text" : "password";
+
+            togglePassword.textContent =
+                isPassword ? "🙈" : "👁";
+
+            togglePassword.setAttribute(
+                "aria-label",
+                isPassword
+                    ? "Hide password"
+                    : "Show password"
+            );
+
+        });
+
+
+        // ---------------------------------------------------------
+        // FORM SUBMISSION DEMO
+        // ---------------------------------------------------------
+
+        const loginForm =
+            document.getElementById("loginForm");
+
+        loginForm.addEventListener("submit", function (event) {
+
+            event.preventDefault();
+
+            const email =
+                document.getElementById("email").value;
+
+            if (email.trim() === "") {
+                alert("Please enter your email address.");
+                return;
+            }
+
+            alert(
+                "Login form submitted successfully!\n\n" +
+                "This is a front-end demonstration. " +
+                "A real login system would require a backend."
+            );
+
+        });
+
+    </script>
+
+</body>
+</html>
+```
