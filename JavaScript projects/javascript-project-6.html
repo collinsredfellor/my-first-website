@@ -1,0 +1,1095 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="An interactive student grade management dashboard built with JavaScript by Collins Redfellor.">
+    <title>Student Grade Manager | Collins Redfellor</title>
+
+    <style>
+        :root {
+            --bg: #080d1a;
+            --panel: rgba(20, 29, 52, 0.9);
+            --panel-light: rgba(255, 255, 255, 0.045);
+            --border: rgba(255, 255, 255, 0.1);
+            --text: #f3f6ff;
+            --muted: #a3afc9;
+            --primary: #8064ff;
+            --secondary: #26d6ae;
+            --danger: #ff7188;
+            --warning: #ffd166;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            padding: 30px 16px;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 10% 10%, #252052 0, transparent 32%),
+                radial-gradient(circle at 90% 80%, #073c43 0, transparent 30%),
+                var(--bg);
+        }
+
+        input, button {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1150px;
+            margin: auto;
+        }
+
+        header {
+            margin-bottom: 30px;
+            text-align: center;
+            animation: slideDown 0.65s ease both;
+        }
+
+        .badge {
+            display: inline-block;
+            margin-bottom: 16px;
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            color: #cbbfff;
+            background: var(--panel-light);
+            font-size: 0.78rem;
+            letter-spacing: 1.3px;
+            text-transform: uppercase;
+        }
+
+        header h1 {
+            margin-bottom: 12px;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 1.15;
+            background: linear-gradient(100deg, #fff, #b7a9ff, #67e9d0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        header p {
+            max-width: 690px;
+            margin: auto;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: minmax(0, 1.5fr) minmax(270px, 0.7fr);
+            gap: 22px;
+            align-items: start;
+        }
+
+        .panel {
+            min-width: 0;
+            padding: 25px;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            background: var(--panel);
+            box-shadow: 0 20px 55px rgba(0, 0, 0, 0.24);
+            backdrop-filter: blur(15px);
+            animation: fadeUp 0.7s ease both;
+        }
+
+        .panel h2 {
+            margin-bottom: 9px;
+            font-size: 1.3rem;
+        }
+
+        .subtitle {
+            margin-bottom: 22px;
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 14px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--muted);
+            font-size: 0.86rem;
+        }
+
+        .field input {
+            width: 100%;
+            min-width: 0;
+            padding: 13px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            outline: none;
+            color: var(--text);
+            background: #10192d;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .field input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(128, 100, 255, 0.15);
+        }
+
+        .field input::placeholder {
+            color: #65718d;
+        }
+
+        .helper {
+            margin-top: 7px;
+            color: var(--muted);
+            font-size: 0.78rem;
+        }
+
+        .button-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .btn {
+            padding: 12px 16px;
+            border: 1px solid transparent;
+            border-radius: 11px;
+            font-weight: 700;
+            transition: transform 0.2s, filter 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            color: white;
+            background: linear-gradient(135deg, #7657ff, #a083ff);
+        }
+
+        .btn-secondary {
+            color: var(--text);
+            background: var(--panel-light);
+            border-color: var(--border);
+        }
+
+        .btn-danger {
+            color: #ffb3c0;
+            background: rgba(255, 113, 136, 0.08);
+            border-color: rgba(255, 113, 136, 0.22);
+        }
+
+        .message {
+            min-height: 43px;
+            margin-top: 15px;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            color: var(--muted);
+            background: rgba(255, 255, 255, 0.025);
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .message.success {
+            color: #75edc8;
+            border-color: rgba(38, 214, 174, 0.25);
+        }
+
+        .message.error {
+            color: #ff9cad;
+            border-color: rgba(255, 113, 136, 0.25);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .stat {
+            padding: 17px;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            background: var(--panel-light);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .stat:hover {
+            transform: translateY(-3px);
+            border-color: rgba(128, 100, 255, 0.45);
+        }
+
+        .stat-label {
+            display: block;
+            margin-bottom: 9px;
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .stat-note {
+            display: block;
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 0.75rem;
+        }
+
+        .section-heading {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin: 28px 0 15px;
+        }
+
+        .section-heading h2 {
+            font-size: 1.15rem;
+        }
+
+        .count-pill {
+            padding: 7px 10px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: #cbbfff;
+            background: var(--panel-light);
+            font-size: 0.78rem;
+        }
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 14px 13px;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+            font-size: 0.87rem;
+        }
+
+        th {
+            color: var(--muted);
+            background: rgba(255, 255, 255, 0.035);
+            font-size: 0.77rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        tbody tr {
+            transition: background 0.2s;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.035);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .grade {
+            display: inline-block;
+            min-width: 34px;
+            padding: 6px 8px;
+            border-radius: 8px;
+            color: #cbbfff;
+            background: rgba(128, 100, 255, 0.14);
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 9px;
+            border-radius: 20px;
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        .status.pass {
+            color: #72ebc5;
+            background: rgba(38, 214, 174, 0.11);
+        }
+
+        .status.fail {
+            color: #ff9cad;
+            background: rgba(255, 113, 136, 0.11);
+        }
+
+        .delete-btn {
+            padding: 7px 10px;
+            border: 1px solid rgba(255, 113, 136, 0.22);
+            border-radius: 8px;
+            color: #ff9cad;
+            background: rgba(255, 113, 136, 0.06);
+            font-size: 0.78rem;
+        }
+
+        .delete-btn:hover {
+            background: rgba(255, 113, 136, 0.16);
+        }
+
+        .empty-state {
+            padding: 28px 15px;
+            color: var(--muted);
+            text-align: center;
+            line-height: 1.7;
+        }
+
+        .side-panel {
+            animation-delay: 0.12s;
+        }
+
+        .side-panel h2 {
+            margin-bottom: 17px;
+        }
+
+        .rule {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 17px;
+            color: var(--muted);
+            font-size: 0.88rem;
+            line-height: 1.6;
+        }
+
+        .rule-icon {
+            display: grid;
+            flex-shrink: 0;
+            width: 35px;
+            height: 35px;
+            place-items: center;
+            border-radius: 10px;
+            color: #cbbfff;
+            background: rgba(128, 100, 255, 0.14);
+        }
+
+        .rule strong {
+            display: block;
+            margin-bottom: 3px;
+            color: var(--text);
+        }
+
+        .grading-scale {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .grading-scale h3 {
+            margin-bottom: 13px;
+            font-size: 1rem;
+        }
+
+        .scale-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--muted);
+            font-size: 0.86rem;
+        }
+
+        .scale-row strong {
+            color: var(--text);
+        }
+
+        .note {
+            margin-top: 18px;
+            padding: 14px;
+            border: 1px solid rgba(255, 209, 102, 0.2);
+            border-radius: 12px;
+            color: #e9d9a9;
+            background: rgba(255, 209, 102, 0.05);
+            font-size: 0.82rem;
+            line-height: 1.65;
+        }
+
+        footer {
+            padding: 30px 0 8px;
+            color: var(--muted);
+            font-size: 0.84rem;
+            line-height: 1.8;
+            text-align: center;
+        }
+
+        footer strong {
+            color: #cbbfff;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 850px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 520px) {
+            body {
+                padding: 20px 11px;
+            }
+
+            .panel {
+                padding: 17px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-row .btn {
+                flex: 1 1 100%;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
+            th, td {
+                padding: 12px 10px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <header>
+            <div class="badge">JavaScript Project 06</div>
+            <h1>Student Grade Manager</h1>
+            <p>
+                A modern academic dashboard for managing student marks,
+                calculating grades, checking pass rates, and reviewing
+                classroom performance.
+            </p>
+        </header>
+
+        <main class="dashboard">
+
+            <section class="panel">
+                <h2>🎓 Student Management</h2>
+                <p class="subtitle">
+                    Add a student and their marks out of 100. Grades and
+                    performance statistics will be calculated automatically.
+                </p>
+
+                <form id="studentForm">
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="studentName">Student name</label>
+                            <input
+                                type="text"
+                                id="studentName"
+                                placeholder="e.g. Alex Johnson"
+                                maxlength="60"
+                                autocomplete="off"
+                                required
+                            >
+                        </div>
+
+                        <div class="field">
+                            <label for="studentMarks">Marks (0–100)</label>
+                            <input
+                                type="number"
+                                id="studentMarks"
+                                placeholder="e.g. 85"
+                                min="0"
+                                max="100"
+                                step="1"
+                                required
+                            >
+                            <p class="helper">Enter a whole number.</p>
+                        </div>
+                    </div>
+
+                    <div class="button-row">
+                        <button class="btn btn-primary" type="submit">
+                            + Add Student
+                        </button>
+                        <button class="btn btn-secondary" type="button" id="demoButton">
+                            Load Demo Students
+                        </button>
+                        <button class="btn btn-danger" type="button" id="clearButton">
+                            Clear All
+                        </button>
+                    </div>
+                </form>
+
+                <div class="message" id="message" role="status" aria-live="polite">
+                    Add your first student to begin.
+                </div>
+
+                <div class="stats">
+                    <div class="stat">
+                        <span class="stat-label">Total Students</span>
+                        <strong class="stat-value" id="totalStudents">0</strong>
+                        <span class="stat-note">Students recorded</span>
+                    </div>
+
+                    <div class="stat">
+                        <span class="stat-label">Class Average</span>
+                        <strong class="stat-value" id="classAverage">—</strong>
+                        <span class="stat-note">Average marks out of 100</span>
+                    </div>
+
+                    <div class="stat">
+                        <span class="stat-label">Pass Rate</span>
+                        <strong class="stat-value" id="passRate">—</strong>
+                        <span class="stat-note">Students scoring 50 or above</span>
+                    </div>
+
+                    <div class="stat">
+                        <span class="stat-label">Highest Mark</span>
+                        <strong class="stat-value" id="highestMark">—</strong>
+                        <span class="stat-note" id="topStudent">No results yet</span>
+                    </div>
+                </div>
+
+                <div class="section-heading">
+                    <h2>📋 Student Report</h2>
+                    <span class="count-pill" id="reportCount">0 records</span>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Marks</th>
+                                <th>Grade</th>
+                                <th>Result</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTableBody">
+                            <tr>
+                                <td colspan="5">
+                                    <div class="empty-state">
+                                        No students added yet.<br>
+                                        Enter a name and marks above to create your first record.
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <aside class="panel side-panel">
+                <h2>📘 How It Works</h2>
+
+                <div class="rule">
+                    <div class="rule-icon">01</div>
+                    <div>
+                        <strong>Add student information</strong>
+                        Enter the student's name and a whole-number score from 0 to 100.
+                    </div>
+                </div>
+
+                <div class="rule">
+                    <div class="rule-icon">02</div>
+                    <div>
+                        <strong>Calculate the grade</strong>
+                        The application assigns a letter grade based on the score.
+                    </div>
+                </div>
+
+                <div class="rule">
+                    <div class="rule-icon">03</div>
+                    <div>
+                        <strong>Review the report</strong>
+                        See individual results, the class average, pass rate, and highest mark.
+                    </div>
+                </div>
+
+                <div class="rule">
+                    <div class="rule-icon">04</div>
+                    <div>
+                        <strong>Manage records</strong>
+                        Remove individual students or clear the entire class list.
+                    </div>
+                </div>
+
+                <div class="grading-scale">
+                    <h3>📊 Grading Scale</h3>
+
+                    <div class="scale-row">
+                        <span>Excellent</span>
+                        <strong>A — 80–100</strong>
+                    </div>
+                    <div class="scale-row">
+                        <span>Very Good</span>
+                        <strong>B — 70–79</strong>
+                    </div>
+                    <div class="scale-row">
+                        <span>Good</span>
+                        <strong>C — 60–69</strong>
+                    </div>
+                    <div class="scale-row">
+                        <span>Satisfactory</span>
+                        <strong>D — 50–59</strong>
+                    </div>
+                    <div class="scale-row">
+                        <span>Needs Improvement</span>
+                        <strong>F — 0–49</strong>
+                    </div>
+                </div>
+
+                <div class="note">
+                    <strong>Important:</strong> This project uses a sample
+                    grading scale for practice. Real schools may use different
+                    grading policies, so adapt the thresholds to the relevant
+                    institution when needed.
+                </div>
+
+                <div class="grading-scale">
+                    <h3>🧠 Skills Practiced</h3>
+                    <div class="rule">
+                        <div class="rule-icon">{ }</div>
+                        <div>
+                            <strong>Objects and arrays</strong>
+                            Store student records in structured data.
+                        </div>
+                    </div>
+                    <div class="rule">
+                        <div class="rule-icon">ƒ</div>
+                        <div>
+                            <strong>Functions</strong>
+                            Reuse code for grades and statistics.
+                        </div>
+                    </div>
+                    <div class="rule">
+                        <div class="rule-icon">↔</div>
+                        <div>
+                            <strong>Conditions</strong>
+                            Apply grading rules and pass/fail decisions.
+                        </div>
+                    </div>
+                    <div class="rule">
+                        <div class="rule-icon">▤</div>
+                        <div>
+                            <strong>DOM manipulation</strong>
+                            Generate report rows and update statistics dynamically.
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+        </main>
+
+        <footer>
+            Part of the JavaScript learning journey<br>
+            Designed and developed by <strong>Collins Redfellor</strong>
+        </footer>
+    </div>
+
+    <script>
+        // =========================================
+        // 1. STUDENT DATA
+        // =========================================
+
+        // Each student is represented by an object.
+        // The array stores all student objects.
+
+        let students = [];
+        let nextStudentId = 1;
+
+        // =========================================
+        // 2. SELECT HTML ELEMENTS
+        // =========================================
+
+        const studentForm = document.getElementById("studentForm");
+        const studentNameInput = document.getElementById("studentName");
+        const studentMarksInput = document.getElementById("studentMarks");
+
+        const message = document.getElementById("message");
+        const studentTableBody = document.getElementById("studentTableBody");
+
+        const totalStudentsElement = document.getElementById("totalStudents");
+        const classAverageElement = document.getElementById("classAverage");
+        const passRateElement = document.getElementById("passRate");
+        const highestMarkElement = document.getElementById("highestMark");
+        const topStudentElement = document.getElementById("topStudent");
+        const reportCountElement = document.getElementById("reportCount");
+
+        const demoButton = document.getElementById("demoButton");
+        const clearButton = document.getElementById("clearButton");
+
+        // =========================================
+        // 3. DETERMINE A STUDENT'S GRADE
+        // =========================================
+
+        function calculateGrade(marks) {
+            if (marks >= 80) {
+                return "A";
+            } else if (marks >= 70) {
+                return "B";
+            } else if (marks >= 60) {
+                return "C";
+            } else if (marks >= 50) {
+                return "D";
+            } else {
+                return "F";
+            }
+        }
+
+        // =========================================
+        // 4. DETERMINE PASS OR FAIL
+        // =========================================
+
+        function getResult(marks) {
+            if (marks >= 50) {
+                return "Pass";
+            }
+
+            return "Fail";
+        }
+
+        // =========================================
+        // 5. DISPLAY A MESSAGE
+        // =========================================
+
+        function showMessage(text, type = "") {
+            message.textContent = text;
+            message.className = "message";
+
+            if (type) {
+                message.classList.add(type);
+            }
+        }
+
+        // =========================================
+        // 6. ADD A STUDENT
+        // =========================================
+
+        function addStudent(name, marks) {
+            const student = {
+                id: nextStudentId++,
+                name: name,
+                marks: marks,
+                grade: calculateGrade(marks),
+                result: getResult(marks)
+            };
+
+            students.push(student);
+            return student;
+        }
+
+        studentForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const name = studentNameInput.value.trim();
+            const rawMarks = studentMarksInput.value.trim();
+
+            if (name === "") {
+                showMessage("Please enter a student's name.", "error");
+                studentNameInput.focus();
+                return;
+            }
+
+            if (rawMarks === "") {
+                showMessage("Please enter the student's marks.", "error");
+                studentMarksInput.focus();
+                return;
+            }
+
+            const marks = Number(rawMarks);
+
+            if (
+                !Number.isInteger(marks) ||
+                marks < 0 ||
+                marks > 100
+            ) {
+                showMessage(
+                    "Marks must be a whole number between 0 and 100.",
+                    "error"
+                );
+                studentMarksInput.focus();
+                return;
+            }
+
+            addStudent(name, marks);
+
+            studentForm.reset();
+
+            renderStudents();
+            updateStatistics();
+
+            showMessage(
+                `${name} was added successfully with grade ${calculateGrade(marks)}.`,
+                "success"
+            );
+
+            studentNameInput.focus();
+        });
+
+        // =========================================
+        // 7. RENDER THE STUDENT TABLE
+        // =========================================
+
+        function renderStudents() {
+            studentTableBody.replaceChildren();
+
+            if (students.length === 0) {
+                const row = document.createElement("tr");
+                const cell = document.createElement("td");
+                const emptyState = document.createElement("div");
+
+                cell.colSpan = 5;
+                emptyState.className = "empty-state";
+                emptyState.textContent =
+                    "No students added yet. Enter a name and marks above to create your first record.";
+
+                cell.appendChild(emptyState);
+                row.appendChild(cell);
+                studentTableBody.appendChild(row);
+
+                reportCountElement.textContent = "0 records";
+                return;
+            }
+
+            students.forEach(function(student) {
+                const row = document.createElement("tr");
+
+                const nameCell = document.createElement("td");
+                nameCell.textContent = student.name;
+
+                const marksCell = document.createElement("td");
+                marksCell.textContent = `${student.marks}/100`;
+
+                const gradeCell = document.createElement("td");
+                const gradeBadge = document.createElement("span");
+                gradeBadge.className = "grade";
+                gradeBadge.textContent = student.grade;
+                gradeCell.appendChild(gradeBadge);
+
+                const resultCell = document.createElement("td");
+                const resultBadge = document.createElement("span");
+                resultBadge.className =
+                    student.result === "Pass" ? "status pass" : "status fail";
+                resultBadge.textContent = student.result;
+                resultCell.appendChild(resultBadge);
+
+                const actionCell = document.createElement("td");
+                const deleteButton = document.createElement("button");
+
+                deleteButton.type = "button";
+                deleteButton.className = "delete-btn";
+                deleteButton.textContent = "Remove";
+                deleteButton.setAttribute(
+                    "aria-label",
+                    `Remove ${student.name}`
+                );
+
+                deleteButton.addEventListener("click", function() {
+                    removeStudent(student.id);
+                });
+
+                actionCell.appendChild(deleteButton);
+
+                row.append(
+                    nameCell,
+                    marksCell,
+                    gradeCell,
+                    resultCell,
+                    actionCell
+                );
+
+                studentTableBody.appendChild(row);
+            });
+
+            reportCountElement.textContent =
+                `${students.length} ${students.length === 1 ? "record" : "records"}`;
+        }
+
+        // =========================================
+        // 8. REMOVE ONE STUDENT
+        // =========================================
+
+        function removeStudent(id) {
+            const studentToRemove = students.find(function(student) {
+                return student.id === id;
+            });
+
+            if (!studentToRemove) {
+                return;
+            }
+
+            students = students.filter(function(student) {
+                return student.id !== id;
+            });
+
+            renderStudents();
+            updateStatistics();
+
+            showMessage(
+                `${studentToRemove.name} was removed from the report.`,
+                "success"
+            );
+        }
+
+        // =========================================
+        // 9. CALCULATE CLASS STATISTICS
+        // =========================================
+
+        function updateStatistics() {
+            const total = students.length;
+
+            totalStudentsElement.textContent = total;
+
+            if (total === 0) {
+                classAverageElement.textContent = "—";
+                passRateElement.textContent = "—";
+                highestMarkElement.textContent = "—";
+                topStudentElement.textContent = "No results yet";
+                return;
+            }
+
+            // Add all student marks together.
+            const totalMarks = students.reduce(function(sum, student) {
+                return sum + student.marks;
+            }, 0);
+
+            const average = totalMarks / total;
+
+            const passingStudents = students.filter(function(student) {
+                return student.marks >= 50;
+            });
+
+            const rate = (passingStudents.length / total) * 100;
+
+            const highestStudent = students.reduce(function(best, student) {
+                return student.marks > best.marks ? student : best;
+            }, students[0]);
+
+            classAverageElement.textContent = average.toFixed(1);
+            passRateElement.textContent = `${rate.toFixed(1)}%`;
+            highestMarkElement.textContent = highestStudent.marks;
+            topStudentElement.textContent = highestStudent.name;
+        }
+
+        // =========================================
+        // 10. LOAD SAMPLE STUDENTS
+        // =========================================
+
+        demoButton.addEventListener("click", function() {
+            if (students.length > 0) {
+                showMessage(
+                    "Clear the current list first if you want to load a fresh demo class.",
+                    "error"
+                );
+                return;
+            }
+
+            const demoStudents = [
+                { name: "Alex Johnson", marks: 92 },
+                { name: "Sophia Williams", marks: 84 },
+                { name: "Daniel Brown", marks: 76 },
+                { name: "Grace Miller", marks: 68 },
+                { name: "Michael Davis", marks: 55 },
+                { name: "Emma Wilson", marks: 43 }
+            ];
+
+            demoStudents.forEach(function(student) {
+                addStudent(student.name, student.marks);
+            });
+
+            renderStudents();
+            updateStatistics();
+
+            showMessage(
+                "Demo class loaded successfully. Explore the grades and statistics!",
+                "success"
+            );
+        });
+
+        // =========================================
+        // 11. CLEAR ALL STUDENT RECORDS
+        // =========================================
+
+        clearButton.addEventListener("click", function() {
+            if (students.length === 0) {
+                showMessage("There are no student records to clear.", "error");
+                return;
+            }
+
+            const confirmed = confirm(
+                "Are you sure you want to remove every student from this report?"
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+            students = [];
+
+            renderStudents();
+            updateStatistics();
+
+            showMessage("All student records have been cleared.", "success");
+        });
+
+        // =========================================
+        // 12. INITIALIZE THE DASHBOARD
+        // =========================================
+
+        renderStudents();
+        updateStatistics();
+    </script>
+</body>
+</html>
+```
