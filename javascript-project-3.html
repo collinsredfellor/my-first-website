@@ -1,0 +1,1386 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="JavaScript Project 3 by Collins Redfellor - Multiplication Table Generator"
+    >
+
+    <title>Multiplication Table | Collins Redfellor</title>
+
+
+    <style>
+
+        /* =========================================
+           GLOBAL RESET
+        ========================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            color: #f5f7ff;
+
+            background:
+
+                radial-gradient(
+                    circle at top left,
+                    rgba(0, 212, 255, 0.18),
+                    transparent 30%
+                ),
+
+                radial-gradient(
+                    circle at bottom right,
+                    rgba(139, 92, 246, 0.18),
+                    transparent 30%
+                ),
+
+                #080b14;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================================
+           NAVIGATION
+        ========================================= */
+
+        header {
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+
+            padding:
+                18px 8%;
+
+            background:
+                rgba(8, 11, 20, 0.82);
+
+            backdrop-filter:
+                blur(16px);
+
+            -webkit-backdrop-filter:
+                blur(16px);
+
+            border-bottom:
+                1px solid
+                rgba(255, 255, 255, 0.08);
+        }
+
+
+        nav {
+
+            max-width:
+                1200px;
+
+            margin:
+                auto;
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            gap:
+                20px;
+        }
+
+
+        .logo {
+
+            font-size:
+                1.3rem;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                1px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #00d4ff,
+                    #8b5cf6
+                );
+
+            -webkit-background-clip:
+                text;
+
+            -webkit-text-fill-color:
+                transparent;
+        }
+
+
+        nav a {
+
+            color:
+                #dce3f7;
+
+            text-decoration:
+                none;
+
+            margin-left:
+                20px;
+
+            transition:
+                0.3s ease;
+        }
+
+
+        nav a:hover {
+
+            color:
+                #00d4ff;
+        }
+
+
+        /* =========================================
+           HERO
+        ========================================= */
+
+        .hero {
+
+            max-width:
+                1100px;
+
+            margin:
+                auto;
+
+            padding:
+                90px 8% 60px;
+
+            text-align:
+                center;
+        }
+
+
+        .badge {
+
+            display:
+                inline-block;
+
+            padding:
+                8px 16px;
+
+            margin-bottom:
+                20px;
+
+            border:
+                1px solid
+                rgba(0, 212, 255, 0.35);
+
+            border-radius:
+                50px;
+
+            background:
+                rgba(0, 212, 255, 0.08);
+
+            color:
+                #00d4ff;
+
+            font-size:
+                0.85rem;
+
+            font-weight:
+                bold;
+
+            letter-spacing:
+                1px;
+        }
+
+
+        .hero h1 {
+
+            font-size:
+                clamp(2.5rem, 6vw, 5rem);
+
+            line-height:
+                1.05;
+
+            margin-bottom:
+                25px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff,
+                    #00d4ff,
+                    #8b5cf6
+                );
+
+            -webkit-background-clip:
+                text;
+
+            -webkit-text-fill-color:
+                transparent;
+        }
+
+
+        .hero p {
+
+            max-width:
+                760px;
+
+            margin:
+                auto;
+
+            color:
+                #aeb8d0;
+
+            font-size:
+                1.1rem;
+        }
+
+
+        /* =========================================
+           MAIN
+        ========================================= */
+
+        main {
+
+            width:
+                min(1100px, 90%);
+
+            margin:
+                auto;
+        }
+
+
+        section {
+
+            margin-bottom:
+                70px;
+        }
+
+
+        .section-title {
+
+            margin-bottom:
+                30px;
+        }
+
+
+        .section-title h2 {
+
+            font-size:
+                2rem;
+
+            margin-bottom:
+                8px;
+        }
+
+
+        .section-title p {
+
+            color:
+                #8994ad;
+        }
+
+
+        /* =========================================
+           GENERATOR
+        ========================================= */
+
+        .generator {
+
+            padding:
+                40px;
+
+            border-radius:
+                25px;
+
+            background:
+                rgba(255, 255, 255, 0.045);
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.1);
+
+            backdrop-filter:
+                blur(15px);
+
+            -webkit-backdrop-filter:
+                blur(15px);
+
+            box-shadow:
+                0 25px 70px
+                rgba(0, 0, 0, 0.25);
+        }
+
+
+        .input-area {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1fr auto;
+
+            gap:
+                15px;
+
+            margin-top:
+                25px;
+        }
+
+
+        input {
+
+            width:
+                100%;
+
+            padding:
+                16px 18px;
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.12);
+
+            border-radius:
+                12px;
+
+            outline:
+                none;
+
+            background:
+                rgba(0, 0, 0, 0.25);
+
+            color:
+                white;
+
+            font-size:
+                1rem;
+
+            transition:
+                0.3s ease;
+        }
+
+
+        input:focus {
+
+            border-color:
+                #00d4ff;
+
+            box-shadow:
+                0 0 20px
+                rgba(0, 212, 255, 0.15);
+        }
+
+
+        button {
+
+            border:
+                none;
+
+            cursor:
+                pointer;
+
+            padding:
+                15px 24px;
+
+            border-radius:
+                12px;
+
+            color:
+                white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #00a8cc,
+                    #6d4aff
+                );
+
+            font-weight:
+                bold;
+
+            font-size:
+                0.95rem;
+
+            transition:
+                0.3s ease;
+        }
+
+
+        button:hover {
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 12px 30px
+                rgba(0, 0, 0, 0.3);
+        }
+
+
+        .button-row {
+
+            display:
+                flex;
+
+            flex-wrap:
+                wrap;
+
+            gap:
+                12px;
+
+            margin-top:
+                18px;
+        }
+
+
+        .secondary-button {
+
+            background:
+                rgba(255, 255, 255, 0.08);
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.12);
+        }
+
+
+        /* =========================================
+           TABLE RESULT
+        ========================================= */
+
+        .result-area {
+
+            margin-top:
+                35px;
+
+            padding:
+                25px;
+
+            border-radius:
+                18px;
+
+            background:
+                rgba(0, 0, 0, 0.25);
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.08);
+        }
+
+
+        .result-area h3 {
+
+            color:
+                #00d4ff;
+
+            margin-bottom:
+                20px;
+        }
+
+
+        #tableOutput {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap:
+                12px;
+        }
+
+
+        .table-row {
+
+            padding:
+                14px 18px;
+
+            border-radius:
+                10px;
+
+            background:
+                rgba(255, 255, 255, 0.05);
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.07);
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            color:
+                #e6ebff;
+
+            transition:
+                0.25s ease;
+        }
+
+
+        .table-row:hover {
+
+            transform:
+                translateX(5px);
+
+            border-color:
+                rgba(0, 212, 255, 0.35);
+        }
+
+
+        /* =========================================
+           CONCEPT CARDS
+        ========================================= */
+
+        .grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap:
+                20px;
+        }
+
+
+        .card {
+
+            padding:
+                25px;
+
+            border-radius:
+                18px;
+
+            background:
+                rgba(255, 255, 255, 0.04);
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.08);
+
+            transition:
+                0.3s ease;
+        }
+
+
+        .card:hover {
+
+            transform:
+                translateY(-7px);
+
+            border-color:
+                rgba(0, 212, 255, 0.35);
+        }
+
+
+        .card-icon {
+
+            font-size:
+                2rem;
+
+            margin-bottom:
+                12px;
+        }
+
+
+        .card h3 {
+
+            margin-bottom:
+                10px;
+
+            color:
+                #ffffff;
+        }
+
+
+        .card p {
+
+            color:
+                #8994ad;
+
+            font-size:
+                0.95rem;
+        }
+
+
+        /* =========================================
+           LOOP VISUALIZATION
+        ========================================= */
+
+        .loop-box {
+
+            margin-top:
+                25px;
+
+            padding:
+                25px;
+
+            border-radius:
+                18px;
+
+            background:
+                rgba(0, 0, 0, 0.25);
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.08);
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            color:
+                #dce3f7;
+
+            white-space:
+                pre-line;
+        }
+
+
+        .highlight {
+
+            color:
+                #00d4ff;
+
+            font-weight:
+                bold;
+        }
+
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        footer {
+
+            margin-top:
+                80px;
+
+            padding:
+                35px 20px;
+
+            text-align:
+                center;
+
+            border-top:
+                1px solid
+                rgba(255, 255, 255, 0.08);
+
+            color:
+                #77829b;
+        }
+
+
+        footer strong {
+
+            color:
+                #00d4ff;
+        }
+
+
+        /* =========================================
+           RESPONSIVE DESIGN
+        ========================================= */
+
+        @media (max-width: 850px) {
+
+            .grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            #tableOutput {
+
+                grid-template-columns:
+                    1fr;
+            }
+        }
+
+
+        @media (max-width: 600px) {
+
+            header {
+
+                padding:
+                    15px 5%;
+            }
+
+
+            nav {
+
+                flex-direction:
+                    column;
+            }
+
+
+            nav a {
+
+                margin:
+                    0 7px;
+            }
+
+
+            .hero {
+
+                padding:
+                    70px 5% 50px;
+            }
+
+
+            .generator {
+
+                padding:
+                    25px;
+            }
+
+
+            .input-area {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         NAVIGATION
+    ========================================== -->
+
+    <header>
+
+        <nav>
+
+            <div class="logo">
+                COLLINS.DEV
+            </div>
+
+
+            <div>
+
+                <a href="#generator">
+                    Generator
+                </a>
+
+                <a href="#concepts">
+                    Concepts
+                </a>
+
+                <a href="#loops">
+                    Loops
+                </a>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =========================================
+         HERO
+    ========================================== -->
+
+    <section class="hero">
+
+        <span class="badge">
+            JAVASCRIPT PROJECT 03
+        </span>
+
+
+        <h1>
+            Multiplication Table Generator
+        </h1>
+
+
+        <p>
+
+            A practical JavaScript application designed to
+            demonstrate loops, repetition, functions, user input,
+            calculations and dynamic HTML generation.
+
+        </p>
+
+    </section>
+
+
+    <main>
+
+
+        <!-- =========================================
+             GENERATOR
+        ========================================== -->
+
+        <section id="generator">
+
+            <div class="section-title">
+
+                <h2>
+                    Generate a Multiplication Table
+                </h2>
+
+                <p>
+                    Enter a number and JavaScript will generate
+                    its multiplication table.
+                </p>
+
+            </div>
+
+
+            <div class="generator">
+
+
+                <h3>
+                    Choose Your Number
+                </h3>
+
+
+                <p>
+                    Enter a number below and select how far
+                    the multiplication table should go.
+                </p>
+
+
+                <div class="input-area">
+
+                    <input
+                        type="number"
+                        id="numberInput"
+                        placeholder="Enter a number..."
+                    >
+
+
+                    <input
+                        type="number"
+                        id="limitInput"
+                        placeholder="Table limit..."
+                        value="12"
+                        min="1"
+                        max="100"
+                    >
+
+                </div>
+
+
+                <div class="button-row">
+
+                    <button onclick="generateTable()">
+
+                        Generate Table
+
+                    </button>
+
+
+                    <button
+                        class="secondary-button"
+                        onclick="clearTable()"
+                    >
+
+                        Clear Table
+
+                    </button>
+
+                </div>
+
+
+                <div class="result-area">
+
+                    <h3>
+                        Generated Table
+                    </h3>
+
+
+                    <div id="tableOutput">
+
+                        Enter a number and click
+                        "Generate Table".
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================
+             CONCEPTS
+        ========================================== -->
+
+        <section id="concepts">
+
+            <div class="section-title">
+
+                <h2>
+                    JavaScript Concepts Used
+                </h2>
+
+                <p>
+                    Project 3 introduces repetition and demonstrates
+                    why loops are so important in programming.
+                </p>
+
+            </div>
+
+
+            <div class="grid">
+
+
+                <article class="card">
+
+                    <div class="card-icon">
+                        🔁
+                    </div>
+
+                    <h3>
+                        For Loops
+                    </h3>
+
+                    <p>
+                        A for loop repeats a block of code a specific
+                        number of times.
+                    </p>
+
+                </article>
+
+
+                <article class="card">
+
+                    <div class="card-icon">
+                        ⚙️
+                    </div>
+
+                    <h3>
+                        Functions
+                    </h3>
+
+                    <p>
+                        Functions allow us to package instructions
+                        into reusable blocks of code.
+                    </p>
+
+                </article>
+
+
+                <article class="card">
+
+                    <div class="card-icon">
+                        🧮
+                    </div>
+
+                    <h3>
+                        Multiplication
+                    </h3>
+
+                    <p>
+                        JavaScript performs calculations dynamically
+                        using mathematical operators.
+                    </p>
+
+                </article>
+
+
+                <article class="card">
+
+                    <div class="card-icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        DOM Manipulation
+                    </h3>
+
+                    <p>
+                        JavaScript creates and inserts new HTML
+                        elements into the webpage.
+                    </p>
+
+                </article>
+
+
+                <article class="card">
+
+                    <div class="card-icon">
+                        🛡️
+                    </div>
+
+                    <h3>
+                        Validation
+                    </h3>
+
+                    <p>
+                        The program checks whether the user entered
+                        valid values before generating the table.
+                    </p>
+
+                </article>
+
+
+                <article class="card">
+
+                    <div class="card-icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        Variables
+                    </h3>
+
+                    <p>
+                        Variables temporarily store values used
+                        throughout the program.
+                    </p>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================
+             LOOP VISUALIZATION
+        ========================================== -->
+
+        <section id="loops">
+
+            <div class="section-title">
+
+                <h2>
+                    How the Loop Works
+                </h2>
+
+                <p>
+                    This is the basic logic behind our multiplication
+                    table generator.
+                </p>
+
+            </div>
+
+
+            <div class="loop-box">
+
+                <span class="highlight">
+                    for
+                </span>
+                (
+                let i = 1;
+                i <= 12;
+                i++
+                )
+
+                {
+
+                    result =
+                    number * i;
+
+                }
+
+
+                The loop starts at 1.
+
+                It continues while i is less than
+                or equal to 12.
+
+                After every repetition,
+                i increases by 1.
+
+                This allows JavaScript to automatically
+                calculate all twelve multiplication results.
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================== -->
+
+    <footer>
+
+        <p>
+
+            JavaScript Project 03 created by
+            <strong>
+                Collins Redfellor
+            </strong>.
+
+        </p>
+
+
+        <p>
+
+            Python →
+            HTML →
+            CSS →
+            JavaScript →
+            Backend →
+            AI →
+            Cybersecurity
+
+        </p>
+
+    </footer>
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+
+    <script>
+
+
+        /* =========================================
+           GET HTML ELEMENTS
+        ========================================= */
+
+        const numberInput =
+            document.getElementById(
+                "numberInput"
+            );
+
+
+        const limitInput =
+            document.getElementById(
+                "limitInput"
+            );
+
+
+        const tableOutput =
+            document.getElementById(
+                "tableOutput"
+            );
+
+
+        /* =========================================
+           GENERATE TABLE FUNCTION
+        ========================================== */
+
+        function generateTable() {
+
+
+            /* -----------------------------------------
+               GET VALUES
+            ----------------------------------------- */
+
+            const number =
+                Number(
+                    numberInput.value
+                );
+
+
+            const limit =
+                Number(
+                    limitInput.value
+                );
+
+
+            /* -----------------------------------------
+               VALIDATION
+            ----------------------------------------- */
+
+            if (
+                numberInput.value.trim() === ""
+                ||
+                limitInput.value.trim() === ""
+            ) {
+
+                tableOutput.innerHTML =
+                    "⚠️ Please enter both a number and a table limit.";
+
+                return;
+            }
+
+
+            if (
+                Number.isNaN(number)
+                ||
+                Number.isNaN(limit)
+            ) {
+
+                tableOutput.innerHTML =
+                    "⚠️ Please enter valid numbers.";
+
+                return;
+            }
+
+
+            if (limit < 1) {
+
+                tableOutput.innerHTML =
+                    "⚠️ The table limit must be at least 1.";
+
+                return;
+            }
+
+
+            if (limit > 100) {
+
+                tableOutput.innerHTML =
+                    "⚠️ Please choose a limit of 100 or less.";
+
+                return;
+            }
+
+
+            /* -----------------------------------------
+               CLEAR PREVIOUS RESULTS
+            ----------------------------------------- */
+
+            tableOutput.innerHTML = "";
+
+
+            /* -----------------------------------------
+               CREATE TABLE USING A FOR LOOP
+            ----------------------------------------- */
+
+            for (
+                let i = 1;
+                i <= limit;
+                i++
+            ) {
+
+
+                const result =
+                    number * i;
+
+
+                const row =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                row.className =
+                    "table-row";
+
+
+                row.textContent =
+                    number +
+                    " × " +
+                    i +
+                    " = " +
+                    result;
+
+
+                tableOutput.appendChild(
+                    row
+                );
+
+            }
+
+        }
+
+
+        /* =========================================
+           CLEAR TABLE FUNCTION
+        ========================================== */
+
+        function clearTable() {
+
+            tableOutput.innerHTML =
+                "Enter a number and click " +
+                "\"Generate Table\".";
+
+            numberInput.value = "";
+
+            limitInput.value = "12";
+
+        }
+
+
+        /* =========================================
+           ENTER KEY SUPPORT
+        ========================================== */
+
+        numberInput.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (
+                    event.key === "Enter"
+                ) {
+
+                    generateTable();
+
+                }
+
+            }
+        );
+
+
+        limitInput.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (
+                    event.key === "Enter"
+                ) {
+
+                    generateTable();
+
+                }
+
+            }
+        );
+
+
+    </script>
+
+
+</body>
+
+</html>
+```
