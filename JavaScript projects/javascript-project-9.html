@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="An interactive JavaScript quiz application with timed questions, live scoring, and a results dashboard.">
+    <title>QuizMaster | JavaScript Project 9</title>
+
+    <style>
+        :root {
+            --bg: #090d19;
+            --panel: rgba(21, 28, 49, 0.9);
+            --panel-light: #18223a;
+            --text: #f1f5ff;
+            --muted: #9ba8c4;
+            --purple: #8b5cf6;
+            --blue: #38bdf8;
+            --green: #34d399;
+            --red: #fb7185;
+            --border: rgba(148, 163, 184, 0.18);
+            --radius: 22px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            color: var(--text);
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            line-height: 1.6;
+            background:
+                radial-gradient(ellipse at 10% 0%, #30205b 0%, transparent 37%),
+                radial-gradient(ellipse at 95% 80%, #103c50 0%, transparent 35%),
+                var(--bg);
+        }
+
+        button {
+            font: inherit;
+            cursor: pointer;
+        }
+
+        button:focus-visible {
+            outline: 2px solid var(--blue);
+            outline-offset: 4px;
+        }
+
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.45;
+        }
+
+        .container {
+            width: min(1100px, 92%);
+            margin: auto;
+            padding: 30px 0 50px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 35px;
+            animation: fadeDown 0.6s ease both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .brand-icon {
+            width: 50px;
+            height: 50px;
+            display: grid;
+            place-items: center;
+            border-radius: 16px;
+            font-size: 25px;
+            background: linear-gradient(135deg, var(--purple), var(--blue));
+            box-shadow: 0 8px 28px #8b5cf644;
+        }
+
+        .brand h1 {
+            font-size: 1.5rem;
+            letter-spacing: -0.6px;
+        }
+
+        .brand p {
+            color: var(--muted);
+            font-size: 0.83rem;
+        }
+
+        .project-tag {
+            padding: 8px 13px;
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            color: #c4b5fd;
+            background: #ffffff08;
+            font-size: 0.78rem;
+            white-space: nowrap;
+        }
+
+        .hero {
+            margin-bottom: 27px;
+            animation: fadeUp 0.7s ease both;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            margin-bottom: 12px;
+            color: #c4b5fd;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .hero h2 {
+            max-width: 750px;
+            font-size: clamp(2rem, 5vw, 3.4rem);
+            line-height: 1.12;
+            letter-spacing: -1.5px;
+            margin-bottom: 15px;
+        }
+
+        .gradient-text {
+            color: transparent;
+            background: linear-gradient(90deg, #a78bfa, #38bdf8);
+            background-clip: text;
+            -webkit-background-clip: text;
+        }
+
+        .hero p {
+            max-width: 650px;
+            color: var(--muted);
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+            animation: fadeUp 0.8s ease both;
+        }
+
+        .stat-card {
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: var(--panel);
+            transition: transform 0.25s, border-color 0.25s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            border-color: #8b5cf677;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 0.83rem;
+            margin-bottom: 7px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 270px;
+            gap: 22px;
+            align-items: start;
+        }
+
+        .panel {
+            min-width: 0;
+            padding: 25px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--panel);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            animation: fadeUp 0.9s ease both;
+        }
+
+        .panel-heading {
+            margin-bottom: 20px;
+        }
+
+        .panel-heading h3 {
+            font-size: 1.15rem;
+            margin-bottom: 5px;
+        }
+
+        .panel-heading p {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .category-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .category-btn {
+            width: 100%;
+            padding: 15px;
+            text-align: left;
+            color: var(--text);
+            background: #ffffff06;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            transition: 0.22s ease;
+        }
+
+        .category-btn:hover {
+            background: #8b5cf615;
+            border-color: #8b5cf677;
+            transform: translateX(3px);
+        }
+
+        .category-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+            font-weight: 750;
+        }
+
+        .category-description {
+            color: var(--muted);
+            font-size: 0.79rem;
+        }
+
+        .category-count {
+            padding: 3px 8px;
+            color: #c4b5fd;
+            background: #8b5cf622;
+            border-radius: 20px;
+            font-size: 0.73rem;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-label {
+            color: #c4b5fd;
+            font-size: 0.77rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .timer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            color: var(--green);
+            background: #34d39912;
+            border: 1px solid #34d39935;
+            border-radius: 12px;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .timer.warning {
+            color: var(--red);
+            background: #fb718515;
+            border-color: #fb718550;
+            animation: pulse 1s infinite;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            color: var(--muted);
+            font-size: 0.8rem;
+            margin-bottom: 9px;
+        }
+
+        .progress-track {
+            height: 8px;
+            overflow: hidden;
+            background: #ffffff12;
+            border-radius: 20px;
+            margin-bottom: 27px;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--purple), var(--blue));
+            transition: width 0.35s ease;
+        }
+
+        .question-number {
+            color: var(--blue);
+            font-size: 0.8rem;
+            font-weight: 800;
+            margin-bottom: 9px;
+        }
+
+        .question-text {
+            font-size: clamp(1.25rem, 3vw, 1.65rem);
+            line-height: 1.4;
+            margin-bottom: 22px;
+        }
+
+        .answers {
+            display: grid;
+            gap: 12px;
+        }
+
+        .answer-btn {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            width: 100%;
+            padding: 14px;
+            text-align: left;
+            color: var(--text);
+            background: #ffffff06;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            transition: background 0.2s, border-color 0.2s, transform 0.2s;
+        }
+
+        .answer-btn:hover:not(:disabled) {
+            background: #8b5cf615;
+            border-color: #8b5cf6a0;
+            transform: translateX(3px);
+        }
+
+        .answer-letter {
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            width: 34px;
+            height: 34px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: #c4b5fd;
+            background: #ffffff08;
+            font-size: 0.83rem;
+            font-weight: 800;
+        }
+
+        .answer-btn.correct {
+            background: #34d39918;
+            border-color: var(--green);
+        }
+
+        .answer-btn.correct .answer-letter {
+            color: #052e24;
+            background: var(--green);
+        }
+
+        .answer-btn.incorrect {
+            background: #fb718518;
+            border-color: var(--red);
+        }
+
+        .answer-btn.incorrect .answer-letter {
+            color: #4c0519;
+            background: var(--red);
+        }
+
+        .feedback {
+            min-height: 26px;
+            margin-top: 16px;
+            color: var(--muted);
+            font-size: 0.87rem;
+        }
+
+        .feedback.correct-text {
+            color: var(--green);
+        }
+
+        .feedback.incorrect-text {
+            color: #fda4af;
+        }
+
+        .quiz-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .btn {
+            padding: 12px 17px;
+            border: 0;
+            border-radius: 12px;
+            font-weight: 750;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            color: white;
+            background: linear-gradient(120deg, var(--purple), #6366f1);
+            box-shadow: 0 8px 20px #8b5cf626;
+        }
+
+        .btn-secondary {
+            color: #dbeafe;
+            background: #ffffff0b;
+            border: 1px solid var(--border);
+        }
+
+        .btn-danger {
+            color: #fecdd3;
+            background: #fb718515;
+            border: 1px solid #fb71853d;
+        }
+
+        .sidebar-card {
+            padding: 18px;
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            background: #ffffff05;
+            margin-bottom: 15px;
+        }
+
+        .sidebar-card h4 {
+            font-size: 0.93rem;
+            margin-bottom: 9px;
+        }
+
+        .sidebar-card p, .sidebar-card li {
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
+
+        .sidebar-card ul {
+            padding-left: 18px;
+        }
+
+        .sidebar-card li + li {
+            margin-top: 7px;
+        }
+
+        .result-screen {
+            text-align: center;
+            padding: 22px 5px 10px;
+            animation: fadeUp 0.5s ease both;
+        }
+
+        .result-trophy {
+            display: grid;
+            place-items: center;
+            width: 92px;
+            height: 92px;
+            margin: 0 auto 18px;
+            border-radius: 28px;
+            background: linear-gradient(135deg, #8b5cf633, #38bdf833);
+            font-size: 3.1rem;
+        }
+
+        .result-screen h3 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .result-screen > p {
+            color: var(--muted);
+        }
+
+        .score-circle {
+            width: 160px;
+            height: 160px;
+            display: grid;
+            place-items: center;
+            margin: 25px auto;
+            border-radius: 50%;
+            border: 9px solid #8b5cf644;
+            background: #8b5cf610;
+            box-shadow: 0 0 35px #8b5cf61c;
+        }
+
+        .score-circle strong {
+            display: block;
+            font-size: 2.4rem;
+            line-height: 1.1;
+        }
+
+        .score-circle span {
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        .result-stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin: 25px 0;
+        }
+
+        .result-stat {
+            padding: 13px 8px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: #ffffff06;
+        }
+
+        .result-stat strong {
+            display: block;
+            font-size: 1.35rem;
+        }
+
+        .result-stat span {
+            color: var(--muted);
+            font-size: 0.76rem;
+        }
+
+        .result-actions {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 35px;
+            color: #8190ae;
+            font-size: 0.82rem;
+        }
+
+        .footer strong {
+            color: #c4b5fd;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            50% { opacity: 0.65; }
+        }
+
+        @media (max-width: 850px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+            }
+
+            .sidebar-card {
+                margin-bottom: 0;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .container {
+                width: 94%;
+                padding-top: 20px;
+            }
+
+            header {
+                align-items: flex-start;
+            }
+
+            .brand-icon {
+                width: 42px;
+                height: 42px;
+            }
+
+            .brand h1 {
+                font-size: 1.15rem;
+            }
+
+            .project-tag {
+                padding: 6px 8px;
+                font-size: 0.65rem;
+            }
+
+            .dashboard-stats {
+                gap: 8px;
+            }
+
+            .stat-card {
+                padding: 13px 10px;
+            }
+
+            .stat-value {
+                font-size: 1.45rem;
+            }
+
+            .stat-label {
+                font-size: 0.72rem;
+            }
+
+            .panel {
+                padding: 17px;
+            }
+
+            .sidebar {
+                grid-template-columns: 1fr;
+            }
+
+            .quiz-actions .btn {
+                padding: 11px 12px;
+                font-size: 0.85rem;
+            }
+
+            .result-stats {
+                gap: 6px;
+            }
+
+            .result-stat strong {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <header>
+            <div class="brand">
+                <div class="brand-icon" aria-hidden="true">🧠</div>
+                <div>
+                    <h1>QuizMaster</h1>
+                    <p>Challenge your knowledge.</p>
+                </div>
+            </div>
+            <span class="project-tag">JAVASCRIPT PROJECT 09</span>
+        </header>
+
+        <section class="hero">
+            <span class="eyebrow">Learn · Think · Achieve</span>
+            <h2>Knowledge is power.<br><span class="gradient-text">Prove what you know.</span></h2>
+            <p>Choose a category, answer the questions, beat the clock, and discover your score. Every challenge is an opportunity to learn.</p>
+        </section>
+
+        <section class="dashboard-stats" aria-label="Quiz statistics">
+            <div class="stat-card">
+                <p class="stat-label">Questions per quiz</p>
+                <p class="stat-value" id="totalQuestionsStat">10</p>
+            </div>
+            <div class="stat-card">
+                <p class="stat-label">Time limit</p>
+                <p class="stat-value">90 sec</p>
+            </div>
+            <div class="stat-card">
+                <p class="stat-label">Points per correct answer</p>
+                <p class="stat-value">+10</p>
+            </div>
+        </section>
+
+        <main class="layout">
+
+            <section class="panel">
+                <div id="categoryScreen">
+                    <div class="panel-heading">
+                        <h3>Choose Your Challenge</h3>
+                        <p>Select a category to begin your quiz.</p>
+                    </div>
+
+                    <div class="category-list">
+                        <button class="category-btn" data-category="javascript">
+                            <div class="category-top">
+                                <span>💻 JavaScript</span>
+                                <span class="category-count">10 questions</span>
+                            </div>
+                            <p class="category-description">Programming logic and web development.</p>
+                        </button>
+
+                        <button class="category-btn" data-category="technology">
+                            <div class="category-top">
+                                <span>🚀 Technology</span>
+                                <span class="category-count">10 questions</span>
+                            </div>
+                            <p class="category-description">Computers, the internet, and digital innovation.</p>
+                        </button>
+
+                        <button class="category-btn" data-category="general">
+                            <div class="category-top">
+                                <span>🌍 General Knowledge</span>
+                                <span class="category-count">10 questions</span>
+                            </div>
+                            <p class="category-description">Explore science, geography, and everyday facts.</p>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="quizScreen" class="hidden">
+                    <div class="quiz-header">
+                        <span class="quiz-label" id="currentCategoryLabel">JavaScript Challenge</span>
+                        <div class="timer" id="timer" aria-live="off">
+                            <span aria-hidden="true">◷</span>
+                            <span id="timerText">01:30</span>
+                        </div>
+                    </div>
+
+                    <div class="progress-info">
+                        <span id="questionProgress">Question 1 of 10</span>
+                        <span id="progressPercent">10%</span>
+                    </div>
+
+                    <div class="progress-track" role="progressbar"
+                         aria-label="Quiz progress" aria-valuemin="0"
+                         aria-valuemax="10" aria-valuenow="1" id="progressTrack">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+
+                    <p class="question-number" id="questionNumber">QUESTION 01</p>
+                    <h3 class="question-text" id="questionText"></h3>
+
+                    <div class="answers" id="answersContainer"></div>
+
+                    <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
+
+                    <div class="quiz-actions">
+                        <button class="btn btn-secondary" id="quitBtn" type="button">← Exit Quiz</button>
+                        <button class="btn btn-primary" id="nextBtn" type="button" disabled>Next Question →</button>
+                    </div>
+                </div>
+
+                <div id="resultScreen" class="hidden">
+                    <div class="result-screen">
+                        <div class="result-trophy" id="resultTrophy" aria-hidden="true">🏆</div>
+                        <h3 id="resultTitle">Challenge Complete!</h3>
+                        <p id="resultMessage">Here is your final result.</p>
+
+                        <div class="score-circle">
+                            <div>
+                                <strong id="scorePercent">0%</strong>
+                                <span>Final score</span>
+                            </div>
+                        </div>
+
+                        <div class="result-stats">
+                            <div class="result-stat">
+                                <strong id="correctCount">0</strong>
+                                <span>Correct</span>
+                            </div>
+                            <div class="result-stat">
+                                <strong id="wrongCount">0</strong>
+                                <span>Incorrect</span>
+                            </div>
+                            <div class="result-stat">
+                                <strong id="finalPoints">0</strong>
+                                <span>Points</span>
+                            </div>
+                        </div>
+
+                        <p id="resultDetail"></p>
+
+                        <div class="result-actions">
+                            <button class="btn btn-primary" id="retryBtn" type="button">↻ Try Again</button>
+                            <button class="btn btn-secondary" id="categoriesBtn" type="button">Choose Category</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <aside class="sidebar">
+                <div class="sidebar-card">
+                    <h4>📘 How to Play</h4>
+                    <ul>
+                        <li>Choose your favorite quiz category.</li>
+                        <li>Select one answer per question.</li>
+                        <li>Each correct answer earns 10 points.</li>
+                        <li>Finish before the 90-second timer ends.</li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-card">
+                    <h4>⚡ Challenge Rules</h4>
+                    <p>There are 10 questions in each category. Your selected answer is locked once submitted, and the correct answer is revealed before you continue.</p>
+                </div>
+
+                <div class="sidebar-card">
+                    <h4>🎯 Score Guide</h4>
+                    <ul>
+                        <li>90–100%: Outstanding!</li>
+                        <li>70–80%: Great work!</li>
+                        <li>50–60%: Keep practicing.</li>
+                        <li>Below 50%: Try again and improve.</li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-card">
+                    <h4>💡 Learning Tip</h4>
+                    <p>Focus on understanding why an answer is correct. Knowledge grows faster when you learn from every mistake.</p>
+                </div>
+            </aside>
+
+        </main>
+
+        <footer class="footer">
+            <p>Crafted with <strong>HTML, CSS & JavaScript</strong></p>
+            <p>JavaScript Learning Journey · Project 09</p>
+        </footer>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. QUIZ DATABASE
+        // ==========================================
+
+        const quizData = {
+            javascript: [
+                {
+                    question: "Which keyword declares a block-scoped variable that can be reassigned?",
+                    options: ["const", "let", "static", "define"],
+                    answer: 1,
+                    explanation: "let declares a block-scoped variable that can be reassigned."
+                },
+                {
+                    question: "Which symbol is used for strict equality in JavaScript?",
+                    options: ["=", "==", "===", "!="],
+                    answer: 2,
+                    explanation: "=== compares values without performing type coercion."
+                },
+                {
+                    question: "Which method adds an item to the end of an array?",
+                    options: ["pop()", "shift()", "push()", "slice()"],
+                    answer: 2,
+                    explanation: "push() adds one or more elements to the end of an array."
+                },
+                {
+                    question: "Which HTML tag is used to include JavaScript directly in a page?",
+                    options: ["<javascript>", "<script>", "<code>", "<js>"],
+                    answer: 1,
+                    explanation: "The script element embeds or references JavaScript code."
+                },
+                {
+                    question: "What does typeof 42 return?",
+                    options: ["integer", "float", "number", "numeric"],
+                    answer: 2,
+                    explanation: "JavaScript uses the number type for ordinary integers and decimals."
+                },
+                {
+                    question: "Which method selects an element using a CSS selector?",
+                    options: ["getCSS()", "querySelector()", "selectHTML()", "findElement()"],
+                    answer: 1,
+                    explanation: "document.querySelector() returns the first matching element."
+                },
+                {
+                    question: "Which keyword is used to define a function?",
+                    options: ["func", "method", "function", "define"],
+                    answer: 2,
+                    explanation: "The function keyword declares a traditional JavaScript function."
+                },
+                {
+                    question: "What does the DOM allow JavaScript to do?",
+                    options: [
+                        "Only style server hardware",
+                        "Access and update page elements",
+                        "Replace the internet",
+                        "Create HTML files automatically in every case"
+                    ],
+                    answer: 1,
+                    explanation: "The DOM represents the document as objects that JavaScript can access and modify."
+                },
+                {
+                    question: "Which array method creates a new array by transforming each item?",
+                    options: ["map()", "find()", "push()", "includes()"],
+                    answer: 0,
+                    explanation: "map() calls a callback for each array element and returns a new array."
+                },
+                {
+                    question: "Which event commonly fires when a user clicks a button?",
+                    options: ["changeText", "hovering", "click", "submitOnly"],
+                    answer: 2,
+                    explanation: "The click event fires when an element is clicked."
+                }
+            ],
+
+            technology: [
+                {
+                    question: "What does CPU stand for?",
+                    options: [
+                        "Central Processing Unit",
+                        "Computer Personal Utility",
+                        "Central Program Upload",
+                        "Core Performance User"
+                    ],
+                    answer: 0,
+                    explanation: "The CPU executes instructions and performs essential computing operations."
+                },
+                {
+                    question: "Which of these is an operating system?",
+                    options: ["HTML", "Windows", "Wi-Fi", "Bluetooth"],
+                    answer: 1,
+                    explanation: "Windows is an operating system that manages computer hardware and software."
+                },
+                {
+                    question: "What does URL identify?",
+                    options: [
+                        "A computer battery",
+                        "A web resource address",
+                        "A programming loop",
+                        "A storage chip"
+                    ],
+                    answer: 1,
+                    explanation: "A URL identifies the location of a resource on a network."
+                },
+                {
+                    question: "Which device commonly routes traffic between networks?",
+                    options: ["Keyboard", "Monitor", "Router", "Printer"],
+                    answer: 2,
+                    explanation: "A router forwards data packets between networks."
+                },
+                {
+                    question: "What is cloud computing?",
+                    options: [
+                        "Predicting the weather",
+                        "Using computing resources over a network",
+                        "Cleaning computer screens",
+                        "Storing files only on paper"
+                    ],
+                    answer: 1,
+                    explanation: "Cloud computing provides computing services such as storage and processing over a network."
+                },
+                {
+                    question: "Which of these is a web browser?",
+                    options: ["Chrome", "Python", "Linux kernel", "SQL"],
+                    answer: 0,
+                    explanation: "Google Chrome is a web browser used to access websites."
+                },
+                {
+                    question: "What is the main purpose of a backup?",
+                    options: [
+                        "Increase screen brightness",
+                        "Create a recoverable copy of data",
+                        "Remove all passwords",
+                        "Replace an operating system"
+                    ],
+                    answer: 1,
+                    explanation: "Backups help restore data after loss, damage, or accidental deletion."
+                },
+                {
+                    question: "Which technology is commonly used for wireless local networking?",
+                    options: ["HDMI", "Ethernet cable only", "Wi-Fi", "VGA"],
+                    answer: 2,
+                    explanation: "Wi-Fi connects devices wirelessly to a local network."
+                },
+                {
+                    question: "What does two-factor authentication add?",
+                    options: [
+                        "A second verification step",
+                        "A second monitor",
+                        "A faster keyboard",
+                        "Unlimited storage"
+                    ],
+                    answer: 0,
+                    explanation: "Two-factor authentication requires another form of verification beyond the first factor."
+                },
+                {
+                    question: "Which unit is commonly used to measure digital file size?",
+                    options: ["Liter", "Byte", "Watt", "Meter"],
+                    answer: 1,
+                    explanation: "Bytes and their multiples are used to measure digital information."
+                }
+            ],
+
+            general: [
+                {
+                    question: "Which planet is known as the Red Planet?",
+                    options: ["Venus", "Mars", "Jupiter", "Mercury"],
+                    answer: 1,
+                    explanation: "Mars appears reddish because of iron oxide on its surface."
+                },
+                {
+                    question: "What is the largest ocean on Earth?",
+                    options: ["Atlantic", "Indian", "Arctic", "Pacific"],
+                    answer: 3,
+                    explanation: "The Pacific Ocean is the largest ocean on Earth."
+                },
+                {
+                    question: "How many sides does a hexagon have?",
+                    options: ["Five", "Six", "Seven", "Eight"],
+                    answer: 1,
+                    explanation: "A hexagon is a polygon with six sides."
+                },
+                {
+                    question: "Which gas do plants absorb during photosynthesis?",
+                    options: ["Oxygen", "Nitrogen", "Carbon dioxide", "Helium"],
+                    answer: 2,
+                    explanation: "Plants use carbon dioxide, water, and light energy to produce sugars during photosynthesis."
+                },
+                {
+                    question: "What is the capital city of Kenya?",
+                    options: ["Mombasa", "Kisumu", "Nakuru", "Nairobi"],
+                    answer: 3,
+                    explanation: "Nairobi is the capital city of Kenya."
+                },
+                {
+                    question: "How many minutes are in one hour?",
+                    options: ["30", "45", "60", "100"],
+                    answer: 2,
+                    explanation: "One hour contains 60 minutes."
+                },
+                {
+                    question: "Which organ pumps blood around the human body?",
+                    options: ["Lungs", "Heart", "Liver", "Kidneys"],
+                    answer: 1,
+                    explanation: "The heart pumps blood through the circulatory system."
+                },
+                {
+                    question: "At standard atmospheric pressure, water freezes at what temperature in Celsius?",
+                    options: ["0°C", "10°C", "32°C", "100°C"],
+                    answer: 0,
+                    explanation: "Pure water freezes at 0°C under standard atmospheric pressure."
+                },
+                {
+                    question: "Which star is closest to Earth?",
+                    options: ["Sirius", "Polaris", "The Sun", "Vega"],
+                    answer: 2,
+                    explanation: "The Sun is the star closest to Earth."
+                },
+                {
+                    question: "How many days are in a standard non-leap year?",
+                    options: ["360", "365", "366", "364"],
+                    answer: 1,
+                    explanation: "A standard year has 365 days; a leap year has 366."
+                }
+            ]
+        };
+
+        // ==========================================
+        // 2. APPLICATION STATE
+        // ==========================================
+
+        const QUESTION_TIME = 90;
+        const POINTS_PER_CORRECT = 10;
+
+        let currentCategory = "";
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let correctAnswers = 0;
+        let incorrectAnswers = 0;
+        let secondsRemaining = QUESTION_TIME;
+        let timerInterval = null;
+        let hasAnswered = false;
+        let quizActive = false;
+
+        // ==========================================
+        // 3. DOM REFERENCES
+        // ==========================================
+
+        const categoryScreen = document.getElementById("categoryScreen");
+        const quizScreen = document.getElementById("quizScreen");
+        const resultScreen = document.getElementById("resultScreen");
+
+        const currentCategoryLabel = document.getElementById("currentCategoryLabel");
+        const timer = document.getElementById("timer");
+        const timerText = document.getElementById("timerText");
+        const questionProgress = document.getElementById("questionProgress");
+        const progressPercent = document.getElementById("progressPercent");
+        const progressBar = document.getElementById("progressBar");
+        const progressTrack = document.getElementById("progressTrack");
+        const questionNumber = document.getElementById("questionNumber");
+        const questionText = document.getElementById("questionText");
+        const answersContainer = document.getElementById("answersContainer");
+        const feedback = document.getElementById("feedback");
+        const nextBtn = document.getElementById("nextBtn");
+        const quitBtn = document.getElementById("quitBtn");
+
+        // ==========================================
+        // 4. CATEGORY SELECTION
+        // ==========================================
+
+        document.querySelectorAll(".category-btn").forEach(button => {
+            button.addEventListener("click", function() {
+                startQuiz(button.dataset.category);
+            });
+        });
+
+        function startQuiz(category) {
+            stopTimer();
+
+            currentCategory = category;
+            currentQuestions = [...quizData[category]];
+            currentQuestionIndex = 0;
+            score = 0;
+            correctAnswers = 0;
+            incorrectAnswers = 0;
+            secondsRemaining = QUESTION_TIME;
+            hasAnswered = false;
+            quizActive = true;
+
+            categoryScreen.classList.add("hidden");
+            resultScreen.classList.add("hidden");
+            quizScreen.classList.remove("hidden");
+
+            const labels = {
+                javascript: "JavaScript Challenge",
+                technology: "Technology Challenge",
+                general: "General Knowledge"
+            };
+
+            currentCategoryLabel.textContent = labels[category];
+
+            document.getElementById("totalQuestionsStat").textContent =
+                currentQuestions.length;
+
+            renderQuestion();
+            startTimer();
+        }
+
+        // ==========================================
+        // 5. DISPLAY THE CURRENT QUESTION
+        // ==========================================
+
+        function renderQuestion() {
+            const question = currentQuestions[currentQuestionIndex];
+
+            hasAnswered = false;
+            nextBtn.disabled = true;
+
+            questionProgress.textContent =
+                `Question ${currentQuestionIndex + 1} of ${currentQuestions.length}`;
+
+            const progress = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
+
+            progressPercent.textContent = Math.round(progress) + "%";
+            progressBar.style.width = progress + "%";
+            progressTrack.setAttribute("aria-valuemax", currentQuestions.length);
+            progressTrack.setAttribute("aria-valuenow", currentQuestionIndex + 1);
+
+            questionNumber.textContent =
+                "QUESTION " + String(currentQuestionIndex + 1).padStart(2, "0");
+
+            questionText.textContent = question.question;
+            feedback.textContent = "";
+            feedback.className = "feedback";
+            answersContainer.replaceChildren();
+
+            question.options.forEach((option, index) => {
+                const button = document.createElement("button");
+                button.type = "button";
+                button.className = "answer-btn";
+
+                const letter = document.createElement("span");
+                letter.className = "answer-letter";
+                letter.textContent = String.fromCharCode(65 + index);
+
+                const text = document.createElement("span");
+                text.textContent = option;
+
+                button.append(letter, text);
+
+                button.addEventListener("click", function() {
+                    selectAnswer(index);
+                });
+
+                answersContainer.appendChild(button);
+            });
+
+            nextBtn.textContent =
+                currentQuestionIndex === currentQuestions.length - 1
+                    ? "View Results →"
+                    : "Next Question →";
+        }
+
+        // ==========================================
+        // 6. CHECK AN ANSWER
+        // ==========================================
+
+        function selectAnswer(selectedIndex) {
+            if (hasAnswered || !quizActive) {
+                return;
+            }
+
+            hasAnswered = true;
+
+            const question = currentQuestions[currentQuestionIndex];
+            const answerButtons = answersContainer.querySelectorAll(".answer-btn");
+            const isCorrect = selectedIndex === question.answer;
+
+            answerButtons.forEach((button, index) => {
+                button.disabled = true;
+
+                if (index === question.answer) {
+                    button.classList.add("correct");
+                }
+
+                if (index === selectedIndex && !isCorrect) {
+                    button.classList.add("incorrect");
+                }
+            });
+
+            if (isCorrect) {
+                score += POINTS_PER_CORRECT;
+                correctAnswers++;
+
+                feedback.textContent = "✓ Correct! " + question.explanation;
+                feedback.className = "feedback correct-text";
+            } else {
+                incorrectAnswers++;
+
+                feedback.textContent = "✗ Not quite. " + question.explanation;
+                feedback.className = "feedback incorrect-text";
+            }
+
+            nextBtn.disabled = false;
+        }
+
+        // ==========================================
+        // 7. NEXT QUESTION
+        // ==========================================
+
+        nextBtn.addEventListener("click", function() {
+            if (!hasAnswered || !quizActive) {
+                return;
+            }
+
+            if (currentQuestionIndex < currentQuestions.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                finishQuiz("completed");
+            }
+        });
+
+        // ==========================================
+        // 8. COUNTDOWN TIMER
+        // ==========================================
+
+        function startTimer() {
+            stopTimer();
+            updateTimerDisplay();
+
+            timerInterval = setInterval(function() {
+                if (!quizActive) {
+                    stopTimer();
+                    return;
+                }
+
+                secondsRemaining--;
+                updateTimerDisplay();
+
+                if (secondsRemaining <= 0) {
+                    finishQuiz("timeout");
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (timerInterval !== null) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(secondsRemaining / 60);
+            const seconds = secondsRemaining % 60;
+
+            timerText.textContent =
+                String(minutes).padStart(2, "0") + ":" +
+                String(seconds).padStart(2, "0");
+
+            timer.classList.toggle("warning", secondsRemaining <= 15);
+        }
+
+        // ==========================================
+        // 9. FINISH THE QUIZ AND CALCULATE RESULTS
+        // ==========================================
+
+        function finishQuiz(reason) {
+            if (!quizActive) {
+                return;
+            }
+
+            quizActive = false;
+            stopTimer();
+
+            quizScreen.classList.add("hidden");
+            categoryScreen.classList.add("hidden");
+            resultScreen.classList.remove("hidden");
+
+            const totalQuestions = currentQuestions.length;
+            const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+
+            document.getElementById("scorePercent").textContent = percentage + "%";
+            document.getElementById("correctCount").textContent = correctAnswers;
+            document.getElementById("wrongCount").textContent = incorrectAnswers;
+            document.getElementById("finalPoints").textContent = score;
+
+            let title;
+            let message;
+            let trophy;
+
+            if (percentage >= 90) {
+                title = "Outstanding Performance!";
+                message = "You've demonstrated excellent knowledge. Keep reaching higher!";
+                trophy = "🏆";
+            } else if (percentage >= 70) {
+                title = "Great Work!";
+                message = "You're doing very well. A little more practice can take you further.";
+                trophy = "🥇";
+            } else if (percentage >= 50) {
+                title = "Good Effort!";
+                message = "You're making progress. Review the concepts and try again.";
+                trophy = "🎯";
+            } else {
+                title = "Keep Learning!";
+                message = "Every attempt is a learning opportunity. You've got this!";
+                trophy = "💪";
+            }
+
+            if (reason === "timeout") {
+                message += " Time ran out before you finished all the questions.";
+            }
+
+            document.getElementById("resultTitle").textContent = title;
+            document.getElementById("resultMessage").textContent = message;
+            document.getElementById("resultTrophy").textContent = trophy;
+
+            document.getElementById("resultDetail").textContent =
+                `You answered ${correctAnswers} out of ${totalQuestions} questions correctly.`;
+
+            progressBar.style.width = "100%";
+            progressPercent.textContent = "100%";
+        }
+
+        // ==========================================
+        // 10. EXIT, RETRY, AND CATEGORY NAVIGATION
+        // ==========================================
+
+        quitBtn.addEventListener("click", function() {
+            if (!quizActive) {
+                return;
+            }
+
+            const confirmed = window.confirm(
+                "Exit this quiz? Your current score will be lost."
+            );
+
+            if (confirmed) {
+                quizActive = false;
+                stopTimer();
+
+                quizScreen.classList.add("hidden");
+                resultScreen.classList.add("hidden");
+                categoryScreen.classList.remove("hidden");
+            }
+        });
+
+        document.getElementById("retryBtn").addEventListener("click", function() {
+            startQuiz(currentCategory);
+        });
+
+        document.getElementById("categoriesBtn").addEventListener("click", function() {
+            stopTimer();
+            quizActive = false;
+
+            resultScreen.classList.add("hidden");
+            quizScreen.classList.add("hidden");
+            categoryScreen.classList.remove("hidden");
+        });
+
+        // ==========================================
+        // 11. INITIALIZE THE APPLICATION
+        // ==========================================
+
+        document.getElementById("totalQuestionsStat").textContent =
+            quizData.javascript.length;
+
+    </script>
+</body>
+</html>
