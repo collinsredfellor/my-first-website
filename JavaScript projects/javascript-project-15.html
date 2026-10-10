@@ -1,0 +1,1137 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A professional responsive website demonstrating JavaScript dark and light themes, localStorage, and interactive UI design.">
+  <meta name="theme-color" content="#0b1020">
+  <title>Theme Studio | JavaScript Project 15</title>
+
+  <script>
+    // Apply the saved theme early to reduce the initial flash.
+    try {
+      const savedTheme = localStorage.getItem("theme-studio-theme");
+      if (savedTheme === "light" || savedTheme === "dark") {
+        document.documentElement.dataset.theme = savedTheme;
+      }
+    } catch (error) {
+      // The site still works if localStorage is unavailable.
+    }
+  </script>
+
+  <style>
+    :root {
+      color-scheme: dark;
+
+      --bg: #0b1020;
+      --bg-secondary: #10172b;
+      --surface: rgba(23, 32, 56, 0.83);
+      --surface-solid: #151d33;
+      --text: #f3f5ff;
+      --muted: #a2aec9;
+      --border: rgba(255, 255, 255, 0.1);
+      --primary: #a78bfa;
+      --primary-strong: #8b5cf6;
+      --accent: #60a5fa;
+      --success: #34d399;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+      --header-bg: rgba(11, 16, 32, 0.78);
+      --hero-glow: rgba(139, 92, 246, 0.19);
+      --card-hover: rgba(167, 139, 250, 0.09);
+    }
+
+    html[data-theme="light"] {
+      color-scheme: light;
+
+      --bg: #f5f7ff;
+      --bg-secondary: #edf1fc;
+      --surface: rgba(255, 255, 255, 0.85);
+      --surface-solid: #ffffff;
+      --text: #17203a;
+      --muted: #626d88;
+      --border: rgba(31, 41, 73, 0.12);
+      --primary: #7544db;
+      --primary-strong: #6335c4;
+      --accent: #2563eb;
+      --success: #07875d;
+      --shadow: 0 24px 70px rgba(42, 56, 99, 0.1);
+      --header-bg: rgba(245, 247, 255, 0.85);
+      --hero-glow: rgba(139, 92, 246, 0.11);
+      --card-hover: rgba(139, 92, 246, 0.055);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 95px;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      background:
+        radial-gradient(ellipse at 10% 8%, var(--hero-glow), transparent 35%),
+        radial-gradient(ellipse at 90% 42%, rgba(96, 165, 250, 0.07), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    button, a {
+      font: inherit;
+    }
+
+    button {
+      color: inherit;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 4px;
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 40px));
+      margin-inline: auto;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--border);
+      background: var(--header-bg);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .nav-content {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      font-size: 1.08rem;
+      font-weight: 850;
+      letter-spacing: -0.5px;
+      white-space: nowrap;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #a78bfa, #60a5fa);
+      color: #fff;
+      font-size: 1.2rem;
+      box-shadow: 0 7px 22px rgba(139, 92, 246, 0.25);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      font-size: 0.91rem;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .theme-toggle {
+      min-width: 116px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 10px 15px;
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-weight: 750;
+      transition: transform 0.2s, border-color 0.2s, background 0.3s;
+    }
+
+    .theme-toggle:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+    }
+
+    .theme-icon {
+      font-size: 1.05rem;
+    }
+
+    .hero {
+      position: relative;
+      padding: 105px 0 80px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      background: var(--surface);
+      color: var(--primary);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      animation: fade-up 0.65s ease both;
+    }
+
+    .eyebrow-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 10px var(--success);
+    }
+
+    h1, h2, h3 {
+      line-height: 1.18;
+      letter-spacing: -1.2px;
+    }
+
+    .hero h1 {
+      max-width: 850px;
+      margin: 27px auto 20px;
+      font-size: clamp(2.8rem, 7.5vw, 5.7rem);
+      font-weight: 900;
+      letter-spacing: -4px;
+      animation: fade-up 0.7s ease 0.08s both;
+    }
+
+    .gradient-text {
+      color: transparent;
+      background: linear-gradient(100deg, #a78bfa, #60a5fa 55%, #34d399);
+      background-clip: text;
+      -webkit-background-clip: text;
+    }
+
+    .hero-description {
+      max-width: 660px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      animation: fade-up 0.7s ease 0.16s both;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+      animation: fade-up 0.7s ease 0.24s both;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 49px;
+      padding: 12px 21px;
+      border: 1px solid transparent;
+      border-radius: 13px;
+      cursor: pointer;
+      font-weight: 750;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(110deg, #8b5cf6, #5b8df7);
+      color: #fff;
+      box-shadow: 0 10px 28px rgba(107, 87, 231, 0.22);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 14px 35px rgba(107, 87, 231, 0.32);
+    }
+
+    .btn-secondary {
+      border-color: var(--border);
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .hero-preview {
+      max-width: 850px;
+      margin: 65px auto 0;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      text-align: left;
+      animation: fade-up 0.8s ease 0.3s both;
+    }
+
+    .preview-window {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+    }
+
+    .window-bar {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 15px 17px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .window-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #fb7185;
+    }
+
+    .window-dot:nth-child(2) {
+      background: #fbbf24;
+    }
+
+    .window-dot:nth-child(3) {
+      background: #34d399;
+    }
+
+    .window-title {
+      margin-left: 10px;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .preview-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 25px;
+      padding: clamp(20px, 5vw, 40px);
+    }
+
+    .preview-content h3 {
+      margin-bottom: 12px;
+      font-size: clamp(1.35rem, 3vw, 2rem);
+    }
+
+    .preview-content p {
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .preview-visual {
+      min-height: 180px;
+      display: grid;
+      place-items: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(167, 139, 250, 0.25), transparent 48%),
+        var(--surface-solid);
+    }
+
+    .preview-orb {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #a78bfa, #60a5fa);
+      box-shadow: 0 0 55px rgba(139, 92, 246, 0.32);
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .preview-ring {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      border: 1px solid var(--primary);
+      border-radius: 50%;
+      opacity: 0.4;
+      animation: rotate 14s linear infinite;
+    }
+
+    section.content-section {
+      padding: 70px 0;
+    }
+
+    .section-heading {
+      max-width: 650px;
+      margin: 0 auto 40px;
+      text-align: center;
+    }
+
+    .section-label {
+      margin-bottom: 12px;
+      color: var(--primary);
+      font-size: 0.8rem;
+      font-weight: 850;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+    }
+
+    .section-heading h2 {
+      margin-bottom: 15px;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 850;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 19px;
+    }
+
+    .feature-card {
+      padding: 27px;
+      border: 1px solid var(--border);
+      border-radius: 21px;
+      background: var(--surface);
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.025);
+      transition: transform 0.25s, border-color 0.25s, background 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-7px);
+      border-color: var(--primary);
+      background: var(--card-hover);
+    }
+
+    .feature-icon {
+      width: 51px;
+      height: 51px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 22px;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background: var(--card-hover);
+      font-size: 1.45rem;
+    }
+
+    .feature-card h3 {
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+      letter-spacing: -0.4px;
+    }
+
+    .feature-card p {
+      color: var(--muted);
+      font-size: 0.93rem;
+      line-height: 1.8;
+    }
+
+    .showcase {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      align-items: stretch;
+    }
+
+    .showcase-panel {
+      padding: clamp(24px, 4vw, 36px);
+      border: 1px solid var(--border);
+      border-radius: 23px;
+      background: var(--surface);
+    }
+
+    .showcase-panel h3 {
+      margin-bottom: 14px;
+      font-size: 1.5rem;
+    }
+
+    .showcase-panel > p {
+      margin-bottom: 23px;
+      color: var(--muted);
+    }
+
+    .check-list {
+      display: grid;
+      gap: 14px;
+      list-style: none;
+    }
+
+    .check-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .check {
+      flex: 0 0 23px;
+      width: 23px;
+      height: 23px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(52, 211, 153, 0.12);
+      color: var(--success);
+      font-size: 0.78rem;
+      font-weight: 900;
+    }
+
+    .theme-demo {
+      display: grid;
+      gap: 12px;
+    }
+
+    .demo-row {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: var(--bg-secondary);
+    }
+
+    .demo-swatch {
+      width: 35px;
+      height: 35px;
+      flex: 0 0 35px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #a78bfa, #60a5fa);
+    }
+
+    .demo-row strong {
+      display: block;
+      font-size: 0.9rem;
+    }
+
+    .demo-row span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .cta {
+      padding: 52px 25px;
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      background:
+        radial-gradient(ellipse at 0% 0%, var(--hero-glow), transparent 60%),
+        var(--surface);
+      text-align: center;
+    }
+
+    .cta h2 {
+      margin-bottom: 15px;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+    }
+
+    .cta p {
+      max-width: 580px;
+      margin: 0 auto 25px;
+      color: var(--muted);
+    }
+
+    footer {
+      margin-top: 70px;
+      padding: 30px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .footer-content p,
+    .footer-links {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary);
+    }
+
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 200;
+      max-width: calc(100vw - 44px);
+      padding: 13px 19px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: var(--surface-solid);
+      color: var(--text);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes fade-up {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 800px) {
+      .nav-links {
+        gap: 15px;
+      }
+
+      .feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .feature-card:last-child {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        width: min(100% - 28px, 1120px);
+      }
+
+      .nav-content {
+        min-height: 68px;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 10px 0;
+      }
+
+      .brand {
+        font-size: 0.96rem;
+      }
+
+      .brand-icon {
+        width: 35px;
+        height: 35px;
+      }
+
+      .nav-links {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        gap: 24px;
+        padding: 5px 0;
+      }
+
+      .nav-links a {
+        font-size: 0.82rem;
+      }
+
+      .theme-toggle {
+        min-width: 98px;
+        padding: 8px 11px;
+        font-size: 0.8rem;
+      }
+
+      .hero {
+        padding: 70px 0 50px;
+      }
+
+      .hero h1 {
+        letter-spacing: -2px;
+      }
+
+      .hero-preview {
+        margin-top: 42px;
+      }
+
+      .preview-content {
+        grid-template-columns: 1fr;
+      }
+
+      .preview-visual {
+        min-height: 150px;
+      }
+
+      section.content-section {
+        padding: 48px 0;
+      }
+
+      .feature-grid,
+      .showcase {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-card:last-child {
+        grid-column: auto;
+      }
+
+      .feature-card {
+        padding: 23px;
+      }
+
+      .footer-content {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar" aria-label="Main navigation">
+    <div class="container nav-content">
+      <a class="brand" href="#home" aria-label="Theme Studio home">
+        <span class="brand-icon" aria-hidden="true">✦</span>
+        <span>Theme<span class="gradient-text">Studio</span></span>
+      </a>
+
+      <div class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#features">Features</a>
+        <a href="#about">About</a>
+      </div>
+
+      <button
+        class="theme-toggle"
+        id="themeToggle"
+        type="button"
+        aria-label="Switch to light mode"
+        aria-pressed="false"
+      >
+        <span class="theme-icon" id="themeIcon" aria-hidden="true">☀️</span>
+        <span id="themeLabel">Light mode</span>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero container" id="home">
+      <span class="eyebrow">
+        <span class="eyebrow-dot"></span>
+        JavaScript Project 15
+      </span>
+
+      <h1>
+        Your interface.<br>
+        <span class="gradient-text">Your atmosphere.</span>
+      </h1>
+
+      <p class="hero-description">
+        Experience a smarter, more comfortable web interface.
+        Switch between beautiful dark and light themes with one click,
+        and your preference will be remembered.
+      </p>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#features">
+          Explore features <span aria-hidden="true">→</span>
+        </a>
+
+        <button class="btn btn-secondary" id="heroThemeButton" type="button">
+          <span aria-hidden="true">◐</span>
+          Try the theme switch
+        </button>
+      </div>
+
+      <div class="hero-preview">
+        <div class="preview-window">
+          <div class="window-bar" aria-hidden="true">
+            <span class="window-dot"></span>
+            <span class="window-dot"></span>
+            <span class="window-dot"></span>
+            <span class="window-title">theme-studio / live-preview</span>
+          </div>
+
+          <div class="preview-content">
+            <div>
+              <h3>A better experience starts with the details.</h3>
+              <p>
+                Thoughtful colors, comfortable contrast, smooth transitions,
+                and a layout that adapts to your screen.
+              </p>
+            </div>
+
+            <div class="preview-visual" aria-hidden="true">
+              <div class="preview-ring"></div>
+              <div class="preview-orb"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section container" id="features">
+      <div class="section-heading">
+        <p class="section-label">Designed with purpose</p>
+        <h2>More than just <span class="gradient-text">a theme.</span></h2>
+        <p>
+          This project combines interactive JavaScript with modern
+          design principles to create a useful, accessible experience.
+        </p>
+      </div>
+
+      <div class="feature-grid">
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">🌗</div>
+          <h3>Instant theme switching</h3>
+          <p>
+            Move between dark and light appearances instantly.
+            The interface updates without reloading the page.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">💾</div>
+          <h3>Preference memory</h3>
+          <p>
+            Your chosen theme is stored in localStorage, so it can
+            remain selected when you revisit or reload the page.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">📱</div>
+          <h3>Responsive layout</h3>
+          <p>
+            Navigation, cards, buttons, and content adapt to desktops,
+            tablets, and smaller mobile screens.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">✨</div>
+          <h3>Smooth animations</h3>
+          <p>
+            Subtle transitions and floating visual elements add
+            polish without overwhelming the content.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">🎨</div>
+          <h3>Centralized color system</h3>
+          <p>
+            CSS custom properties control the colors, backgrounds,
+            borders, and shadows used throughout the website.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">♿</div>
+          <h3>Accessibility in mind</h3>
+          <p>
+            Keyboard focus styles, descriptive button labels, readable
+            content, and reduced-motion support improve usability.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="content-section container" id="about">
+      <div class="section-heading">
+        <p class="section-label">Under the hood</p>
+        <h2>Simple code. <span class="gradient-text">Powerful ideas.</span></h2>
+        <p>
+          Learn how a small amount of JavaScript can control an entire
+          website's visual appearance.
+        </p>
+      </div>
+
+      <div class="showcase">
+        <article class="showcase-panel">
+          <h3>What this project demonstrates</h3>
+          <p>
+            A practical combination of frontend skills that can be
+            reused in larger applications.
+          </p>
+
+          <ul class="check-list">
+            <li>
+              <span class="check" aria-hidden="true">✓</span>
+              <span>DOM selection and event listeners</span>
+            </li>
+            <li>
+              <span class="check" aria-hidden="true">✓</span>
+              <span>Changing HTML attributes with JavaScript</span>
+            </li>
+            <li>
+              <span class="check" aria-hidden="true">✓</span>
+              <span>Saving and reading preferences with localStorage</span>
+            </li>
+            <li>
+              <span class="check" aria-hidden="true">✓</span>
+              <span>CSS variables and data attributes</span>
+            </li>
+            <li>
+              <span class="check" aria-hidden="true">✓</span>
+              <span>Responsive design and accessible controls</span>
+            </li>
+          </ul>
+        </article>
+
+        <article class="showcase-panel">
+          <h3>Your active color system</h3>
+          <p>
+            The cards below use the same theme variables as the rest
+            of the website.
+          </p>
+
+          <div class="theme-demo">
+            <div class="demo-row">
+              <div class="demo-swatch" aria-hidden="true"></div>
+              <div>
+                <strong>Primary gradient</strong>
+                <span>Brand accents and calls to action</span>
+              </div>
+            </div>
+
+            <div class="demo-row">
+              <div class="demo-swatch" style="background: var(--surface-solid); border: 1px solid var(--border);" aria-hidden="true"></div>
+              <div>
+                <strong>Surface background</strong>
+                <span>Cards and interactive panels</span>
+              </div>
+            </div>
+
+            <div class="demo-row">
+              <div class="demo-swatch" style="background: var(--bg); border: 1px solid var(--border);" aria-hidden="true"></div>
+              <div>
+                <strong>Page background</strong>
+                <span>Comfortable contrast for the whole page</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="container content-section">
+      <div class="cta">
+        <p class="section-label">Keep building</p>
+        <h2>Every project makes you <span class="gradient-text">stronger.</span></h2>
+        <p>
+          Practice the fundamentals, experiment with new ideas,
+          and keep adding useful projects to your programming portfolio.
+        </p>
+        <button class="btn btn-primary" id="ctaThemeButton" type="button">
+          Switch my theme <span aria-hidden="true">↗</span>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-content">
+      <p>
+        © <span id="currentYear"></span> Collins Redfellor.
+        Built with HTML, CSS, and JavaScript.
+      </p>
+
+      <div class="footer-links">
+        <a href="#home">Back to top ↑</a>
+        <a href="#features">Features</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    "use strict";
+
+    // ------------------------------------------
+    // 1. Select the HTML elements we will use.
+    // ------------------------------------------
+
+    const themeToggle = document.getElementById("themeToggle");
+    const themeIcon = document.getElementById("themeIcon");
+    const themeLabel = document.getElementById("themeLabel");
+
+    const heroThemeButton = document.getElementById("heroThemeButton");
+    const ctaThemeButton = document.getElementById("ctaThemeButton");
+
+    const toast = document.getElementById("toast");
+    const root = document.documentElement;
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+
+    let toastTimeout;
+
+    // ------------------------------------------
+    // 2. Read the current theme.
+    // ------------------------------------------
+
+    function getCurrentTheme() {
+      return root.dataset.theme === "light" ? "light" : "dark";
+    }
+
+    // ------------------------------------------
+    // 3. Show a small notification.
+    // ------------------------------------------
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+
+      clearTimeout(toastTimeout);
+
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2400);
+    }
+
+    // ------------------------------------------
+    // 4. Update the interface for a given theme.
+    // ------------------------------------------
+
+    function applyTheme(theme, savePreference = true) {
+      const validTheme = theme === "light" ? "light" : "dark";
+
+      // Update the data attribute used by CSS.
+      root.dataset.theme = validTheme;
+
+      const isDark = validTheme === "dark";
+
+      // Update the button icon, text, and accessibility labels.
+      themeIcon.textContent = isDark ? "☀️" : "🌙";
+      themeLabel.textContent = isDark ? "Light mode" : "Dark mode";
+
+      themeToggle.setAttribute(
+        "aria-label",
+        isDark ? "Switch to light mode" : "Switch to dark mode"
+      );
+
+      themeToggle.setAttribute("aria-pressed", String(!isDark));
+
+      // Keep the browser's theme-color metadata in sync.
+      themeColorMeta.setAttribute(
+        "content",
+        isDark ? "#0b1020" : "#f5f7ff"
+      );
+
+      // Remember the user's choice.
+      if (savePreference) {
+        try {
+          localStorage.setItem("theme-studio-theme", validTheme);
+        } catch (error) {
+          // Theme switching still works if storage is blocked.
+        }
+      }
+    }
+
+    // ------------------------------------------
+    // 5. Switch between dark and light themes.
+    // ------------------------------------------
+
+    function toggleTheme() {
+      const nextTheme = getCurrentTheme() === "dark" ? "light" : "dark";
+
+      applyTheme(nextTheme);
+      showToast(
+        nextTheme === "light"
+          ? "☀️ Light mode activated."
+          : "🌙 Dark mode activated."
+      );
+    }
+
+    // ------------------------------------------
+    // 6. Connect the buttons to the function.
+    // ------------------------------------------
+
+    themeToggle.addEventListener("click", toggleTheme);
+    heroThemeButton.addEventListener("click", toggleTheme);
+    ctaThemeButton.addEventListener("click", toggleTheme);
+
+    // ------------------------------------------
+    // 7. Set the current year automatically.
+    // ------------------------------------------
+
+    document.getElementById("currentYear").textContent =
+      new Date().getFullYear();
+
+    // ------------------------------------------
+    // 8. Initialize the page using the saved theme.
+    // ------------------------------------------
+
+    applyTheme(getCurrentTheme(), false);
+  </script>
+</body>
+</html>
