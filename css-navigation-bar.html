@@ -1,0 +1,852 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!-- =========================================================
+         DOCUMENT INFORMATION
+         ========================================================= -->
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="A professional responsive navigation bar created with HTML and CSS."
+    >
+
+    <title>CSS Navigation Bar | Collins Redfellor</title>
+
+
+    <!-- =========================================================
+         CSS STYLES
+         ========================================================= -->
+
+    <style>
+
+        /* =====================================================
+           1. GLOBAL RESET
+           ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        /* =====================================================
+           2. BODY
+           ===================================================== */
+
+        body {
+            min-height: 100vh;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #020617,
+                    #0f172a,
+                    #1e293b
+                );
+
+            color: #ffffff;
+        }
+
+
+        /* =====================================================
+           3. NAVIGATION CONTAINER
+           ===================================================== */
+
+        .navbar {
+            width: 100%;
+
+            padding: 20px 7%;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            background:
+                rgba(15, 23, 42, 0.9);
+
+            border-bottom:
+                1px solid rgba(255, 255, 255, 0.1);
+
+            backdrop-filter: blur(15px);
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+        }
+
+
+        /* =====================================================
+           4. LOGO
+           ===================================================== */
+
+        .logo {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            text-decoration: none;
+
+            color: #ffffff;
+
+            font-size: 22px;
+
+            font-weight: bold;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* =====================================================
+           5. LOGO ICON
+           ===================================================== */
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #38bdf8,
+                    #6366f1
+                );
+
+            color: #ffffff;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            box-shadow:
+                0 8px 25px rgba(56, 189, 248, 0.25);
+        }
+
+
+        /* =====================================================
+           6. NAVIGATION LINKS CONTAINER
+           ===================================================== */
+
+        .nav-links {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            list-style: none;
+        }
+
+
+        /* =====================================================
+           7. NAVIGATION LINK
+           ===================================================== */
+
+        .nav-links a {
+            position: relative;
+
+            display: inline-block;
+
+            padding: 10px 15px;
+
+            color: #cbd5e1;
+
+            text-decoration: none;
+
+            font-size: 15px;
+
+            font-weight: 600;
+
+            transition:
+                color 0.3s ease;
+        }
+
+
+        /* =====================================================
+           8. NAVIGATION LINK UNDERLINE
+           ===================================================== */
+
+        .nav-links a::after {
+            content: "";
+
+            position: absolute;
+
+            left: 50%;
+
+            bottom: 2px;
+
+            width: 0;
+
+            height: 2px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #38bdf8,
+                    #6366f1
+                );
+
+            transform:
+                translateX(-50%);
+
+            transition:
+                width 0.3s ease;
+        }
+
+
+        /* =====================================================
+           9. NAVIGATION HOVER
+           ===================================================== */
+
+        .nav-links a:hover {
+            color: #ffffff;
+        }
+
+
+        .nav-links a:hover::after {
+            width: 70%;
+        }
+
+
+        /* =====================================================
+           10. ACTIVE LINK
+           ===================================================== */
+
+        .nav-links a.active {
+            color: #ffffff;
+        }
+
+
+        .nav-links a.active::after {
+            width: 70%;
+        }
+
+
+        /* =====================================================
+           11. CALL-TO-ACTION BUTTON
+           ===================================================== */
+
+        .nav-button {
+            padding: 11px 20px !important;
+
+            border-radius: 50px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #38bdf8,
+                    #6366f1
+                );
+
+            color: #ffffff !important;
+
+            box-shadow:
+                0 8px 20px rgba(56, 189, 248, 0.2);
+
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+
+        .nav-button::after {
+            display: none;
+        }
+
+
+        .nav-button:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 12px 30px rgba(56, 189, 248, 0.35);
+        }
+
+
+        /* =====================================================
+           12. MOBILE MENU BUTTON
+           ===================================================== */
+
+        .menu-button {
+            display: none;
+
+            width: 42px;
+            height: 42px;
+
+            border: 1px solid
+                rgba(255, 255, 255, 0.15);
+
+            border-radius: 10px;
+
+            background:
+                rgba(255, 255, 255, 0.05);
+
+            cursor: pointer;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 5px;
+        }
+
+
+        .menu-button span {
+            width: 20px;
+
+            height: 2px;
+
+            background: #ffffff;
+
+            border-radius: 10px;
+        }
+
+
+        /* =====================================================
+           13. HERO SECTION
+           ===================================================== */
+
+        .hero {
+            min-height: calc(100vh - 83px);
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            text-align: center;
+
+            padding: 80px 7%;
+        }
+
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+
+        /* =====================================================
+           14. HERO SMALL LABEL
+           ===================================================== */
+
+        .hero-label {
+            display: inline-block;
+
+            margin-bottom: 20px;
+
+            padding: 8px 16px;
+
+            border:
+                1px solid rgba(56, 189, 248, 0.3);
+
+            border-radius: 50px;
+
+            background:
+                rgba(56, 189, 248, 0.08);
+
+            color: #7dd3fc;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            letter-spacing: 1px;
+
+            text-transform: uppercase;
+        }
+
+
+        /* =====================================================
+           15. HERO HEADING
+           ===================================================== */
+
+        .hero h1 {
+            margin-bottom: 20px;
+
+            font-size:
+                clamp(40px, 7vw, 72px);
+
+            line-height: 1.05;
+
+            letter-spacing: -2px;
+        }
+
+
+        .hero h1 span {
+            background:
+                linear-gradient(
+                    90deg,
+                    #38bdf8,
+                    #818cf8
+                );
+
+            -webkit-background-clip: text;
+
+            background-clip: text;
+
+            color: transparent;
+        }
+
+
+        /* =====================================================
+           16. HERO DESCRIPTION
+           ===================================================== */
+
+        .hero p {
+            max-width: 650px;
+
+            margin: 0 auto 30px;
+
+            color: #94a3b8;
+
+            font-size: 17px;
+
+            line-height: 1.8;
+        }
+
+
+        /* =====================================================
+           17. HERO BUTTONS
+           ===================================================== */
+
+        .hero-buttons {
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            flex-wrap: wrap;
+
+            gap: 15px;
+        }
+
+
+        .hero-button {
+            display: inline-block;
+
+            padding: 13px 25px;
+
+            border-radius: 50px;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease,
+                background 0.3s ease;
+        }
+
+
+        .primary-button {
+            background:
+                linear-gradient(
+                    135deg,
+                    #38bdf8,
+                    #6366f1
+                );
+
+            color: #ffffff;
+
+            box-shadow:
+                0 10px 25px rgba(56, 189, 248, 0.2);
+        }
+
+
+        .secondary-button {
+            border:
+                1px solid rgba(255, 255, 255, 0.15);
+
+            background:
+                rgba(255, 255, 255, 0.05);
+
+            color: #ffffff;
+        }
+
+
+        .hero-button:hover {
+            transform: translateY(-4px);
+        }
+
+
+        .primary-button:hover {
+            box-shadow:
+                0 15px 35px rgba(56, 189, 248, 0.35);
+        }
+
+
+        .secondary-button:hover {
+            background:
+                rgba(255, 255, 255, 0.1);
+        }
+
+
+        /* =====================================================
+           18. RESPONSIVE NAVIGATION
+           ===================================================== */
+
+        @media (max-width: 850px) {
+
+            .navbar {
+                padding: 15px 5%;
+            }
+
+
+            .menu-button {
+                display: flex;
+            }
+
+
+            .nav-links {
+                position: absolute;
+
+                top: 100%;
+
+                left: 0;
+
+                width: 100%;
+
+                padding: 20px;
+
+                flex-direction: column;
+
+                align-items: stretch;
+
+                gap: 5px;
+
+                background:
+                    rgba(15, 23, 42, 0.98);
+
+                border-bottom:
+                    1px solid rgba(255, 255, 255, 0.1);
+
+                opacity: 0;
+
+                visibility: hidden;
+
+                transform:
+                    translateY(-10px);
+
+                transition:
+                    opacity 0.3s ease,
+                    visibility 0.3s ease,
+                    transform 0.3s ease;
+            }
+
+
+            .nav-links:hover {
+                opacity: 1;
+            }
+
+
+            .nav-links li {
+                width: 100%;
+
+                text-align: center;
+            }
+
+
+            .nav-links a {
+                width: 100%;
+
+                padding: 13px;
+            }
+
+
+            /*
+                CSS-only mobile menu demonstration.
+                Hovering over the menu area reveals the links.
+            */
+
+            .navbar:hover .nav-links {
+                opacity: 1;
+
+                visibility: visible;
+
+                transform:
+                    translateY(0);
+            }
+
+
+            .nav-button {
+                margin-top: 5px;
+            }
+
+        }
+
+
+        /* =====================================================
+           19. SMALL SCREEN ADJUSTMENTS
+           ===================================================== */
+
+        @media (max-width: 500px) {
+
+            .logo {
+                font-size: 18px;
+            }
+
+
+            .logo-icon {
+                width: 38px;
+                height: 38px;
+            }
+
+
+            .hero {
+                padding:
+                    60px 20px;
+            }
+
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+
+            .hero p {
+                font-size: 15px;
+            }
+
+
+            .hero-buttons {
+                flex-direction: column;
+
+                width: 100%;
+            }
+
+
+            .hero-button {
+                width: 100%;
+
+                max-width: 280px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================================
+         NAVIGATION BAR
+         ========================================================= -->
+
+    <header class="navbar">
+
+
+        <!-- Logo -->
+
+        <a
+            href="index.html"
+            class="logo"
+        >
+
+            <span class="logo-icon">
+                CR
+            </span>
+
+            Collins
+        </a>
+
+
+        <!-- Navigation Links -->
+
+        <nav>
+
+            <ul class="nav-links">
+
+                <li>
+                    <a
+                        href="index.html"
+                        class="active"
+                    >
+                        Home
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="#about">
+                        About
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="#projects">
+                        Projects
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="#skills">
+                        Skills
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="#contact">
+                        Contact
+                    </a>
+                </li>
+
+
+                <li>
+                    <a
+                        href="css-profile-card.html"
+                        class="nav-button"
+                    >
+                        My Profile
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+
+
+        <!-- Mobile Menu Icon -->
+
+        <div
+            class="menu-button"
+            aria-label="Open navigation menu"
+        >
+
+            <span></span>
+
+            <span></span>
+
+            <span></span>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================================================
+         HERO SECTION
+         ========================================================= -->
+
+    <main>
+
+        <section class="hero">
+
+
+            <div class="hero-content">
+
+
+                <!-- Small Label -->
+
+                <div class="hero-label">
+                    CSS Project 02
+                </div>
+
+
+                <!-- Main Heading -->
+
+                <h1>
+
+                    Building the
+                    <span>Web</span>
+
+                </h1>
+
+
+                <!-- Description -->
+
+                <p>
+
+                    This project demonstrates how CSS Flexbox,
+                    spacing, positioning, responsive design,
+                    transitions and hover effects can be combined
+                    to create a professional navigation experience.
+
+                </p>
+
+
+                <!-- Buttons -->
+
+                <div class="hero-buttons">
+
+                    <a
+                        href="css-profile-card.html"
+                        class="hero-button primary-button"
+                    >
+                        Previous Project
+                    </a>
+
+
+                    <a
+                        href="#projects"
+                        class="hero-button secondary-button"
+                    >
+                        Explore Projects
+                    </a>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             HIDDEN ANCHOR TARGETS FOR DEMONSTRATION
+             ===================================================== -->
+
+        <section id="about"></section>
+
+        <section id="projects"></section>
+
+        <section id="skills"></section>
+
+        <section id="contact"></section>
+
+    </main>
+
+
+</body>
+
+</html>
+```
