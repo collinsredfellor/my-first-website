@@ -1,0 +1,1398 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="JavaScript Project 2 by Collins Redfellor - Interactive Number Analyzer"
+    >
+
+    <title>Number Analyzer | Collins Redfellor</title>
+
+
+    <style>
+
+        /* =========================================
+           GLOBAL RESET
+        ========================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            color: #f5f7ff;
+
+            background:
+
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(0, 212, 255, 0.18),
+                    transparent 30%
+                ),
+
+                radial-gradient(
+                    circle at 90% 90%,
+                    rgba(139, 92, 246, 0.18),
+                    transparent 30%
+                ),
+
+                #080b14;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================================
+           NAVIGATION
+        ========================================= */
+
+        header {
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+
+            padding:
+                18px 8%;
+
+            background:
+                rgba(8, 11, 20, 0.82);
+
+            backdrop-filter:
+                blur(16px);
+
+            -webkit-backdrop-filter:
+                blur(16px);
+
+            border-bottom:
+                1px solid
+                rgba(255, 255, 255, 0.08);
+        }
+
+
+        nav {
+
+            max-width: 1200px;
+
+            margin: auto;
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            gap: 20px;
+        }
+
+
+        .logo {
+
+            font-size:
+                1.3rem;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                1px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #00d4ff,
+                    #8b5cf6
+                );
+
+            -webkit-background-clip:
+                text;
+
+            -webkit-text-fill-color:
+                transparent;
+        }
+
+
+        nav a {
+
+            color:
+                #dce3f7;
+
+            text-decoration:
+                none;
+
+            margin-left:
+                20px;
+
+            transition:
+                0.3s ease;
+        }
+
+
+        nav a:hover {
+
+            color:
+                #00d4ff;
+        }
+
+
+        /* =========================================
+           HERO
+        ========================================= */
+
+        .hero {
+
+            max-width:
+                1100px;
+
+            margin:
+                auto;
+
+            padding:
+                90px 8% 60px;
+
+            text-align:
+                center;
+        }
+
+
+        .badge {
+
+            display:
+                inline-block;
+
+            padding:
+                8px 16px;
+
+            margin-bottom:
+                20px;
+
+            border:
+                1px solid
+                rgba(0, 212, 255, 0.35);
+
+            border-radius:
+                50px;
+
+            background:
+                rgba(0, 212, 255, 0.08);
+
+            color:
+                #00d4ff;
+
+            font-size:
+                0.85rem;
+
+            font-weight:
+                bold;
+
+            letter-spacing:
+                1px;
+        }
+
+
+        .hero h1 {
+
+            font-size:
+                clamp(2.5rem, 6vw, 5rem);
+
+            line-height:
+                1.05;
+
+            margin-bottom:
+                25px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff,
+                    #00d4ff,
+                    #8b5cf6
+                );
+
+            -webkit-background-clip:
+                text;
+
+            -webkit-text-fill-color:
+                transparent;
+        }
+
+
+        .hero p {
+
+            max-width:
+                750px;
+
+            margin:
+                auto;
+
+            color:
+                #aeb8d0;
+
+            font-size:
+                1.1rem;
+        }
+
+
+        /* =========================================
+           MAIN
+        ========================================= */
+
+        main {
+
+            width:
+                min(1100px, 90%);
+
+            margin:
+                auto;
+        }
+
+
+        section {
+
+            margin-bottom:
+                70px;
+        }
+
+
+        .section-title {
+
+            margin-bottom:
+                30px;
+        }
+
+
+        .section-title h2 {
+
+            font-size:
+                2rem;
+
+            margin-bottom:
+                8px;
+        }
+
+
+        .section-title p {
+
+            color:
+                #8994ad;
+        }
+
+
+        /* =========================================
+           ANALYZER PANEL
+        ========================================= */
+
+        .analyzer {
+
+            padding:
+                40px;
+
+            border-radius:
+                25px;
+
+            background:
+                rgba(255, 255, 255, 0.045);
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.1);
+
+            backdrop-filter:
+                blur(15px);
+
+            -webkit-backdrop-filter:
+                blur(15px);
+
+            box-shadow:
+                0 25px 70px
+                rgba(0, 0, 0, 0.25);
+        }
+
+
+        .input-group {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1fr auto;
+
+            gap:
+                15px;
+
+            margin-top:
+                25px;
+        }
+
+
+        input {
+
+            width:
+                100%;
+
+            padding:
+                16px 18px;
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.12);
+
+            border-radius:
+                12px;
+
+            outline:
+                none;
+
+            background:
+                rgba(0, 0, 0, 0.25);
+
+            color:
+                white;
+
+            font-size:
+                1rem;
+
+            transition:
+                0.3s ease;
+        }
+
+
+        input:focus {
+
+            border-color:
+                #00d4ff;
+
+            box-shadow:
+                0 0 20px
+                rgba(0, 212, 255, 0.15);
+        }
+
+
+        button {
+
+            border:
+                none;
+
+            cursor:
+                pointer;
+
+            padding:
+                15px 24px;
+
+            border-radius:
+                12px;
+
+            color:
+                white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #00a8cc,
+                    #6d4aff
+                );
+
+            font-weight:
+                bold;
+
+            font-size:
+                0.95rem;
+
+            transition:
+                0.3s ease;
+        }
+
+
+        button:hover {
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 12px 30px
+                rgba(0, 0, 0, 0.3);
+        }
+
+
+        /* =========================================
+           RESULT
+        ========================================= */
+
+        .result {
+
+            margin-top:
+                30px;
+
+            padding:
+                25px;
+
+            border-radius:
+                18px;
+
+            background:
+                rgba(0, 0, 0, 0.25);
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.08);
+
+            min-height:
+                150px;
+        }
+
+
+        .result h3 {
+
+            color:
+                #00d4ff;
+
+            margin-bottom:
+                15px;
+        }
+
+
+        #resultContent {
+
+            color:
+                #dce3f7;
+
+            white-space:
+                pre-line;
+        }
+
+
+        /* =========================================
+           ANALYSIS CARDS
+        ========================================= */
+
+        .grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap:
+                20px;
+        }
+
+
+        .card {
+
+            padding:
+                25px;
+
+            border-radius:
+                18px;
+
+            background:
+                rgba(255, 255, 255, 0.04);
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.08);
+
+            transition:
+                0.3s ease;
+        }
+
+
+        .card:hover {
+
+            transform:
+                translateY(-7px);
+
+            border-color:
+                rgba(0, 212, 255, 0.35);
+        }
+
+
+        .card-icon {
+
+            font-size:
+                2rem;
+
+            margin-bottom:
+                12px;
+        }
+
+
+        .card h3 {
+
+            margin-bottom:
+                10px;
+
+            color:
+                #ffffff;
+        }
+
+
+        .card p {
+
+            color:
+                #8994ad;
+
+            font-size:
+                0.95rem;
+        }
+
+
+        /* =========================================
+           EXAMPLE SECTION
+        ========================================= */
+
+        .examples {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap:
+                20px;
+        }
+
+
+        .example {
+
+            padding:
+                25px;
+
+            border-left:
+                3px solid
+                #00d4ff;
+
+            border-radius:
+                0 15px 15px 0;
+
+            background:
+                rgba(255, 255, 255, 0.035);
+        }
+
+
+        .example strong {
+
+            display:
+                block;
+
+            color:
+                white;
+
+            margin-bottom:
+                7px;
+        }
+
+
+        .example span {
+
+            color:
+                #8994ad;
+        }
+
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        footer {
+
+            margin-top:
+                80px;
+
+            padding:
+                35px 20px;
+
+            text-align:
+                center;
+
+            border-top:
+                1px solid
+                rgba(255, 255, 255, 0.08);
+
+            color:
+                #77829b;
+        }
+
+
+        footer strong {
+
+            color:
+                #00d4ff;
+        }
+
+
+        /* =========================================
+           RESPONSIVE DESIGN
+        ========================================= */
+
+        @media (max-width: 850px) {
+
+            .grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .examples {
+
+                grid-template-columns:
+                    1fr;
+            }
+        }
+
+
+        @media (max-width: 600px) {
+
+            header {
+
+                padding:
+                    15px 5%;
+            }
+
+
+            nav {
+
+                flex-direction:
+                    column;
+            }
+
+
+            nav a {
+
+                margin:
+                    0 7px;
+            }
+
+
+            .hero {
+
+                padding:
+                    70px 5% 50px;
+            }
+
+
+            .analyzer {
+
+                padding:
+                    25px;
+            }
+
+
+            .input-group {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         NAVIGATION
+    ========================================== -->
+
+    <header>
+
+        <nav>
+
+            <div class="logo">
+                COLLINS.DEV
+            </div>
+
+            <div>
+
+                <a href="#analyzer">
+                    Analyzer
+                </a>
+
+                <a href="#concepts">
+                    Concepts
+                </a>
+
+                <a href="#examples">
+                    Examples
+                </a>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =========================================
+         HERO
+    ========================================== -->
+
+    <section class="hero">
+
+        <span class="badge">
+            JAVASCRIPT PROJECT 02
+        </span>
+
+
+        <h1>
+            Number Analyzer
+        </h1>
+
+
+        <p>
+
+            A practical JavaScript application that analyzes
+            numbers using conditions, comparisons, mathematical
+            operators, functions, validation and DOM manipulation.
+
+        </p>
+
+    </section>
+
+
+    <main>
+
+
+        <!-- =========================================
+             ANALYZER
+        ========================================== -->
+
+        <section id="analyzer">
+
+            <div class="section-title">
+
+                <h2>
+                    Analyze a Number
+                </h2>
+
+                <p>
+                    Enter a number and let JavaScript analyze it.
+                </p>
+
+            </div>
+
+
+            <div class="analyzer">
+
+
+                <h3>
+                    Number Input
+                </h3>
+
+
+                <p>
+                    Enter any whole number or decimal number below.
+                </p>
+
+
+                <div class="input-group">
+
+                    <input
+                        type="number"
+                        id="numberInput"
+                        placeholder="Enter a number..."
+                    >
+
+
+                    <button onclick="analyzeNumber()">
+                        Analyze Number
+                    </button>
+
+                </div>
+
+
+                <div class="result">
+
+                    <h3>
+                        Analysis Result
+                    </h3>
+
+
+                    <div id="resultContent">
+
+                        Your analysis will appear here.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================
+             CONCEPTS
+        ========================================== -->
+
+        <section id="concepts">
+
+            <div class="section-title">
+
+                <h2>
+                    JavaScript Concepts Used
+                </h2>
+
+                <p>
+                    Project 2 builds directly on the fundamentals
+                    introduced in Project 1.
+                </p>
+
+            </div>
+
+
+            <div class="grid">
+
+
+                <article class="card">
+
+                    <div class="card-icon">
+                        🔢
+                    </div>
+
+                    <h3>
+                        Numbers
+                    </h3>
+
+                    <p>
+                        JavaScript can perform calculations and
+                        mathematical operations with numbers.
+                    </p>
+
+                </article>
+
+
+                <article class="card">
+
+                    <div class="card-icon">
+                        ⚖️
+                    </div>
+
+                    <h3>
+                        Comparisons
+                    </h3>
+
+                    <p>
+                        Comparison operators allow JavaScript
+                        to determine relationships between values.
+                    </p>
+
+                </article>
+
+
+                <article class="card">
+
+                    <div class="card-icon">
+                        🧠
+                    </div>
+
+                    <h3>
+                        Conditions
+                    </h3>
+
+                    <p>
+                        if, else if and else statements allow
+                        JavaScript to make decisions.
+                    </p>
+
+                </article>
+
+
+                <article class="card">
+
+                    <div class="card-icon">
+                        🔧
+                    </div>
+
+                    <h3>
+                        Functions
+                    </h3>
+
+                    <p>
+                        Functions organize reusable blocks of
+                        JavaScript instructions.
+                    </p>
+
+                </article>
+
+
+                <article class="card">
+
+                    <div class="card-icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        DOM
+                    </h3>
+
+                    <p>
+                        JavaScript can select HTML elements and
+                        dynamically change their content.
+                    </p>
+
+                </article>
+
+
+                <article class="card">
+
+                    <div class="card-icon">
+                        🛡️
+                    </div>
+
+                    <h3>
+                        Validation
+                    </h3>
+
+                    <p>
+                        User input can be checked before the
+                        application processes it.
+                    </p>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================
+             EXAMPLES
+        ========================================== -->
+
+        <section id="examples">
+
+            <div class="section-title">
+
+                <h2>
+                    What JavaScript Can Determine
+                </h2>
+
+                <p>
+                    The analyzer performs several different checks.
+                </p>
+
+            </div>
+
+
+            <div class="examples">
+
+
+                <div class="example">
+
+                    <strong>
+                        Positive or Negative
+                    </strong>
+
+                    <span>
+                        Determines whether the number is positive,
+                        negative or zero.
+                    </span>
+
+                </div>
+
+
+                <div class="example">
+
+                    <strong>
+                        Even or Odd
+                    </strong>
+
+                    <span>
+                        Uses the remainder operator to determine
+                        whether a number is even or odd.
+                    </span>
+
+                </div>
+
+
+                <div class="example">
+
+                    <strong>
+                        Greater or Smaller
+                    </strong>
+
+                    <span>
+                        Compares the number against predefined
+                        values.
+                    </span>
+
+                </div>
+
+
+                <div class="example">
+
+                    <strong>
+                        Number Range
+                    </strong>
+
+                    <span>
+                        Determines which range the entered number
+                        belongs to.
+                    </span>
+
+                </div>
+
+
+                <div class="example">
+
+                    <strong>
+                        Square
+                    </strong>
+
+                    <span>
+                        Calculates the square of the entered number.
+                    </span>
+
+                </div>
+
+
+                <div class="example">
+
+                    <strong>
+                        Absolute Value
+                    </strong>
+
+                    <span>
+                        Calculates the absolute value using
+                        JavaScript's Math functionality.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================== -->
+
+    <footer>
+
+        <p>
+
+            JavaScript Project 02 created by
+            <strong>
+                Collins Redfellor
+            </strong>.
+
+        </p>
+
+
+        <p>
+
+            Python →
+            HTML →
+            CSS →
+            JavaScript →
+            Backend →
+            AI →
+            Cybersecurity
+
+        </p>
+
+    </footer>
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+
+    <script>
+
+
+        /* =========================================
+           MAIN ANALYZER FUNCTION
+        ========================================== */
+
+        function analyzeNumber() {
+
+
+            /* -----------------------------------------
+               GET USER INPUT
+            ----------------------------------------- */
+
+            const input =
+                document.getElementById(
+                    "numberInput"
+                );
+
+
+            const result =
+                document.getElementById(
+                    "resultContent"
+                );
+
+
+            const number =
+                Number(input.value);
+
+
+            /* -----------------------------------------
+               INPUT VALIDATION
+            ----------------------------------------- */
+
+            if (input.value.trim() === "") {
+
+                result.textContent =
+                    "⚠️ Please enter a number before analyzing it.";
+
+                return;
+            }
+
+
+            if (Number.isNaN(number)) {
+
+                result.textContent =
+                    "⚠️ The value entered is not a valid number.";
+
+                return;
+            }
+
+
+            /* -----------------------------------------
+               POSITIVE / NEGATIVE / ZERO
+            ----------------------------------------- */
+
+            let numberType;
+
+
+            if (number > 0) {
+
+                numberType =
+                    "Positive number";
+
+            }
+
+            else if (number < 0) {
+
+                numberType =
+                    "Negative number";
+
+            }
+
+            else {
+
+                numberType =
+                    "Zero";
+
+            }
+
+
+            /* -----------------------------------------
+               EVEN / ODD
+            ----------------------------------------- */
+
+            let evenOrOdd;
+
+
+            if (number % 2 === 0) {
+
+                evenOrOdd =
+                    "Even number";
+
+            }
+
+            else {
+
+                evenOrOdd =
+                    "Odd number";
+
+            }
+
+
+            /* -----------------------------------------
+               RANGE
+            ----------------------------------------- */
+
+            let range;
+
+
+            if (number >= 100) {
+
+                range =
+                    "100 or greater";
+
+            }
+
+            else if (number >= 50) {
+
+                range =
+                    "Between 50 and 99";
+
+            }
+
+            else if (number >= 10) {
+
+                range =
+                    "Between 10 and 49";
+
+            }
+
+            else if (number >= 0) {
+
+                range =
+                    "Between 0 and 9";
+
+            }
+
+            else {
+
+                range =
+                    "Below zero";
+
+            }
+
+
+            /* -----------------------------------------
+               COMPARISON
+            ----------------------------------------- */
+
+            let comparison;
+
+
+            if (number > 50) {
+
+                comparison =
+                    "Greater than 50";
+
+            }
+
+            else if (number === 50) {
+
+                comparison =
+                    "Exactly equal to 50";
+
+            }
+
+            else {
+
+                comparison =
+                    "Less than 50";
+
+            }
+
+
+            /* -----------------------------------------
+               MATHEMATICAL CALCULATIONS
+            ----------------------------------------- */
+
+            const square =
+                number * number;
+
+
+            const cube =
+                number * number * number;
+
+
+            const absoluteValue =
+                Math.abs(number);
+
+
+            /* -----------------------------------------
+               DISPLAY RESULTS
+            ----------------------------------------- */
+
+            result.textContent =
+
+                "Number: " +
+                number +
+
+                "\n\nType: " +
+                numberType +
+
+                "\nEven/Odd: " +
+                evenOrOdd +
+
+                "\nRange: " +
+                range +
+
+                "\nComparison: " +
+                comparison +
+
+                "\nSquare: " +
+                square +
+
+                "\nCube: " +
+                cube +
+
+                "\nAbsolute Value: " +
+                absoluteValue;
+
+        }
+
+
+        /* =========================================
+           ENTER KEY SUPPORT
+        ========================================== */
+
+        document
+            .getElementById("numberInput")
+            .addEventListener(
+                "keydown",
+                function(event) {
+
+                    if (event.key === "Enter") {
+
+                        analyzeNumber();
+
+                    }
+
+                }
+            );
+
+
+    </script>
+
+
+</body>
+
+</html>
+```
