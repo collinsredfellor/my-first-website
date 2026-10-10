@@ -1,0 +1,2531 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Collins Redfellor - Final JavaScript Portfolio Dashboard"
+    >
+
+    <title>Collins Redfellor | JavaScript Portfolio</title>
+
+    <style>
+        /* ================================
+           GLOBAL VARIABLES
+        ================================= */
+
+        :root {
+            --bg: #070b16;
+            --bg-secondary: #0d1324;
+            --card: rgba(255, 255, 255, 0.06);
+            --card-hover: rgba(255, 255, 255, 0.1);
+            --border: rgba(255, 255, 255, 0.12);
+
+            --text: #f5f7ff;
+            --muted: #aab3ca;
+
+            --primary: #7c5cff;
+            --secondary: #00d4ff;
+            --accent: #00ffa3;
+            --danger: #ff5577;
+
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+
+            --radius: 20px;
+            --transition: 0.3s ease;
+        }
+
+        body.light {
+            --bg: #f3f6fb;
+            --bg-secondary: #ffffff;
+            --card: rgba(255, 255, 255, 0.8);
+            --card-hover: rgba(255, 255, 255, 1);
+            --border: rgba(20, 30, 50, 0.1);
+
+            --text: #172033;
+            --muted: #5f6b80;
+
+            --shadow: 0 20px 50px rgba(35, 50, 80, 0.12);
+        }
+
+        /* ================================
+           RESET
+        ================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family:
+                Inter,
+                ui-sans-serif,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at top left,
+                    rgba(124, 92, 255, 0.18),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at bottom right,
+                    rgba(0, 212, 255, 0.12),
+                    transparent 35%
+                ),
+                var(--bg);
+
+            color: var(--text);
+            min-height: 100vh;
+            transition: background var(--transition), color var(--transition);
+        }
+
+        body.no-scroll {
+            overflow: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button,
+        input,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        .container {
+            width: min(1180px, 92%);
+            margin: auto;
+        }
+
+        .section {
+            padding: 100px 0;
+        }
+
+        .section-heading {
+            margin-bottom: 45px;
+        }
+
+        .section-heading span {
+            display: inline-block;
+            color: var(--secondary);
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .section-heading h2 {
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            line-height: 1.1;
+            margin-bottom: 14px;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            max-width: 650px;
+            line-height: 1.7;
+        }
+
+        /* ================================
+           HEADER
+        ================================= */
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+
+            background: rgba(7, 11, 22, 0.72);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        body.light header {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .nav {
+            min-height: 75px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: color var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        .theme-btn,
+        .menu-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            display: grid;
+            place-items: center;
+            transition: transform var(--transition), background var(--transition);
+        }
+
+        .theme-btn:hover,
+        .menu-btn:hover {
+            transform: translateY(-2px);
+            background: var(--card-hover);
+        }
+
+        .menu-btn {
+            display: none;
+        }
+
+        /* ================================
+           HERO
+        ================================= */
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 90px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before,
+        .hero::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(10px);
+            pointer-events: none;
+        }
+
+        .hero::before {
+            width: 300px;
+            height: 300px;
+            background: rgba(124, 92, 255, 0.15);
+            top: 15%;
+            left: -100px;
+        }
+
+        .hero::after {
+            width: 350px;
+            height: 350px;
+            background: rgba(0, 212, 255, 0.1);
+            right: -120px;
+            bottom: 5%;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.25fr 0.75fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            background: var(--card);
+            color: var(--muted);
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+        }
+
+        .status-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 15px var(--accent);
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6.2rem);
+            line-height: 0.95;
+            letter-spacing: -5px;
+            margin-bottom: 25px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(
+                90deg,
+                var(--primary),
+                var(--secondary),
+                var(--accent)
+            );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-description {
+            max-width: 650px;
+            color: var(--muted);
+            line-height: 1.8;
+            font-size: 1.05rem;
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .btn {
+            padding: 13px 20px;
+            border-radius: 12px;
+            font-weight: 800;
+            transition:
+                transform var(--transition),
+                box-shadow var(--transition);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .btn-primary {
+            color: white;
+            background: linear-gradient(
+                135deg,
+                var(--primary),
+                var(--secondary)
+            );
+
+            box-shadow: 0 12px 30px rgba(124, 92, 255, 0.25);
+        }
+
+        .btn-secondary {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .profile-card {
+            position: relative;
+            padding: 30px;
+            border-radius: 30px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(20px);
+            animation: floatCard 5s ease-in-out infinite;
+        }
+
+        @keyframes floatCard {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        .profile-avatar {
+            width: 115px;
+            height: 115px;
+            margin-bottom: 20px;
+            border-radius: 30px;
+            display: grid;
+            place-items: center;
+            font-size: 2.5rem;
+            font-weight: 900;
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--secondary)
+                );
+            color: white;
+            box-shadow: 0 20px 40px rgba(124, 92, 255, 0.25);
+        }
+
+        .profile-card h3 {
+            font-size: 1.7rem;
+            margin-bottom: 6px;
+        }
+
+        .profile-card > p {
+            color: var(--muted);
+            margin-bottom: 25px;
+        }
+
+        .profile-list {
+            list-style: none;
+            display: grid;
+            gap: 13px;
+        }
+
+        .profile-list li {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding-bottom: 13px;
+            border-bottom: 1px solid var(--border);
+            color: var(--muted);
+        }
+
+        .profile-list strong {
+            color: var(--text);
+        }
+
+        /* ================================
+           STATS
+        ================================= */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .stat-card {
+            padding: 28px;
+            border-radius: var(--radius);
+            background: var(--card);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(16px);
+            transition: transform var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 2.6rem;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        /* ================================
+           SKILLS
+        ================================= */
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .skill-card {
+            padding: 25px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            border-radius: var(--radius);
+        }
+
+        .skill-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .skill-top span:last-child {
+            color: var(--secondary);
+            font-weight: 800;
+        }
+
+        .progress {
+            height: 9px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+        }
+
+        body.light .progress {
+            background: rgba(20, 30, 50, 0.08);
+        }
+
+        .progress-bar {
+            width: 0;
+            height: 100%;
+            border-radius: inherit;
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--primary),
+                    var(--secondary)
+                );
+
+            transition: width 1.5s ease;
+        }
+
+        /* ================================
+           PROJECTS
+        ================================= */
+
+        .project-controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .filter-btn {
+            padding: 10px 15px;
+            border-radius: 10px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            color: white;
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .search-box {
+            min-width: 260px;
+            padding: 11px 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            outline: none;
+        }
+
+        .search-box:focus {
+            border-color: var(--secondary);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .project-card {
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--card);
+            min-height: 310px;
+            transition:
+                transform var(--transition),
+                background var(--transition);
+        }
+
+        .project-card:hover {
+            transform: translateY(-7px);
+            background: var(--card-hover);
+        }
+
+        .project-number {
+            width: 45px;
+            height: 45px;
+            border-radius: 13px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 18px;
+            background: rgba(124, 92, 255, 0.15);
+            color: var(--secondary);
+            font-weight: 900;
+        }
+
+        .project-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .project-card p {
+            color: var(--muted);
+            line-height: 1.65;
+            font-size: 0.92rem;
+            margin-bottom: 20px;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-top: auto;
+            margin-bottom: 20px;
+        }
+
+        .project-tag {
+            padding: 5px 9px;
+            border-radius: 7px;
+            background: rgba(0, 212, 255, 0.08);
+            color: var(--secondary);
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .project-link {
+            color: var(--text);
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .project-link:hover {
+            color: var(--secondary);
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--muted);
+            border: 1px dashed var(--border);
+            border-radius: var(--radius);
+        }
+
+        /* ================================
+           JOURNEY
+        ================================= */
+
+        .timeline {
+            position: relative;
+            max-width: 850px;
+            margin: auto;
+        }
+
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 65px;
+            margin-bottom: 35px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 11px;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 5px solid var(--bg);
+            box-shadow: 0 0 20px rgba(124, 92, 255, 0.5);
+        }
+
+        .timeline-card {
+            padding: 25px;
+            border-radius: var(--radius);
+            background: var(--card);
+            border: 1px solid var(--border);
+        }
+
+        .timeline-card small {
+            color: var(--secondary);
+            font-weight: 800;
+        }
+
+        .timeline-card h3 {
+            margin: 8px 0;
+        }
+
+        .timeline-card p {
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        /* ================================
+           CONTACT
+        ================================= */
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 0.8fr 1.2fr;
+            gap: 30px;
+        }
+
+        .contact-info,
+        .contact-form {
+            padding: 30px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--card);
+        }
+
+        .contact-info h3,
+        .contact-form h3 {
+            margin-bottom: 15px;
+        }
+
+        .contact-info p {
+            color: var(--muted);
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .contact-details {
+            display: grid;
+            gap: 15px;
+        }
+
+        .contact-detail {
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .contact-detail span {
+            display: block;
+            color: var(--muted);
+            font-size: 0.8rem;
+            margin-bottom: 4px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text);
+            outline: none;
+            resize: vertical;
+        }
+
+        .form-group textarea {
+            min-height: 140px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--secondary);
+        }
+
+        .error {
+            color: var(--danger);
+            font-size: 0.8rem;
+            margin-top: 5px;
+            min-height: 16px;
+        }
+
+        .success-message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            color: var(--accent);
+            background: rgba(0, 255, 163, 0.08);
+            display: none;
+        }
+
+        /* ================================
+           FOOTER
+        ================================= */
+
+        footer {
+            padding: 35px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--muted);
+        }
+
+        footer strong {
+            color: var(--text);
+        }
+
+        /* ================================
+           MODAL
+        ================================= */
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            place-items: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+        }
+
+        .modal.active {
+            display: grid;
+        }
+
+        .modal-content {
+            width: min(650px, 100%);
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            border-radius: 25px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .modal-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .close-modal {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .modal-content p {
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        /* ================================
+           RESPONSIVE
+        ================================= */
+
+        @media (max-width: 1000px) {
+            .hero-grid,
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .projects-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 760px) {
+            .nav-links {
+                position: absolute;
+                top: 75px;
+                left: 4%;
+                right: 4%;
+                padding: 20px;
+                display: none;
+                flex-direction: column;
+                align-items: flex-start;
+                border-radius: 16px;
+                background: var(--bg-secondary);
+                border: 1px solid var(--border);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .menu-btn {
+                display: grid;
+            }
+
+            .hero h1 {
+                letter-spacing: -3px;
+            }
+
+            .skills-grid,
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .project-controls {
+                flex-direction: column;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .section {
+                padding: 75px 0;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                text-align: center;
+            }
+
+            .profile-card {
+                padding: 22px;
+            }
+        }
+
+        /* ================================
+           REVEAL ANIMATION
+        ================================= */
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition:
+                opacity 0.7s ease,
+                transform 0.7s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================================
+         HEADER
+    ================================= -->
+
+    <header>
+        <div class="container nav">
+
+            <a href="#home" class="logo">
+                Collins<span>.</span>
+            </a>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#journey">Journey</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+
+            <div style="display:flex; gap:8px;">
+                <button
+                    class="theme-btn"
+                    id="themeBtn"
+                    aria-label="Toggle theme"
+                >
+                    🌙
+                </button>
+
+                <button
+                    class="menu-btn"
+                    id="menuBtn"
+                    aria-label="Open navigation"
+                >
+                    ☰
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+    <main>
+
+        <!-- ================================
+             HERO
+        ================================= -->
+
+        <section class="hero" id="home">
+
+            <div class="container hero-grid">
+
+                <div class="reveal">
+
+                    <div class="badge">
+                        <span class="status-dot"></span>
+                        JavaScript Journey Completed
+                    </div>
+
+                    <h1>
+                        Hi, I'm
+                        <span class="gradient-text">
+                            Collins.
+                        </span>
+                    </h1>
+
+                    <p class="hero-description">
+                        I'm building my path toward becoming a professional
+                        software developer. This portfolio represents my
+                        JavaScript learning journey — from fundamental syntax
+                        to interactive applications, APIs, local storage,
+                        dynamic interfaces and real-world projects.
+                    </p>
+
+                    <div class="hero-buttons">
+                        <a
+                            href="#projects"
+                            class="btn btn-primary"
+                        >
+                            Explore My Projects
+                        </a>
+
+                        <a
+                            href="#contact"
+                            class="btn btn-secondary"
+                        >
+                            Contact Me
+                        </a>
+                    </div>
+
+                </div>
+
+                <div class="profile-card reveal">
+
+                    <div class="profile-avatar">
+                        CR
+                    </div>
+
+                    <h3>
+                        Collins Redfellor
+                    </h3>
+
+                    <p>
+                        Software Developer in Progress
+                    </p>
+
+                    <ul class="profile-list">
+                        <li>
+                            <span>Current Focus</span>
+                            <strong>JavaScript</strong>
+                        </li>
+
+                        <li>
+                            <span>Projects</span>
+                            <strong>20</strong>
+                        </li>
+
+                        <li>
+                            <span>Next Goal</span>
+                            <strong>Backend</strong>
+                        </li>
+
+                        <li>
+                            <span>Long-Term</span>
+                            <strong>AI & Cybersecurity</strong>
+                        </li>
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================================
+             STATS
+        ================================= -->
+
+        <section class="section">
+
+            <div class="container">
+
+                <div class="stats-grid">
+
+                    <div class="stat-card reveal">
+                        <span
+                            class="stat-number counter"
+                            data-target="20"
+                        >
+                            0
+                        </span>
+                        <span class="stat-label">
+                            JavaScript Projects
+                        </span>
+                    </div>
+
+                    <div class="stat-card reveal">
+                        <span
+                            class="stat-number counter"
+                            data-target="8"
+                        >
+                            0
+                        </span>
+                        <span class="stat-label">
+                            Core Skill Areas
+                        </span>
+                    </div>
+
+                    <div class="stat-card reveal">
+                        <span
+                            class="stat-number counter"
+                            data-target="100"
+                        >
+                            0
+                        </span>
+                        <span class="stat-label">
+                            Learning Commitment %
+                        </span>
+                    </div>
+
+                    <div class="stat-card reveal">
+                        <span
+                            class="stat-number counter"
+                            data-target="1"
+                        >
+                            0
+                        </span>
+                        <span class="stat-label">
+                            JavaScript Journey Completed
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================================
+             SKILLS
+        ================================= -->
+
+        <section class="section" id="skills">
+
+            <div class="container">
+
+                <div class="section-heading reveal">
+                    <span>Skills</span>
+
+                    <h2>
+                        What I've learned.
+                    </h2>
+
+                    <p>
+                        These are the major JavaScript concepts developed
+                        throughout the 20-project journey.
+                    </p>
+                </div>
+
+                <div class="skills-grid">
+
+                    <div class="skill-card reveal">
+                        <div class="skill-top">
+                            <strong>JavaScript Fundamentals</strong>
+                            <span>95%</span>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                class="progress-bar"
+                                data-width="95%"
+                            ></div>
+                        </div>
+                    </div>
+
+                    <div class="skill-card reveal">
+                        <div class="skill-top">
+                            <strong>DOM Manipulation</strong>
+                            <span>92%</span>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                class="progress-bar"
+                                data-width="92%"
+                            ></div>
+                        </div>
+                    </div>
+
+                    <div class="skill-card reveal">
+                        <div class="skill-top">
+                            <strong>Events & Interactivity</strong>
+                            <span>90%</span>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                class="progress-bar"
+                                data-width="90%"
+                            ></div>
+                        </div>
+                    </div>
+
+                    <div class="skill-card reveal">
+                        <div class="skill-top">
+                            <strong>Arrays & Objects</strong>
+                            <span>90%</span>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                class="progress-bar"
+                                data-width="90%"
+                            ></div>
+                        </div>
+                    </div>
+
+                    <div class="skill-card reveal">
+                        <div class="skill-top">
+                            <strong>Local Storage</strong>
+                            <span>85%</span>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                class="progress-bar"
+                                data-width="85%"
+                            ></div>
+                        </div>
+                    </div>
+
+                    <div class="skill-card reveal">
+                        <div class="skill-top">
+                            <strong>APIs & Async JavaScript</strong>
+                            <span>82%</span>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                class="progress-bar"
+                                data-width="82%"
+                            ></div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================================
+             PROJECTS
+        ================================= -->
+
+        <section class="section" id="projects">
+
+            <div class="container">
+
+                <div class="section-heading reveal">
+
+                    <span>Portfolio</span>
+
+                    <h2>
+                        My JavaScript Projects.
+                    </h2>
+
+                    <p>
+                        Explore the complete collection of projects built
+                        during my JavaScript learning journey.
+                    </p>
+
+                </div>
+
+                <div class="project-controls">
+
+                    <div class="filter-buttons">
+
+                        <button
+                            class="filter-btn active"
+                            data-filter="all"
+                        >
+                            All
+                        </button>
+
+                        <button
+                            class="filter-btn"
+                            data-filter="fundamentals"
+                        >
+                            Fundamentals
+                        </button>
+
+                        <button
+                            class="filter-btn"
+                            data-filter="apps"
+                        >
+                            Applications
+                        </button>
+
+                        <button
+                            class="filter-btn"
+                            data-filter="advanced"
+                        >
+                            Advanced
+                        </button>
+
+                    </div>
+
+                    <input
+                        type="search"
+                        id="projectSearch"
+                        class="search-box"
+                        placeholder="Search projects..."
+                        aria-label="Search projects"
+                    >
+
+                </div>
+
+                <div
+                    class="projects-grid"
+                    id="projectsGrid"
+                ></div>
+
+            </div>
+
+        </section>
+
+        <!-- ================================
+             JOURNEY
+        ================================= -->
+
+        <section class="section" id="journey">
+
+            <div class="container">
+
+                <div class="section-heading reveal">
+
+                    <span>Journey</span>
+
+                    <h2>
+                        From fundamentals to applications.
+                    </h2>
+
+                    <p>
+                        Every project added another layer to the
+                        development foundation.
+                    </p>
+
+                </div>
+
+                <div class="timeline">
+
+                    <div class="timeline-item reveal">
+
+                        <div class="timeline-dot"></div>
+
+                        <div class="timeline-card">
+
+                            <small>STAGE 01</small>
+
+                            <h3>
+                                JavaScript Fundamentals
+                            </h3>
+
+                            <p>
+                                Variables, data types, operators,
+                                conditions, loops, functions, arrays
+                                and objects.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="timeline-item reveal">
+
+                        <div class="timeline-dot"></div>
+
+                        <div class="timeline-card">
+
+                            <small>STAGE 02</small>
+
+                            <h3>
+                                Interactive Web Applications
+                            </h3>
+
+                            <p>
+                                DOM manipulation, events, forms,
+                                validation, calculators, games,
+                                quizzes and interactive interfaces.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="timeline-item reveal">
+
+                        <div class="timeline-dot"></div>
+
+                        <div class="timeline-card">
+
+                            <small>STAGE 03</small>
+
+                            <h3>
+                                Persistent Applications
+                            </h3>
+
+                            <p>
+                                Local storage, JSON, CRUD operations,
+                                search, filtering, themes and user
+                                preferences.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="timeline-item reveal">
+
+                        <div class="timeline-dot"></div>
+
+                        <div class="timeline-card">
+
+                            <small>STAGE 04</small>
+
+                            <h3>
+                                APIs & Async JavaScript
+                            </h3>
+
+                            <p>
+                                Fetch requests, async/await, API
+                                responses, loading states, errors and
+                                dynamic data.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="timeline-item reveal">
+
+                        <div class="timeline-dot"></div>
+
+                        <div class="timeline-card">
+
+                            <small>STAGE 05</small>
+
+                            <h3>
+                                Portfolio Capstone
+                            </h3>
+
+                            <p>
+                                Combining everything into a professional
+                                interactive portfolio dashboard.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================================
+             CONTACT
+        ================================= -->
+
+        <section class="section" id="contact">
+
+            <div class="container">
+
+                <div class="section-heading reveal">
+
+                    <span>Contact</span>
+
+                    <h2>
+                        Let's connect.
+                    </h2>
+
+                    <p>
+                        This contact form demonstrates JavaScript
+                        validation and interactive feedback.
+                    </p>
+
+                </div>
+
+                <div class="contact-grid">
+
+                    <div class="contact-info reveal">
+
+                        <h3>
+                            Build something meaningful.
+                        </h3>
+
+                        <p>
+                            JavaScript is only one stage of the journey.
+                            The next stages are backend development,
+                            advanced development, AI, cybersecurity and
+                            eventually startup building.
+                        </p>
+
+                        <div class="contact-details">
+
+                            <div class="contact-detail">
+                                <span>Name</span>
+                                <strong>Collins Redfellor</strong>
+                            </div>
+
+                            <div class="contact-detail">
+                                <span>Current Stage</span>
+                                <strong>JavaScript Completed</strong>
+                            </div>
+
+                            <div class="contact-detail">
+                                <span>Next Stage</span>
+                                <strong>Backend Development</strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <form
+                        class="contact-form reveal"
+                        id="contactForm"
+                        novalidate
+                    >
+
+                        <h3>
+                            Send a message
+                        </h3>
+
+                        <div class="form-group">
+
+                            <label for="name">
+                                Your Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="name"
+                                placeholder="Enter your name"
+                            >
+
+                            <div
+                                class="error"
+                                id="nameError"
+                            ></div>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="email">
+                                Email Address
+                            </label>
+
+                            <input
+                                type="email"
+                                id="email"
+                                placeholder="Enter your email"
+                            >
+
+                            <div
+                                class="error"
+                                id="emailError"
+                            ></div>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="message">
+                                Message
+                            </label>
+
+                            <textarea
+                                id="message"
+                                placeholder="Write your message..."
+                            ></textarea>
+
+                            <div
+                                class="error"
+                                id="messageError"
+                            ></div>
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            Validate & Send
+                        </button>
+
+                        <div
+                            class="success-message"
+                            id="successMessage"
+                        >
+                            ✓ Message validated successfully!
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- ================================
+         FOOTER
+    ================================= -->
+
+    <footer>
+
+        <div class="container">
+
+            <p>
+                Built with JavaScript by
+                <strong>Collins Redfellor</strong>.
+            </p>
+
+            <p style="margin-top:8px;">
+                JavaScript Projects 1–20 • Journey Completed 🚀
+            </p>
+
+        </div>
+
+    </footer>
+
+    <!-- ================================
+         PROJECT MODAL
+    ================================= -->
+
+    <div
+        class="modal"
+        id="projectModal"
+        role="dialog"
+        aria-modal="true"
+    >
+
+        <div class="modal-content">
+
+            <div class="modal-top">
+
+                <div>
+                    <small
+                        id="modalNumber"
+                        style="color:var(--secondary);"
+                    ></small>
+
+                    <h2 id="modalTitle"></h2>
+                </div>
+
+                <button
+                    class="close-modal"
+                    id="closeModal"
+                    aria-label="Close project details"
+                >
+                    ✕
+                </button>
+
+            </div>
+
+            <p id="modalDescription"></p>
+
+            <div
+                id="modalTags"
+                class="project-tags"
+                style="margin-top:20px;"
+            ></div>
+
+            <a
+                id="modalLink"
+                class="btn btn-primary"
+                style="display:inline-block; margin-top:10px;"
+                href="#"
+            >
+                Open Project
+            </a>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        /* =========================================
+           PROJECT DATA
+        ========================================= */
+
+        const projects = [
+            {
+                id: 1,
+                title: "JavaScript Fundamentals Dashboard",
+                category: "fundamentals",
+                description:
+                    "A dashboard demonstrating variables, data types, operators, conditions, functions, arrays and objects.",
+                tags: ["Variables", "Functions", "Arrays"],
+                file: "javascript-project-1.html"
+            },
+
+            {
+                id: 2,
+                title: "Number Analyzer",
+                category: "fundamentals",
+                description:
+                    "Analyze numbers using conditions, comparisons, mathematical operations and logical expressions.",
+                tags: ["Conditions", "Math", "Logic"],
+                file: "javascript-project-2.html"
+            },
+
+            {
+                id: 3,
+                title: "Multiplication Table Generator",
+                category: "fundamentals",
+                description:
+                    "Generate multiplication tables dynamically using loops and DOM manipulation.",
+                tags: ["Loops", "DOM", "Forms"],
+                file: "javascript-project-3.html"
+            },
+
+            {
+                id: 4,
+                title: "Smart Calculator",
+                category: "apps",
+                description:
+                    "A functional calculator supporting arithmetic operations, keyboard input and calculation history.",
+                tags: ["Events", "Math", "DOM"],
+                file: "javascript-project-4.html"
+            },
+
+            {
+                id: 5,
+                title: "Number Guessing Game",
+                category: "apps",
+                description:
+                    "An interactive guessing game using random numbers, conditions, hints and score tracking.",
+                tags: ["Random", "Game", "Logic"],
+                file: "javascript-project-5.html"
+            },
+
+            {
+                id: 6,
+                title: "Student Grade Manager",
+                category: "apps",
+                description:
+                    "Manage students and grades while calculating averages, pass rates and performance.",
+                tags: ["Arrays", "Objects", "CRUD"],
+                file: "javascript-project-6.html"
+            },
+
+            {
+                id: 7,
+                title: "Personal Expense Tracker",
+                category: "apps",
+                description:
+                    "Track income and expenses while calculating financial summaries.",
+                tags: ["Forms", "Arrays", "DOM"],
+                file: "javascript-project-7.html"
+            },
+
+            {
+                id: 8,
+                title: "Contact Manager",
+                category: "apps",
+                description:
+                    "Create, search and manage contacts using JavaScript data structures.",
+                tags: ["CRUD", "Search", "Objects"],
+                file: "javascript-project-8.html"
+            },
+
+            {
+                id: 9,
+                title: "Quiz Application",
+                category: "apps",
+                description:
+                    "A timed quiz application featuring questions, answers, progress and results.",
+                tags: ["Events", "Timer", "Logic"],
+                file: "javascript-project-9.html"
+            },
+
+            {
+                id: 10,
+                title: "Random Password Generator",
+                category: "apps",
+                description:
+                    "Generate strong random passwords with configurable character options.",
+                tags: ["Random", "Security", "Forms"],
+                file: "javascript-project-10.html"
+            },
+
+            {
+                id: 11,
+                title: "Interactive Counter",
+                category: "fundamentals",
+                description:
+                    "An interactive counter demonstrating event listeners and state changes.",
+                tags: ["Events", "DOM", "State"],
+                file: "javascript-project-11.html"
+            },
+
+            {
+                id: 12,
+                title: "Digital Clock",
+                category: "apps",
+                description:
+                    "A real-time digital clock using JavaScript Date objects and intervals.",
+                tags: ["Date", "Time", "Intervals"],
+                file: "javascript-project-12.html"
+            },
+
+            {
+                id: 13,
+                title: "To-Do List",
+                category: "apps",
+                description:
+                    "Create, complete and remove tasks using dynamic DOM manipulation.",
+                tags: ["CRUD", "DOM", "Events"],
+                file: "javascript-project-13.html"
+            },
+
+            {
+                id: 14,
+                title: "Form Validation System",
+                category: "apps",
+                description:
+                    "Validate user input and provide real-time feedback.",
+                tags: ["Validation", "Forms", "Events"],
+                file: "javascript-project-14.html"
+            },
+
+            {
+                id: 15,
+                title: "Dark/Light Mode Website",
+                category: "advanced",
+                description:
+                    "A theme-switching website demonstrating user preferences and local storage.",
+                tags: ["Themes", "Storage", "UI"],
+                file: "javascript-project-15.html"
+            },
+
+            {
+                id: 16,
+                title: "Notes Application",
+                category: "advanced",
+                description:
+                    "A persistent notes application using local storage, CRUD operations and search.",
+                tags: ["LocalStorage", "CRUD", "Search"],
+                file: "javascript-project-16.html"
+            },
+
+            {
+                id: 17,
+                title: "Expense Tracker Pro",
+                category: "advanced",
+                description:
+                    "A more advanced financial tracker with persistence, filtering and analytics.",
+                tags: ["LocalStorage", "Analytics", "DOM"],
+                file: "javascript-project-17.html"
+            },
+
+            {
+                id: 18,
+                title: "Weather Application",
+                category: "advanced",
+                description:
+                    "A weather application demonstrating APIs, fetch, async/await and dynamic data.",
+                tags: ["API", "Fetch", "Async"],
+                file: "javascript-project-18.html"
+            },
+
+            {
+                id: 19,
+                title: "Movie Search Application",
+                category: "advanced",
+                description:
+                    "Search and display dynamic entertainment data using a public API.",
+                tags: ["API", "Search", "Async"],
+                file: "javascript-project-19.html"
+            },
+
+            {
+                id: 20,
+                title: "Final JavaScript Portfolio Dashboard",
+                category: "advanced",
+                description:
+                    "The capstone portfolio combining DOM manipulation, filtering, forms, validation, themes, animations and dynamic project data.",
+                tags: ["Portfolio", "DOM", "Capstone"],
+                file: "javascript-project-20.html"
+            }
+        ];
+
+        /* =========================================
+           DOM ELEMENTS
+        ========================================= */
+
+        const projectsGrid =
+            document.getElementById("projectsGrid");
+
+        const projectSearch =
+            document.getElementById("projectSearch");
+
+        const filterButtons =
+            document.querySelectorAll(".filter-btn");
+
+        const themeBtn =
+            document.getElementById("themeBtn");
+
+        const navLinks =
+            document.getElementById("navLinks");
+
+        const menuBtn =
+            document.getElementById("menuBtn");
+
+        const modal =
+            document.getElementById("projectModal");
+
+        const closeModal =
+            document.getElementById("closeModal");
+
+        const modalNumber =
+            document.getElementById("modalNumber");
+
+        const modalTitle =
+            document.getElementById("modalTitle");
+
+        const modalDescription =
+            document.getElementById("modalDescription");
+
+        const modalTags =
+            document.getElementById("modalTags");
+
+        const modalLink =
+            document.getElementById("modalLink");
+
+        let currentFilter = "all";
+
+        /* =========================================
+           SAFE HTML FUNCTION
+        ========================================= */
+
+        function escapeHTML(value) {
+
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        /* =========================================
+           PROJECT PATH
+        ========================================= */
+
+        function getProjectPath(file) {
+
+            return "JavaScript%20projects/" +
+                encodeURIComponent(file);
+        }
+
+        /* =========================================
+           RENDER PROJECTS
+        ========================================= */
+
+        function renderProjects() {
+
+            const searchTerm =
+                projectSearch.value
+                    .trim()
+                    .toLowerCase();
+
+            const filteredProjects =
+                projects.filter(project => {
+
+                    const matchesCategory =
+                        currentFilter === "all" ||
+                        project.category === currentFilter;
+
+                    const searchableText = [
+                        project.title,
+                        project.description,
+                        ...project.tags
+                    ]
+                        .join(" ")
+                        .toLowerCase();
+
+                    const matchesSearch =
+                        searchableText.includes(searchTerm);
+
+                    return matchesCategory &&
+                        matchesSearch;
+                });
+
+            if (filteredProjects.length === 0) {
+
+                projectsGrid.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No projects found</h3>
+                        <p>
+                            Try another search term or category.
+                        </p>
+                    </div>
+                `;
+
+                return;
+            }
+
+            projectsGrid.innerHTML =
+                filteredProjects.map(project => {
+
+                    const tags = project.tags
+                        .map(tag =>
+                            `<span class="project-tag">
+                                ${escapeHTML(tag)}
+                            </span>`
+                        )
+                        .join("");
+
+                    return `
+                        <article
+                            class="project-card reveal visible"
+                        >
+
+                            <div class="project-number">
+                                ${String(project.id).padStart(2, "0")}
+                            </div>
+
+                            <h3>
+                                ${escapeHTML(project.title)}
+                            </h3>
+
+                            <p>
+                                ${escapeHTML(project.description)}
+                            </p>
+
+                            <div class="project-tags">
+                                ${tags}
+                            </div>
+
+                            <div
+                                style="
+                                    display:flex;
+                                    gap:15px;
+                                    align-items:center;
+                                "
+                            >
+
+                                <button
+                                    class="project-link details-btn"
+                                    data-id="${project.id}"
+                                >
+                                    View Details →
+                                </button>
+
+                                <a
+                                    class="project-link"
+                                    href="${getProjectPath(project.file)}"
+                                >
+                                    Open →
+                                </a>
+
+                            </div>
+
+                        </article>
+                    `;
+
+                }).join("");
+
+            document
+                .querySelectorAll(".details-btn")
+                .forEach(button => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            const id =
+                                Number(button.dataset.id);
+
+                            openProjectModal(id);
+                        }
+                    );
+                });
+        }
+
+        /* =========================================
+           PROJECT FILTERING
+        ========================================= */
+
+        filterButtons.forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove("active");
+                    });
+
+                    button.classList.add("active");
+
+                    currentFilter =
+                        button.dataset.filter;
+
+                    renderProjects();
+                }
+            );
+        });
+
+        projectSearch.addEventListener(
+            "input",
+            renderProjects
+        );
+
+        /* =========================================
+           MODAL
+        ========================================= */
+
+        function openProjectModal(id) {
+
+            const project =
+                projects.find(item => item.id === id);
+
+            if (!project) return;
+
+            modalNumber.textContent =
+                `PROJECT ${String(project.id).padStart(2, "0")}`;
+
+            modalTitle.textContent =
+                project.title;
+
+            modalDescription.textContent =
+                project.description;
+
+            modalTags.innerHTML =
+                project.tags
+                    .map(tag =>
+                        `<span class="project-tag">
+                            ${escapeHTML(tag)}
+                        </span>`
+                    )
+                    .join("");
+
+            modalLink.href =
+                getProjectPath(project.file);
+
+            modal.classList.add("active");
+
+            document.body.classList.add("no-scroll");
+        }
+
+        function closeProjectModal() {
+
+            modal.classList.remove("active");
+
+            document.body.classList.remove("no-scroll");
+        }
+
+        closeModal.addEventListener(
+            "click",
+            closeProjectModal
+        );
+
+        modal.addEventListener(
+            "click",
+            event => {
+
+                if (event.target === modal) {
+                    closeProjectModal();
+                }
+            }
+        );
+
+        document.addEventListener(
+            "keydown",
+            event => {
+
+                if (event.key === "Escape") {
+                    closeProjectModal();
+                }
+            }
+        );
+
+        /* =========================================
+           THEME SYSTEM
+        ========================================= */
+
+        const savedTheme =
+            localStorage.getItem("portfolioTheme");
+
+        if (savedTheme === "light") {
+
+            document.body.classList.add("light");
+
+            themeBtn.textContent = "☀️";
+        }
+
+        themeBtn.addEventListener(
+            "click",
+            () => {
+
+                document.body.classList.toggle("light");
+
+                const isLight =
+                    document.body.classList.contains("light");
+
+                localStorage.setItem(
+                    "portfolioTheme",
+                    isLight ? "light" : "dark"
+                );
+
+                themeBtn.textContent =
+                    isLight ? "☀️" : "🌙";
+            }
+        );
+
+        /* =========================================
+           MOBILE NAVIGATION
+        ========================================= */
+
+        menuBtn.addEventListener(
+            "click",
+            () => {
+
+                navLinks.classList.toggle("active");
+
+                menuBtn.textContent =
+                    navLinks.classList.contains("active")
+                        ? "✕"
+                        : "☰";
+            }
+        );
+
+        document
+            .querySelectorAll(".nav-links a")
+            .forEach(link => {
+
+                link.addEventListener(
+                    "click",
+                    () => {
+
+                        navLinks.classList.remove("active");
+
+                        menuBtn.textContent = "☰";
+                    }
+                );
+            });
+
+        /* =========================================
+           COUNTER ANIMATION
+        ========================================= */
+
+        const counters =
+            document.querySelectorAll(".counter");
+
+        let countersStarted = false;
+
+        function animateCounters() {
+
+            if (countersStarted) return;
+
+            const statsSection =
+                document.querySelector(".stats-grid");
+
+            const rect =
+                statsSection.getBoundingClientRect();
+
+            if (rect.top < window.innerHeight * 0.85) {
+
+                countersStarted = true;
+
+                counters.forEach(counter => {
+
+                    const target =
+                        Number(counter.dataset.target);
+
+                    let current = 0;
+
+                    const increment =
+                        Math.max(1, Math.ceil(target / 50));
+
+                    const timer =
+                        setInterval(() => {
+
+                            current += increment;
+
+                            if (current >= target) {
+
+                                current = target;
+
+                                clearInterval(timer);
+                            }
+
+                            counter.textContent = current;
+
+                        }, 25);
+                });
+            }
+        }
+
+        /* =========================================
+           SKILL ANIMATIONS
+        ========================================= */
+
+        let skillsAnimated = false;
+
+        function animateSkills() {
+
+            if (skillsAnimated) return;
+
+            const skillsSection =
+                document.getElementById("skills");
+
+            const rect =
+                skillsSection.getBoundingClientRect();
+
+            if (rect.top < window.innerHeight * 0.8) {
+
+                skillsAnimated = true;
+
+                document
+                    .querySelectorAll(".progress-bar")
+                    .forEach(bar => {
+
+                        bar.style.width =
+                            bar.dataset.width;
+                    });
+            }
+        }
+
+        /* =========================================
+           SCROLL REVEAL
+        ========================================= */
+
+        const revealElements =
+            document.querySelectorAll(".reveal");
+
+        const observer =
+            new IntersectionObserver(
+                entries => {
+
+                    entries.forEach(entry => {
+
+                        if (entry.isIntersecting) {
+
+                            entry.target.classList.add(
+                                "visible"
+                            );
+
+                            observer.unobserve(
+                                entry.target
+                            );
+                        }
+                    });
+
+                },
+                {
+                    threshold: 0.12
+                }
+            );
+
+        revealElements.forEach(element => {
+            observer.observe(element);
+        });
+
+        window.addEventListener(
+            "scroll",
+            () => {
+
+                animateCounters();
+                animateSkills();
+
+            },
+            {
+                passive: true
+            }
+        );
+
+        /* =========================================
+           CONTACT FORM VALIDATION
+        ========================================= */
+
+        const contactForm =
+            document.getElementById("contactForm");
+
+        const nameInput =
+            document.getElementById("name");
+
+        const emailInput =
+            document.getElementById("email");
+
+        const messageInput =
+            document.getElementById("message");
+
+        const nameError =
+            document.getElementById("nameError");
+
+        const emailError =
+            document.getElementById("emailError");
+
+        const messageError =
+            document.getElementById("messageError");
+
+        const successMessage =
+            document.getElementById("successMessage");
+
+        function clearErrors() {
+
+            nameError.textContent = "";
+            emailError.textContent = "";
+            messageError.textContent = "";
+
+            successMessage.style.display = "none";
+        }
+
+        contactForm.addEventListener(
+            "submit",
+            event => {
+
+                event.preventDefault();
+
+                clearErrors();
+
+                let valid = true;
+
+                const name =
+                    nameInput.value.trim();
+
+                const email =
+                    emailInput.value.trim();
+
+                const message =
+                    messageInput.value.trim();
+
+                if (name.length < 2) {
+
+                    nameError.textContent =
+                        "Please enter your name.";
+
+                    valid = false;
+                }
+
+                const emailPattern =
+                    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (!emailPattern.test(email)) {
+
+                    emailError.textContent =
+                        "Please enter a valid email address.";
+
+                    valid = false;
+                }
+
+                if (message.length < 10) {
+
+                    messageError.textContent =
+                        "Message must contain at least 10 characters.";
+
+                    valid = false;
+                }
+
+                if (!valid) return;
+
+                successMessage.style.display =
+                    "block";
+
+                contactForm.reset();
+            }
+        );
+
+        /* =========================================
+           INITIALIZE
+        ========================================= */
+
+        renderProjects();
+
+        animateCounters();
+
+        animateSkills();
+
+    </script>
+
+</body>
+</html>
