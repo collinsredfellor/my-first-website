@@ -1,0 +1,752 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A modern JavaScript digital clock with live time, date, time format switching, and a personalized greeting.">
+    <title>Digital Clock | JavaScript Project 12</title>
+
+    <style>
+        :root {
+            --bg: #080c18;
+            --panel: rgba(19, 27, 47, 0.88);
+            --text: #f4f7ff;
+            --muted: #9ba9c5;
+            --purple: #9b7bff;
+            --cyan: #55dcff;
+            --border: rgba(148, 163, 184, 0.19);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(ellipse at 15% 10%, #34215d 0%, transparent 35%),
+                radial-gradient(ellipse at 90% 85%, #103f51 0%, transparent 35%),
+                var(--bg);
+            display: flex;
+            flex-direction: column;
+        }
+
+        button,
+        select {
+            font: inherit;
+        }
+
+        button,
+        select {
+            cursor: pointer;
+        }
+
+        button:focus-visible,
+        select:focus-visible {
+            outline: 2px solid var(--cyan);
+            outline-offset: 4px;
+        }
+
+        .container {
+            width: min(1100px, 92%);
+            margin: auto;
+            padding: 28px 0;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 65px;
+            animation: fadeDown 0.7s ease both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .brand-icon {
+            width: 49px;
+            height: 49px;
+            display: grid;
+            place-items: center;
+            border-radius: 15px;
+            font-size: 25px;
+            background: linear-gradient(135deg, var(--purple), var(--cyan));
+            box-shadow: 0 8px 28px #55dcff25;
+        }
+
+        .brand h1 {
+            font-size: 1.25rem;
+            letter-spacing: -0.5px;
+        }
+
+        .brand p {
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        .project-tag {
+            color: #d2c6ff;
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 9px 13px;
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            background: #ffffff06;
+            white-space: nowrap;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 38px;
+            animation: fadeUp 0.8s ease both;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            color: var(--cyan);
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .hero h2 {
+            font-size: clamp(2.3rem, 6vw, 4rem);
+            line-height: 1.12;
+            letter-spacing: -2px;
+            margin-bottom: 15px;
+        }
+
+        .gradient-text {
+            color: transparent;
+            background: linear-gradient(90deg, var(--purple), var(--cyan));
+            background-clip: text;
+            -webkit-background-clip: text;
+        }
+
+        .hero p {
+            max-width: 570px;
+            margin: auto;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        .clock-card {
+            position: relative;
+            overflow: hidden;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: clamp(25px, 5vw, 55px);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            text-align: center;
+            background:
+                radial-gradient(ellipse at 50% 0%, #8b5cf61b, transparent 65%),
+                var(--panel);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 25px 80px #00000035;
+            animation: fadeUp 0.9s ease both;
+        }
+
+        .clock-card::before {
+            content: "";
+            position: absolute;
+            width: 240px;
+            height: 240px;
+            top: -170px;
+            left: calc(50% - 120px);
+            border-radius: 50%;
+            background: #55dcff25;
+            filter: blur(60px);
+            pointer-events: none;
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #a7f3d0;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #34d399;
+            box-shadow: 0 0 14px #34d39999;
+            animation: pulse 1.8s infinite;
+        }
+
+        .time-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: clamp(5px, 1.6vw, 18px);
+            font-size: clamp(3rem, 11vw, 7.2rem);
+            line-height: 1;
+            font-weight: 800;
+            letter-spacing: -3px;
+            font-variant-numeric: tabular-nums;
+            text-shadow: 0 0 35px #55dcff16;
+        }
+
+        .time-unit {
+            min-width: 0;
+            color: var(--text);
+        }
+
+        .separator {
+            color: var(--cyan);
+            opacity: 0.8;
+            padding-bottom: 10px;
+            animation: blink 1s steps(2, start) infinite;
+        }
+
+        .ampm {
+            align-self: center;
+            color: var(--purple);
+            font-size: clamp(0.8rem, 2vw, 1.15rem);
+            letter-spacing: 1px;
+            padding-top: 10px;
+            min-width: 42px;
+        }
+
+        .time-labels {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-width: 520px;
+            margin: 20px auto 0;
+            color: var(--muted);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .date-display {
+            margin-top: 38px;
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            font-weight: 600;
+        }
+
+        .date-subtitle {
+            color: var(--muted);
+            margin-top: 7px;
+            font-size: 0.87rem;
+        }
+
+        .greeting {
+            margin-top: 25px;
+            color: #d5caff;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 35px;
+        }
+
+        .control-label {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .format-select {
+            padding: 11px 15px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            background: #0c1325;
+        }
+
+        .format-select option {
+            background: #0c1325;
+            color: var(--text);
+        }
+
+        .timezone-note {
+            margin-top: 19px;
+            color: var(--muted);
+            font-size: 0.78rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            max-width: 850px;
+            margin: 22px auto 0;
+            animation: fadeUp 1s ease both;
+        }
+
+        .info-card {
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: #ffffff06;
+            transition: transform 0.25s, border-color 0.25s;
+        }
+
+        .info-card:hover {
+            transform: translateY(-4px);
+            border-color: #55dcff66;
+        }
+
+        .info-icon {
+            font-size: 1.4rem;
+            margin-bottom: 9px;
+        }
+
+        .info-card h3 {
+            font-size: 0.88rem;
+            margin-bottom: 5px;
+        }
+
+        .info-card p {
+            color: var(--muted);
+            font-size: 0.78rem;
+            line-height: 1.6;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 45px;
+            color: #8390aa;
+            font-size: 0.8rem;
+            line-height: 1.9;
+        }
+
+        .footer strong {
+            color: #c9bbff;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeDown {
+            from {
+                opacity: 0;
+                transform: translateY(-14px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0.25;
+            }
+        }
+
+        @keyframes pulse {
+            50% {
+                opacity: 0.45;
+                transform: scale(0.85);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 94%;
+                padding-top: 20px;
+            }
+
+            header {
+                margin-bottom: 42px;
+                align-items: flex-start;
+            }
+
+            .brand-icon {
+                width: 42px;
+                height: 42px;
+            }
+
+            .brand h1 {
+                font-size: 1rem;
+            }
+
+            .brand p {
+                font-size: 0.73rem;
+            }
+
+            .project-tag {
+                padding: 7px 9px;
+                font-size: 0.62rem;
+                letter-spacing: 0;
+            }
+
+            .hero h2 {
+                letter-spacing: -1px;
+            }
+
+            .clock-card {
+                border-radius: 22px;
+                padding: 30px 12px;
+            }
+
+            .time-display {
+                letter-spacing: -2px;
+                gap: 4px;
+            }
+
+            .ampm {
+                min-width: 32px;
+            }
+
+            .time-labels {
+                letter-spacing: 1px;
+                font-size: 0.62rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 11px;
+            }
+
+            .info-card {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                padding: 15px;
+                text-align: left;
+            }
+
+            .info-icon {
+                margin-bottom: 0;
+            }
+
+            .info-card h3 {
+                margin-bottom: 3px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <header>
+            <div class="brand">
+                <div class="brand-icon" aria-hidden="true">🕒</div>
+                <div>
+                    <h1>ChronoSpace</h1>
+                    <p>Your time, beautifully displayed.</p>
+                </div>
+            </div>
+
+            <span class="project-tag">JAVASCRIPT PROJECT 12</span>
+        </header>
+
+        <section class="hero">
+            <span class="eyebrow">Live Time Experience</span>
+            <h2>Every second <span class="gradient-text">matters.</span></h2>
+            <p>
+                A modern digital clock powered by JavaScript.
+                Watch time update live, explore date formatting,
+                and switch between 12-hour and 24-hour modes.
+            </p>
+        </section>
+
+        <main>
+            <section class="clock-card" aria-label="Live digital clock">
+
+                <div class="live-indicator">
+                    <span class="live-dot" aria-hidden="true"></span>
+                    Live local time
+                </div>
+
+                <div class="time-display"
+                     role="timer"
+                     aria-label="Current local time">
+
+                    <span class="time-unit" id="hours">00</span>
+                    <span class="separator" aria-hidden="true">:</span>
+                    <span class="time-unit" id="minutes">00</span>
+                    <span class="separator" aria-hidden="true">:</span>
+                    <span class="time-unit" id="seconds">00</span>
+                    <span class="ampm" id="ampm"></span>
+                </div>
+
+                <div class="time-labels" aria-hidden="true">
+                    <span>HOURS</span>
+                    <span>MINUTES</span>
+                    <span>SECONDS</span>
+                </div>
+
+                <div class="date-display" id="fullDate">
+                    Loading date...
+                </div>
+
+                <p class="date-subtitle" id="dateSubtitle">
+                    Preparing your daily overview...
+                </p>
+
+                <p class="greeting" id="greeting">
+                    Welcome to ChronoSpace.
+                </p>
+
+                <div class="controls">
+                    <label class="control-label" for="timeFormat">
+                        Time format
+                    </label>
+
+                    <select class="format-select" id="timeFormat">
+                        <option value="12">12-hour format</option>
+                        <option value="24">24-hour format</option>
+                    </select>
+                </div>
+
+                <p class="timezone-note" id="timezoneNote">
+                    Displaying time from your device.
+                </p>
+            </section>
+
+            <section class="info-grid" aria-label="Clock information">
+
+                <article class="info-card">
+                    <div class="info-icon" aria-hidden="true">📅</div>
+                    <div>
+                        <h3>Today's Date</h3>
+                        <p id="shortDate">Loading...</p>
+                    </div>
+                </article>
+
+                <article class="info-card">
+                    <div class="info-icon" aria-hidden="true">🌍</div>
+                    <div>
+                        <h3>Your Time Zone</h3>
+                        <p id="timezoneName">Detecting time zone...</p>
+                    </div>
+                </article>
+
+                <article class="info-card">
+                    <div class="info-icon" aria-hidden="true">⏳</div>
+                    <div>
+                        <h3>Seconds Today</h3>
+                        <p id="secondsToday">0 seconds elapsed today</p>
+                    </div>
+                </article>
+
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>Designed with <strong>HTML, CSS & JavaScript</strong></p>
+            <p>Programming Journey · Project 12 · Make every second count.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        // =========================================
+        // 1. SELECT THE HTML ELEMENTS
+        // =========================================
+
+        const hoursElement = document.getElementById("hours");
+        const minutesElement = document.getElementById("minutes");
+        const secondsElement = document.getElementById("seconds");
+        const ampmElement = document.getElementById("ampm");
+
+        const fullDateElement = document.getElementById("fullDate");
+        const dateSubtitleElement = document.getElementById("dateSubtitle");
+        const greetingElement = document.getElementById("greeting");
+
+        const timeFormatElement = document.getElementById("timeFormat");
+        const timezoneNoteElement = document.getElementById("timezoneNote");
+
+        const shortDateElement = document.getElementById("shortDate");
+        const timezoneNameElement = document.getElementById("timezoneName");
+        const secondsTodayElement = document.getElementById("secondsToday");
+
+        // =========================================
+        // 2. HELPER FUNCTION: ADD A LEADING ZERO
+        // =========================================
+
+        function padZero(number) {
+            return String(number).padStart(2, "0");
+        }
+
+        // Example:
+        // padZero(5) returns "05".
+        // padZero(12) returns "12".
+
+        // =========================================
+        // 3. CHOOSE A GREETING BASED ON THE HOUR
+        // =========================================
+
+        function getGreeting(hour) {
+            if (hour >= 5 && hour < 12) {
+                return "Good morning ☀️ — make today count.";
+            }
+
+            if (hour >= 12 && hour < 17) {
+                return "Good afternoon 🌤️ — keep making progress.";
+            }
+
+            if (hour >= 17 && hour < 21) {
+                return "Good evening 🌆 — reflect on your achievements.";
+            }
+
+            return "It's nighttime 🌙 — rest and recharge.";
+        }
+
+        // =========================================
+        // 4. UPDATE THE CLOCK
+        // =========================================
+
+        function updateClock() {
+            // Get the current date and time from the device.
+            const now = new Date();
+
+            const hour24 = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+
+            // Determine whether the user selected 12-hour format.
+            const is12Hour = timeFormatElement.value === "12";
+
+            let displayedHour = hour24;
+
+            if (is12Hour) {
+                displayedHour = hour24 % 12;
+
+                if (displayedHour === 0) {
+                    displayedHour = 12;
+                }
+
+                ampmElement.textContent = hour24 >= 12 ? "PM" : "AM";
+            } else {
+                ampmElement.textContent = "";
+            }
+
+            // Update the individual time displays.
+            hoursElement.textContent = padZero(displayedHour);
+            minutesElement.textContent = padZero(minutes);
+            secondsElement.textContent = padZero(seconds);
+
+            // Display the full date.
+            fullDateElement.textContent = now.toLocaleDateString(
+                undefined,
+                {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric"
+                }
+            );
+
+            // Show additional date information.
+            dateSubtitleElement.textContent =
+                "Day " +
+                Math.ceil(
+                    (new Date(
+                        now.getFullYear(),
+                        now.getMonth(),
+                        now.getDate()
+                    ) - new Date(now.getFullYear(), 0, 0)) / 86400000
+                ) +
+                " of " + now.getFullYear();
+
+            // Personalize the greeting.
+            greetingElement.textContent = getGreeting(hour24);
+
+            // Show the date in a compact format.
+            shortDateElement.textContent = now.toLocaleDateString(
+                undefined,
+                {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                }
+            );
+
+            // Detect the time zone configured on the device.
+            let timezone = "Local device time";
+
+            try {
+                timezone =
+                    Intl.DateTimeFormat().resolvedOptions().timeZone ||
+                    timezone;
+            } catch (error) {
+                // Keep the fallback if time-zone detection is unavailable.
+            }
+
+            timezoneNameElement.textContent = timezone;
+            timezoneNoteElement.textContent =
+                "Using your device's local time · " + timezone;
+
+            // Calculate how many seconds have elapsed since midnight.
+            const elapsedSeconds =
+                hour24 * 3600 +
+                minutes * 60 +
+                seconds;
+
+            secondsTodayElement.textContent =
+                elapsedSeconds.toLocaleString() +
+                " seconds elapsed today";
+        }
+
+        // =========================================
+        // 5. LISTEN FOR FORMAT CHANGES
+        // =========================================
+
+        timeFormatElement.addEventListener("change", function() {
+            updateClock();
+        });
+
+        // =========================================
+        // 6. START THE CLOCK
+        // =========================================
+
+        // Update immediately instead of waiting one second.
+        updateClock();
+
+        // Refresh the display every second.
+        setInterval(updateClock, 1000);
+    </script>
+</body>
+</html>
