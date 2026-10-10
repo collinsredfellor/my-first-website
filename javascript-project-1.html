@@ -1,0 +1,983 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="JavaScript Project 1 by Collins Redfellor - JavaScript Fundamentals Dashboard"
+    >
+
+    <title>JavaScript Fundamentals | Collins Redfellor</title>
+
+    <style>
+        /* =========================================
+           RESET
+        ========================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            min-height: 100vh;
+            color: #f5f7ff;
+            background:
+                radial-gradient(circle at top left, rgba(0, 140, 255, 0.18), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(145, 70, 255, 0.18), transparent 30%),
+                #080b14;
+            line-height: 1.6;
+        }
+
+        /* =========================================
+           HEADER
+        ========================================= */
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+            padding: 20px 8%;
+
+            background: rgba(8, 11, 20, 0.82);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: auto;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+
+            background: linear-gradient(90deg, #00d4ff, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav a {
+            color: #dce3f7;
+            text-decoration: none;
+            margin-left: 20px;
+            transition: 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #00d4ff;
+        }
+
+        /* =========================================
+           HERO
+        ========================================= */
+
+        .hero {
+            max-width: 1200px;
+            margin: auto;
+            padding: 100px 8% 70px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 16px;
+            margin-bottom: 20px;
+
+            border: 1px solid rgba(0, 212, 255, 0.35);
+            border-radius: 50px;
+
+            color: #00d4ff;
+            background: rgba(0, 212, 255, 0.08);
+
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            line-height: 1.05;
+            margin-bottom: 25px;
+
+            background: linear-gradient(
+                90deg,
+                #ffffff,
+                #00d4ff,
+                #8b5cf6
+            );
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            max-width: 760px;
+            margin: auto;
+
+            color: #aeb8d0;
+            font-size: 1.1rem;
+        }
+
+        /* =========================================
+           MAIN CONTAINER
+        ========================================= */
+
+        main {
+            width: min(1200px, 90%);
+            margin: auto;
+        }
+
+        section {
+            margin-bottom: 70px;
+        }
+
+        .section-title {
+            margin-bottom: 30px;
+        }
+
+        .section-title h2 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .section-title p {
+            color: #8994ad;
+        }
+
+        /* =========================================
+           CARDS
+        ========================================= */
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .card {
+            padding: 28px;
+
+            background: rgba(255, 255, 255, 0.045);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-radius: 20px;
+
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+
+            transition:
+                transform 0.3s ease,
+                border-color 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0, 212, 255, 0.4);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h3 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            color: #aeb8d0;
+        }
+
+        .value {
+            margin-top: 18px;
+            padding: 15px;
+
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.25);
+
+            color: #ffffff;
+            font-family: "Courier New", monospace;
+            word-break: break-word;
+        }
+
+        /* =========================================
+           INTERACTIVE AREA
+        ========================================= */
+
+        .interactive {
+            padding: 35px;
+
+            border-radius: 24px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(0, 212, 255, 0.08),
+                    rgba(139, 92, 246, 0.08)
+                );
+
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        button {
+            border: none;
+            cursor: pointer;
+
+            padding: 13px 20px;
+
+            border-radius: 10px;
+
+            color: white;
+            background: linear-gradient(135deg, #00a8cc, #6d4aff);
+
+            font-weight: bold;
+
+            transition: 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        #output {
+            margin-top: 25px;
+            padding: 22px;
+
+            min-height: 100px;
+
+            border-radius: 15px;
+
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+
+            color: #dfe7ff;
+
+            white-space: pre-line;
+        }
+
+        /* =========================================
+           JOURNEY
+        ========================================= */
+
+        .journey {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .journey-item {
+            padding: 22px;
+
+            border-left: 3px solid #00d4ff;
+
+            background: rgba(255, 255, 255, 0.035);
+            border-radius: 0 14px 14px 0;
+        }
+
+        .journey-item strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #ffffff;
+        }
+
+        .journey-item span {
+            color: #8994ad;
+            font-size: 0.9rem;
+        }
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        footer {
+            margin-top: 80px;
+            padding: 35px 20px;
+
+            text-align: center;
+
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+            color: #77829b;
+        }
+
+        footer strong {
+            color: #00d4ff;
+        }
+
+        /* =========================================
+           RESPONSIVE DESIGN
+        ========================================= */
+
+        @media (max-width: 900px) {
+
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .journey {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            header {
+                padding: 16px 5%;
+            }
+
+            nav {
+                flex-direction: column;
+            }
+
+            nav a {
+                margin: 0 8px;
+            }
+
+            .hero {
+                padding: 70px 5% 50px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .interactive {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================================
+         NAVIGATION
+    ========================================== -->
+
+    <header>
+        <nav>
+            <div class="logo">COLLINS.DEV</div>
+
+            <div>
+                <a href="#fundamentals">Fundamentals</a>
+                <a href="#interactive">Interactive</a>
+                <a href="#journey">Journey</a>
+            </div>
+        </nav>
+    </header>
+
+
+    <!-- =========================================
+         HERO
+    ========================================== -->
+
+    <div class="hero">
+
+        <span class="badge">
+            JAVASCRIPT PROJECT 01
+        </span>
+
+        <h1>
+            JavaScript Fundamentals
+        </h1>
+
+        <p>
+            Welcome to the beginning of my JavaScript journey.
+            This project demonstrates the fundamental building blocks
+            of JavaScript while combining them with HTML and CSS
+            to create an interactive learning dashboard.
+        </p>
+
+    </div>
+
+
+    <main>
+
+        <!-- =========================================
+             FUNDAMENTALS
+        ========================================== -->
+
+        <section id="fundamentals">
+
+            <div class="section-title">
+                <h2>JavaScript Fundamentals</h2>
+
+                <p>
+                    The following cards demonstrate some of the
+                    fundamental concepts used throughout JavaScript.
+                </p>
+            </div>
+
+
+            <div class="grid">
+
+                <!-- Variables -->
+
+                <article class="card">
+
+                    <h3>01. Variables</h3>
+
+                    <p>
+                        Variables store information that our programs
+                        can use and manipulate.
+                    </p>
+
+                    <div class="value" id="variableOutput">
+                        Loading...
+                    </div>
+
+                </article>
+
+
+                <!-- Data Types -->
+
+                <article class="card">
+
+                    <h3>02. Data Types</h3>
+
+                    <p>
+                        JavaScript supports different types of values,
+                        including strings, numbers and booleans.
+                    </p>
+
+                    <div class="value" id="dataTypeOutput">
+                        Loading...
+                    </div>
+
+                </article>
+
+
+                <!-- Operators -->
+
+                <article class="card">
+
+                    <h3>03. Operators</h3>
+
+                    <p>
+                        Operators allow us to perform mathematical
+                        and logical operations.
+                    </p>
+
+                    <div class="value" id="operatorOutput">
+                        Loading...
+                    </div>
+
+                </article>
+
+
+                <!-- Conditions -->
+
+                <article class="card">
+
+                    <h3>04. Conditions</h3>
+
+                    <p>
+                        Conditional statements allow programs to make
+                        decisions based on information.
+                    </p>
+
+                    <div class="value" id="conditionOutput">
+                        Loading...
+                    </div>
+
+                </article>
+
+
+                <!-- Arrays -->
+
+                <article class="card">
+
+                    <h3>05. Arrays</h3>
+
+                    <p>
+                        Arrays allow us to store multiple values
+                        inside one variable.
+                    </p>
+
+                    <div class="value" id="arrayOutput">
+                        Loading...
+                    </div>
+
+                </article>
+
+
+                <!-- Objects -->
+
+                <article class="card">
+
+                    <h3>06. Objects</h3>
+
+                    <p>
+                        Objects allow us to organize related
+                        information using properties.
+                    </p>
+
+                    <div class="value" id="objectOutput">
+                        Loading...
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================
+             INTERACTIVE JAVASCRIPT
+        ========================================== -->
+
+        <section id="interactive">
+
+            <div class="section-title">
+                <h2>Interactive JavaScript</h2>
+
+                <p>
+                    Now let's allow JavaScript to respond to user
+                    actions.
+                </p>
+            </div>
+
+
+            <div class="interactive">
+
+                <h3>
+                    JavaScript Control Center
+                </h3>
+
+                <p>
+                    Click the buttons below and watch JavaScript
+                    manipulate the webpage.
+                </p>
+
+
+                <div class="controls">
+
+                    <button onclick="showMessage()">
+                        Show Message
+                    </button>
+
+                    <button onclick="runCalculation()">
+                        Run Calculation
+                    </button>
+
+                    <button onclick="runLoop()">
+                        Run Loop
+                    </button>
+
+                    <button onclick="showProfile()">
+                        Show Profile
+                    </button>
+
+                    <button onclick="clearOutput()">
+                        Clear Output
+                    </button>
+
+                </div>
+
+
+                <div id="output">
+                    JavaScript output will appear here.
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================
+             JAVASCRIPT JOURNEY
+        ========================================== -->
+
+        <section id="journey">
+
+            <div class="section-title">
+
+                <h2>
+                    My JavaScript Journey
+                </h2>
+
+                <p>
+                    These are the concepts we will progressively
+                    master throughout the JavaScript projects.
+                </p>
+
+            </div>
+
+
+            <div class="journey">
+
+                <div class="journey-item">
+
+                    <strong>
+                        Variables & Data Types
+                    </strong>
+
+                    <span>
+                        Understanding how JavaScript stores information.
+                    </span>
+
+                </div>
+
+
+                <div class="journey-item">
+
+                    <strong>
+                        Conditions & Logic
+                    </strong>
+
+                    <span>
+                        Teaching programs how to make decisions.
+                    </span>
+
+                </div>
+
+
+                <div class="journey-item">
+
+                    <strong>
+                        Loops
+                    </strong>
+
+                    <span>
+                        Repeating operations efficiently.
+                    </span>
+
+                </div>
+
+
+                <div class="journey-item">
+
+                    <strong>
+                        Functions
+                    </strong>
+
+                    <span>
+                        Creating reusable blocks of code.
+                    </span>
+
+                </div>
+
+
+                <div class="journey-item">
+
+                    <strong>
+                        Arrays & Objects
+                    </strong>
+
+                    <span>
+                        Organizing and managing collections of data.
+                    </span>
+
+                </div>
+
+
+                <div class="journey-item">
+
+                    <strong>
+                        DOM Manipulation
+                    </strong>
+
+                    <span>
+                        Making webpages interactive with JavaScript.
+                    </span>
+
+                </div>
+
+
+                <div class="journey-item">
+
+                    <strong>
+                        APIs & Async JavaScript
+                    </strong>
+
+                    <span>
+                        Connecting applications to external services.
+                    </span>
+
+                </div>
+
+
+                <div class="journey-item">
+
+                    <strong>
+                        Real Applications
+                    </strong>
+
+                    <span>
+                        Building professional JavaScript projects.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================== -->
+
+    <footer>
+
+        <p>
+            JavaScript Project 01 created by
+            <strong>Collins Redfellor</strong>.
+        </p>
+
+        <p>
+            Python → HTML → CSS → JavaScript → Backend → AI → Cybersecurity
+        </p>
+
+    </footer>
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+
+    <script>
+
+        /* =========================================
+           1. VARIABLES
+        ========================================== */
+
+        let developerName = "Collins Redfellor";
+        const currentLanguage = "JavaScript";
+        let projectNumber = 1;
+
+
+        document.getElementById("variableOutput").textContent =
+            "Name: " + developerName +
+            " | Language: " + currentLanguage +
+            " | Project: " + projectNumber;
+
+
+        /* =========================================
+           2. DATA TYPES
+        ========================================== */
+
+        let userName = "Collins";
+        let age = 25;
+        let isLearning = true;
+
+        document.getElementById("dataTypeOutput").textContent =
+            "String: " + userName +
+            " | Number: " + age +
+            " | Boolean: " + isLearning;
+
+
+        /* =========================================
+           3. OPERATORS
+        ========================================== */
+
+        let firstNumber = 20;
+        let secondNumber = 5;
+
+        let addition = firstNumber + secondNumber;
+        let subtraction = firstNumber - secondNumber;
+        let multiplication = firstNumber * secondNumber;
+        let division = firstNumber / secondNumber;
+
+        document.getElementById("operatorOutput").textContent =
+            "20 + 5 = " + addition +
+            " | 20 - 5 = " + subtraction +
+            " | 20 × 5 = " + multiplication +
+            " | 20 ÷ 5 = " + division;
+
+
+        /* =========================================
+           4. CONDITIONS
+        ========================================== */
+
+        let learningHours = 3;
+        let learningMessage;
+
+        if (learningHours >= 2) {
+
+            learningMessage = "Excellent! You are making progress.";
+
+        } else {
+
+            learningMessage = "Keep practicing consistently.";
+
+        }
+
+        document.getElementById("conditionOutput").textContent =
+            learningMessage;
+
+
+        /* =========================================
+           5. ARRAYS
+        ========================================== */
+
+        let technologies = [
+            "Python",
+            "HTML",
+            "CSS",
+            "JavaScript"
+        ];
+
+        document.getElementById("arrayOutput").textContent =
+            technologies.join(" → ");
+
+
+        /* =========================================
+           6. OBJECTS
+        ========================================== */
+
+        let developer = {
+
+            name: "Collins Redfellor",
+            goal: "Software Developer",
+            currentSkill: "JavaScript",
+            projectsCompleted: 0
+
+        };
+
+
+        document.getElementById("objectOutput").textContent =
+            developer.name +
+            " | Goal: " +
+            developer.goal +
+            " | Learning: " +
+            developer.currentSkill;
+
+
+        /* =========================================
+           7. FUNCTIONS
+        ========================================== */
+
+        function showMessage() {
+
+            document.getElementById("output").textContent =
+                "Hello, Collins! 👋\n\n" +
+                "You have officially started your JavaScript journey.\n" +
+                "This is Project 1 of 20.";
+
+        }
+
+
+        /* =========================================
+           8. CALCULATIONS
+        ========================================== */
+
+        function runCalculation() {
+
+            let numberOne = 15;
+            let numberTwo = 10;
+
+            let result = numberOne + numberTwo;
+
+            document.getElementById("output").textContent =
+                "Calculation Result\n\n" +
+                numberOne +
+                " + " +
+                numberTwo +
+                " = " +
+                result;
+
+        }
+
+
+        /* =========================================
+           9. LOOPS
+        ========================================== */
+
+        function runLoop() {
+
+            let result = "Loop Results\n\n";
+
+            for (let number = 1; number <= 5; number++) {
+
+                result +=
+                    "Iteration " +
+                    number +
+                    "\n";
+
+            }
+
+            document.getElementById("output").textContent =
+                result;
+
+        }
+
+
+        /* =========================================
+           10. OBJECT DATA
+        ========================================== */
+
+        function showProfile() {
+
+            let profile = {
+
+                name: "Collins Redfellor",
+                role: "Aspiring Software Developer",
+                currentStage: "JavaScript",
+                goal: "Build real-world applications"
+
+            };
+
+            document.getElementById("output").textContent =
+
+                "Developer Profile\n\n" +
+
+                "Name: " +
+                profile.name +
+
+                "\nRole: " +
+                profile.role +
+
+                "\nCurrent Stage: " +
+                profile.currentStage +
+
+                "\nGoal: " +
+                profile.goal;
+
+        }
+
+
+        /* =========================================
+           11. CLEAR OUTPUT
+        ========================================== */
+
+        function clearOutput() {
+
+            document.getElementById("output").textContent =
+                "Output cleared. Choose another action.";
+
+        }
+
+    </script>
+
+</body>
+</html>
+```
