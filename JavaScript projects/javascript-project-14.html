@@ -1,0 +1,1218 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A responsive JavaScript registration form with real-time validation and password strength feedback.">
+    <title>Form Validation System | JavaScript Project 14</title>
+
+    <style>
+        :root {
+            --bg: #090d19;
+            --panel: rgba(20, 28, 49, 0.92);
+            --text: #f3f6ff;
+            --muted: #9ba9c5;
+            --purple: #9b7bff;
+            --cyan: #52dcff;
+            --green: #34d399;
+            --red: #fb7185;
+            --yellow: #fbbf24;
+            --border: rgba(148, 163, 184, 0.19);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            padding: 28px 0;
+            display: grid;
+            place-items: center;
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(ellipse at 10% 0%, #302052 0%, transparent 35%),
+                radial-gradient(ellipse at 95% 85%, #103a4c 0%, transparent 35%),
+                var(--bg);
+        }
+
+        input, button {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        input:focus-visible,
+        button:focus-visible {
+            outline: 2px solid var(--cyan);
+            outline-offset: 3px;
+        }
+
+        .container {
+            width: min(1060px, 93%);
+            margin: auto;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 28px;
+            animation: fadeDown 0.6s ease both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            border-radius: 15px;
+            font-size: 23px;
+            background: linear-gradient(135deg, var(--purple), var(--cyan));
+            box-shadow: 0 8px 25px #8b5cf633;
+        }
+
+        .brand h1 {
+            font-size: 1.25rem;
+        }
+
+        .brand p {
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        .project-tag {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            color: #d4c8ff;
+            background: #ffffff06;
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            white-space: nowrap;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            overflow: hidden;
+            background: var(--panel);
+            box-shadow: 0 25px 80px #00000030;
+            animation: fadeUp 0.7s ease both;
+        }
+
+        .intro-panel {
+            position: relative;
+            overflow: hidden;
+            padding: 42px 34px;
+            background:
+                radial-gradient(ellipse at 15% 10%, #a78bfa25, transparent 50%),
+                linear-gradient(155deg, #17172e, #101b2c);
+            border-right: 1px solid var(--border);
+        }
+
+        .intro-panel::after {
+            content: "";
+            position: absolute;
+            width: 210px;
+            height: 210px;
+            right: -110px;
+            bottom: -100px;
+            border-radius: 50%;
+            background: #52dcff1b;
+            filter: blur(35px);
+            pointer-events: none;
+        }
+
+        .eyebrow {
+            color: var(--cyan);
+            font-size: 0.74rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .intro-panel h2 {
+            margin: 17px 0;
+            font-size: clamp(2rem, 4vw, 3.1rem);
+            line-height: 1.12;
+            letter-spacing: -1.4px;
+        }
+
+        .gradient-text {
+            color: transparent;
+            background: linear-gradient(90deg, var(--purple), var(--cyan));
+            background-clip: text;
+            -webkit-background-clip: text;
+        }
+
+        .intro-panel > p {
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .benefits {
+            display: grid;
+            gap: 18px;
+            margin-top: 32px;
+        }
+
+        .benefit {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .benefit-icon {
+            width: 35px;
+            height: 35px;
+            flex: 0 0 auto;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            color: var(--cyan);
+            background: #52dcff12;
+        }
+
+        .benefit h3 {
+            font-size: 0.88rem;
+            margin-bottom: 3px;
+        }
+
+        .benefit p {
+            color: var(--muted);
+            font-size: 0.78rem;
+            line-height: 1.6;
+        }
+
+        .form-panel {
+            padding: 38px 34px;
+        }
+
+        .form-heading {
+            margin-bottom: 25px;
+        }
+
+        .form-heading h2 {
+            font-size: 1.55rem;
+            margin-bottom: 6px;
+        }
+
+        .form-heading p {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-wrap input {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            color: var(--text);
+            background: #0c1324;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .input-wrap input::placeholder {
+            color: #71809e;
+        }
+
+        .input-wrap input:focus {
+            outline: none;
+            border-color: var(--purple);
+            box-shadow: 0 0 0 3px #9b7bff17;
+        }
+
+        .input-wrap input.valid {
+            border-color: #34d39999;
+        }
+
+        .input-wrap input.invalid {
+            border-color: #fb7185cc;
+        }
+
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            padding: 4px;
+            border: none;
+            color: var(--muted);
+            background: transparent;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .has-toggle input {
+            padding-right: 64px;
+        }
+
+        .field-message {
+            min-height: 18px;
+            margin-top: 5px;
+            color: var(--red);
+            font-size: 0.73rem;
+        }
+
+        .field-message.success {
+            color: var(--green);
+        }
+
+        .password-meter {
+            margin-top: 10px;
+        }
+
+        .meter-bars {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+        }
+
+        .meter-bar {
+            height: 5px;
+            border-radius: 10px;
+            background: #ffffff14;
+            transition: background 0.2s;
+        }
+
+        .meter-label {
+            margin-top: 7px;
+            color: var(--muted);
+            font-size: 0.72rem;
+        }
+
+        .requirements {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .requirement {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--muted);
+            font-size: 0.7rem;
+        }
+
+        .requirement .mark {
+            color: #71809e;
+            font-weight: 900;
+        }
+
+        .requirement.met {
+            color: var(--green);
+        }
+
+        .requirement.met .mark {
+            color: var(--green);
+        }
+
+        .checkbox-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .checkbox-row input {
+            margin-top: 5px;
+            accent-color: var(--purple);
+        }
+
+        .checkbox-row label {
+            color: var(--muted);
+            font-size: 0.78rem;
+            line-height: 1.7;
+        }
+
+        .checkbox-row a {
+            color: var(--cyan);
+            text-decoration: none;
+        }
+
+        .checkbox-row a:hover {
+            text-decoration: underline;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px 18px;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 800;
+            background: linear-gradient(110deg, #8055e9, #3888f7);
+            box-shadow: 0 8px 24px #8055e922;
+            transition: transform 0.2s, filter 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .submit-btn:active {
+            transform: scale(0.99);
+        }
+
+        .form-summary {
+            display: none;
+            padding: 13px;
+            margin-top: 17px;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .form-summary.error {
+            display: block;
+            color: #fda4af;
+            border-color: #fb718544;
+            background: #fb71850b;
+        }
+
+        .form-summary.success {
+            display: block;
+            color: #a7f3d0;
+            border-color: #34d39944;
+            background: #34d3990b;
+        }
+
+        .footer {
+            margin-top: 24px;
+            text-align: center;
+            color: #8490a9;
+            font-size: 0.78rem;
+            line-height: 1.9;
+        }
+
+        .footer strong {
+            color: #c4b5fd;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 800px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .intro-panel {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 30px;
+            }
+
+            .benefits {
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+
+            .form-panel {
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            body {
+                padding: 18px 0;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            header {
+                align-items: flex-start;
+            }
+
+            .brand-icon {
+                width: 41px;
+                height: 41px;
+            }
+
+            .brand h1 {
+                font-size: 1.05rem;
+            }
+
+            .brand p {
+                font-size: 0.7rem;
+            }
+
+            .project-tag {
+                padding: 7px 8px;
+                font-size: 0.58rem;
+                letter-spacing: 0;
+            }
+
+            .intro-panel,
+            .form-panel {
+                padding: 24px 19px;
+            }
+
+            .benefits {
+                grid-template-columns: 1fr;
+            }
+
+            .requirements {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <header>
+            <div class="brand">
+                <div class="brand-icon" aria-hidden="true">🛡️</div>
+                <div>
+                    <h1>FormGuard</h1>
+                    <p>Smarter forms. Better experiences.</p>
+                </div>
+            </div>
+            <span class="project-tag">JAVASCRIPT PROJECT 14</span>
+        </header>
+
+        <main class="layout">
+
+            <section class="intro-panel">
+                <span class="eyebrow">Input Validation System</span>
+
+                <h2>Build trust, one <span class="gradient-text">field</span> at a time.</h2>
+
+                <p>
+                    A modern registration interface demonstrating how
+                    JavaScript can validate user input, explain mistakes,
+                    and provide instant feedback.
+                </p>
+
+                <div class="benefits">
+                    <article class="benefit">
+                        <div class="benefit-icon" aria-hidden="true">✓</div>
+                        <div>
+                            <h3>Real-time validation</h3>
+                            <p>Get helpful feedback while filling out the form.</p>
+                        </div>
+                    </article>
+
+                    <article class="benefit">
+                        <div class="benefit-icon" aria-hidden="true">🔐</div>
+                        <div>
+                            <h3>Password feedback</h3>
+                            <p>Check password requirements and strength indicators.</p>
+                        </div>
+                    </article>
+
+                    <article class="benefit">
+                        <div class="benefit-icon" aria-hidden="true">✉️</div>
+                        <div>
+                            <h3>Email validation</h3>
+                            <p>Check that the email has a reasonable format.</p>
+                        </div>
+                    </article>
+
+                    <article class="benefit">
+                        <div class="benefit-icon" aria-hidden="true">📱</div>
+                        <div>
+                            <h3>Responsive design</h3>
+                            <p>Enjoy a clear experience on small and large screens.</p>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="form-panel">
+                <div class="form-heading">
+                    <h2>Create your account</h2>
+                    <p>Fill in the fields below to test the validation system.</p>
+                </div>
+
+                <form id="registrationForm" novalidate>
+
+                    <div class="form-group">
+                        <label for="fullName">Full name</label>
+                        <div class="input-wrap">
+                            <input
+                                type="text"
+                                id="fullName"
+                                name="fullName"
+                                placeholder="e.g. Collins Redfellor"
+                                autocomplete="name"
+                                required
+                                maxlength="80"
+                                aria-describedby="nameMessage"
+                            >
+                        </div>
+                        <p class="field-message" id="nameMessage" aria-live="polite"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <div class="input-wrap">
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="you@example.com"
+                                autocomplete="email"
+                                required
+                                maxlength="254"
+                                aria-describedby="emailMessage"
+                            >
+                        </div>
+                        <p class="field-message" id="emailMessage" aria-live="polite"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-wrap has-toggle">
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Create a password"
+                                autocomplete="new-password"
+                                required
+                                maxlength="128"
+                                aria-describedby="passwordMessage passwordStrength"
+                            >
+                            <button class="toggle-password" type="button"
+                                    data-target="password" aria-label="Show password">
+                                Show
+                            </button>
+                        </div>
+
+                        <div class="password-meter" id="passwordStrength">
+                            <div class="meter-bars" aria-label="Password strength indicator">
+                                <span class="meter-bar"></span>
+                                <span class="meter-bar"></span>
+                                <span class="meter-bar"></span>
+                                <span class="meter-bar"></span>
+                            </div>
+                            <p class="meter-label" id="strengthLabel">
+                                Password strength: Not entered
+                            </p>
+                        </div>
+
+                        <div class="requirements" id="requirements">
+                            <p class="requirement" data-rule="length">
+                                <span class="mark">○</span> 8+ characters
+                            </p>
+                            <p class="requirement" data-rule="lower">
+                                <span class="mark">○</span> Lowercase letter
+                            </p>
+                            <p class="requirement" data-rule="upper">
+                                <span class="mark">○</span> Uppercase letter
+                            </p>
+                            <p class="requirement" data-rule="number">
+                                <span class="mark">○</span> Number
+                            </p>
+                            <p class="requirement" data-rule="symbol">
+                                <span class="mark">○</span> Symbol
+                            </p>
+                        </div>
+
+                        <p class="field-message" id="passwordMessage" aria-live="polite"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm password</label>
+                        <div class="input-wrap has-toggle">
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                placeholder="Enter the password again"
+                                autocomplete="new-password"
+                                required
+                                maxlength="128"
+                                aria-describedby="confirmMessage"
+                            >
+                            <button class="toggle-password" type="button"
+                                    data-target="confirmPassword" aria-label="Show confirmation password">
+                                Show
+                            </button>
+                        </div>
+                        <p class="field-message" id="confirmMessage" aria-live="polite"></p>
+                    </div>
+
+                    <div class="checkbox-row">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">
+                            I understand this is a demonstration form and agree
+                            to the example terms for this project.
+                        </label>
+                    </div>
+                    <p class="field-message" id="termsMessage" aria-live="polite"></p>
+
+                    <button class="submit-btn" type="submit">
+                        Validate Registration →
+                    </button>
+
+                    <div class="form-summary" id="formSummary"
+                         role="status" aria-live="polite"></div>
+                </form>
+            </section>
+
+        </main>
+
+        <footer class="footer">
+            <p>Built with <strong>HTML, CSS & JavaScript</strong></p>
+            <p>Programming Journey · Project 14 · Learn by building.</p>
+            <p>This is a learning demo; it does not create or store a real account.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. SELECT THE FORM ELEMENTS
+        // ==========================================
+
+        const form = document.getElementById("registrationForm");
+
+        const fullName = document.getElementById("fullName");
+        const email = document.getElementById("email");
+        const password = document.getElementById("password");
+        const confirmPassword = document.getElementById("confirmPassword");
+        const terms = document.getElementById("terms");
+
+        const nameMessage = document.getElementById("nameMessage");
+        const emailMessage = document.getElementById("emailMessage");
+        const passwordMessage = document.getElementById("passwordMessage");
+        const confirmMessage = document.getElementById("confirmMessage");
+        const termsMessage = document.getElementById("termsMessage");
+
+        const strengthLabel = document.getElementById("strengthLabel");
+        const meterBars = document.querySelectorAll(".meter-bar");
+        const requirementItems = document.querySelectorAll(".requirement");
+
+        const formSummary = document.getElementById("formSummary");
+
+        // Track which fields the user has interacted with.
+        const touched = {
+            fullName: false,
+            email: false,
+            password: false,
+            confirmPassword: false,
+            terms: false
+        };
+
+        // ==========================================
+        // 2. DISPLAY VALIDATION FEEDBACK
+        // ==========================================
+
+        function showFieldResult(input, messageElement, message, isValid) {
+            input.classList.remove("valid", "invalid");
+
+            if (message === "") {
+                messageElement.textContent = "";
+                input.removeAttribute("aria-invalid");
+                return;
+            }
+
+            if (isValid) {
+                input.classList.add("valid");
+                messageElement.classList.add("success");
+                input.setAttribute("aria-invalid", "false");
+            } else {
+                input.classList.add("invalid");
+                messageElement.classList.remove("success");
+                input.setAttribute("aria-invalid", "true");
+            }
+
+            messageElement.textContent = message;
+        }
+
+        function clearSummary() {
+            formSummary.textContent = "";
+            formSummary.className = "form-summary";
+        }
+
+        // ==========================================
+        // 3. VALIDATE THE NAME
+        // ==========================================
+
+        function validateName(showEmptyError = false) {
+            const value = fullName.value.trim();
+
+            if (!value) {
+                const message = showEmptyError ? "Please enter your name." : "";
+                showFieldResult(fullName, nameMessage, message, false);
+                return false;
+            }
+
+            if (value.length < 2) {
+                showFieldResult(
+                    fullName,
+                    nameMessage,
+                    "Your name must contain at least 2 characters.",
+                    false
+                );
+                return false;
+            }
+
+            // Require at least one letter; allow names containing
+            // spaces, apostrophes, periods, and hyphens.
+            if (!/\p{L}/u.test(value) || /[\u0000-\u001F\u007F]/.test(value)) {
+                showFieldResult(
+                    fullName,
+                    nameMessage,
+                    "Please enter a valid name containing letters.",
+                    false
+                );
+                return false;
+            }
+
+            showFieldResult(
+                fullName,
+                nameMessage,
+                "Name looks good.",
+                true
+            );
+
+            return true;
+        }
+
+        // ==========================================
+        // 4. VALIDATE THE EMAIL ADDRESS
+        // ==========================================
+
+        function validateEmail(showEmptyError = false) {
+            const value = email.value.trim();
+
+            if (!value) {
+                showFieldResult(
+                    email,
+                    emailMessage,
+                    showEmptyError ? "Please enter your email address." : "",
+                    false
+                );
+                return false;
+            }
+
+            // This checks a reasonable email format.
+            // It cannot prove the address exists.
+            const emailPattern =
+                /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailPattern.test(value)) {
+                showFieldResult(
+                    email,
+                    emailMessage,
+                    "Enter an email in a format like name@example.com.",
+                    false
+                );
+                return false;
+            }
+
+            if (value.length > 254) {
+                showFieldResult(
+                    email,
+                    emailMessage,
+                    "Your email address is too long.",
+                    false
+                );
+                return false;
+            }
+
+            showFieldResult(
+                email,
+                emailMessage,
+                "Email format looks good.",
+                true
+            );
+
+            return true;
+        }
+
+        // ==========================================
+        // 5. CHECK PASSWORD REQUIREMENTS
+        // ==========================================
+
+        function getPasswordRules(value) {
+            return {
+                length: value.length >= 8,
+                lower: /[a-z]/.test(value),
+                upper: /[A-Z]/.test(value),
+                number: /[0-9]/.test(value),
+                symbol: /[^A-Za-z0-9\s]/.test(value)
+            };
+        }
+
+        function updateRequirements(rules) {
+            requirementItems.forEach(item => {
+                const ruleName = item.dataset.rule;
+                const passed = Boolean(rules[ruleName]);
+                const mark = item.querySelector(".mark");
+
+                item.classList.toggle("met", passed);
+                mark.textContent = passed ? "✓" : "○";
+            });
+        }
+
+        function calculatePasswordStrength(value, rules) {
+            if (!value) {
+                return {
+                    score: 0,
+                    label: "Not entered"
+                };
+            }
+
+            let score = 0;
+
+            // Award points for length and character variety.
+            if (rules.length) score++;
+            if (rules.lower && rules.upper) score++;
+            if (rules.number) score++;
+            if (rules.symbol) score++;
+
+            if (value.length >= 12 && score >= 3) {
+                score = Math.min(4, score + 1);
+            }
+
+            if (score <= 1) {
+                return { score: 1, label: "Weak" };
+            }
+
+            if (score === 2) {
+                return { score: 2, label: "Fair" };
+            }
+
+            if (score === 3) {
+                return { score: 3, label: "Good" };
+            }
+
+            return { score: 4, label: "Strong" };
+        }
+
+        function updateStrength(value, rules) {
+            const strength = calculatePasswordStrength(value, rules);
+
+            const colors = [
+                "",
+                "#fb7185",
+                "#fbbf24",
+                "#60a5fa",
+                "#34d399"
+            ];
+
+            meterBars.forEach((bar, index) => {
+                bar.style.background =
+                    index < strength.score
+                        ? colors[strength.score]
+                        : "#ffffff14";
+            });
+
+            strengthLabel.textContent =
+                "Password strength: " + strength.label;
+        }
+
+        function validatePassword(showEmptyError = false) {
+            const value = password.value;
+
+            if (!value) {
+                const emptyRules = getPasswordRules("");
+                updateRequirements(emptyRules);
+                updateStrength("", emptyRules);
+
+                showFieldResult(
+                    password,
+                    passwordMessage,
+                    showEmptyError ? "Please create a password." : "",
+                    false
+                );
+
+                return false;
+            }
+
+            const rules = getPasswordRules(value);
+
+            updateRequirements(rules);
+            updateStrength(value, rules);
+
+            const allPassed = Object.values(rules).every(Boolean);
+
+            if (!allPassed) {
+                showFieldResult(
+                    password,
+                    passwordMessage,
+                    "Meet all five password requirements.",
+                    false
+                );
+                return false;
+            }
+
+            showFieldResult(
+                password,
+                passwordMessage,
+                "All password requirements are met.",
+                true
+            );
+
+            return true;
+        }
+
+        // ==========================================
+        // 6. CONFIRM THE PASSWORD
+        // ==========================================
+
+        function validateConfirmation(showEmptyError = false) {
+            const value = confirmPassword.value;
+
+            if (!value) {
+                showFieldResult(
+                    confirmPassword,
+                    confirmMessage,
+                    showEmptyError ? "Please confirm your password." : "",
+                    false
+                );
+                return false;
+            }
+
+            if (value !== password.value) {
+                showFieldResult(
+                    confirmPassword,
+                    confirmMessage,
+                    "The passwords do not match.",
+                    false
+                );
+                return false;
+            }
+
+            showFieldResult(
+                confirmPassword,
+                confirmMessage,
+                "Passwords match.",
+                true
+            );
+
+            return true;
+        }
+
+        // ==========================================
+        // 7. VALIDATE THE TERMS CHECKBOX
+        // ==========================================
+
+        function validateTerms(showError = false) {
+            if (!terms.checked) {
+                termsMessage.textContent = showError
+                    ? "Please check the box to continue."
+                    : "";
+
+                return false;
+            }
+
+            termsMessage.textContent = "";
+            return true;
+        }
+
+        // ==========================================
+        // 8. REAL-TIME FIELD EVENT LISTENERS
+        // ==========================================
+
+        fullName.addEventListener("input", function() {
+            clearSummary();
+
+            if (touched.fullName) {
+                validateName();
+            }
+        });
+
+        fullName.addEventListener("blur", function() {
+            touched.fullName = true;
+            validateName(true);
+        });
+
+        email.addEventListener("input", function() {
+            clearSummary();
+
+            if (touched.email) {
+                validateEmail();
+            }
+        });
+
+        email.addEventListener("blur", function() {
+            touched.email = true;
+            validateEmail(true);
+        });
+
+        password.addEventListener("input", function() {
+            clearSummary();
+
+            // Update the strength meter as the user types.
+            const rules = getPasswordRules(password.value);
+            updateRequirements(rules);
+            updateStrength(password.value, rules);
+
+            if (touched.password) {
+                validatePassword();
+            }
+
+            if (touched.confirmPassword && confirmPassword.value) {
+                validateConfirmation();
+            }
+        });
+
+        password.addEventListener("blur", function() {
+            touched.password = true;
+            validatePassword(true);
+        });
+
+        confirmPassword.addEventListener("input", function() {
+            clearSummary();
+
+            if (touched.confirmPassword) {
+                validateConfirmation();
+            }
+        });
+
+        confirmPassword.addEventListener("blur", function() {
+            touched.confirmPassword = true;
+            validateConfirmation(true);
+        });
+
+        terms.addEventListener("change", function() {
+            touched.terms = true;
+            validateTerms(true);
+            clearSummary();
+        });
+
+        // ==========================================
+        // 9. SHOW OR HIDE PASSWORD TEXT
+        // ==========================================
+
+        document.querySelectorAll(".toggle-password").forEach(button => {
+            button.addEventListener("click", function() {
+                const target = document.getElementById(
+                    button.dataset.target
+                );
+
+                const shouldShow = target.type === "password";
+
+                target.type = shouldShow ? "text" : "password";
+                button.textContent = shouldShow ? "Hide" : "Show";
+
+                button.setAttribute(
+                    "aria-label",
+                    shouldShow ? "Hide password" : "Show password"
+                );
+            });
+        });
+
+        // ==========================================
+        // 10. VALIDATE THE ENTIRE FORM
+        // ==========================================
+
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            clearSummary();
+
+            // Mark all fields as touched so feedback is displayed.
+            Object.keys(touched).forEach(key => {
+                touched[key] = true;
+            });
+
+            const nameIsValid = validateName(true);
+            const emailIsValid = validateEmail(true);
+            const passwordIsValid = validatePassword(true);
+            const confirmationIsValid = validateConfirmation(true);
+            const termsAreValid = validateTerms(true);
+
+            const formIsValid =
+                nameIsValid &&
+                emailIsValid &&
+                passwordIsValid &&
+                confirmationIsValid &&
+                termsAreValid;
+
+            if (!formIsValid) {
+                formSummary.className = "form-summary error";
+                formSummary.textContent =
+                    "Please correct the highlighted fields and try again.";
+
+                // Focus the first invalid field for accessibility.
+                const firstInvalid = form.querySelector(
+                    "input.invalid"
+                );
+
+                if (firstInvalid) {
+                    firstInvalid.focus();
+                } else if (!termsAreValid) {
+                    terms.focus();
+                }
+
+                return;
+            }
+
+            formSummary.className = "form-summary success";
+            formSummary.textContent =
+                "Success! All fields passed validation. This is a demonstration only; no account was created and no information was sent to a server.";
+
+            // This project demonstrates validation only.
+            // A real registration system needs a secure backend.
+        });
+
+        // ==========================================
+        // 11. INITIALIZE THE FORM
+        // ==========================================
+
+        updateRequirements(getPasswordRules(""));
+        updateStrength("", getPasswordRules(""));
+    </script>
+</body>
+</html>
