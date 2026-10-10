@@ -1,0 +1,2371 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Movie Search Application built with JavaScript APIs and async programming"
+    >
+
+    <title>Movie Search Application | JavaScript Project 19</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #070b16;
+            --bg-secondary: #10182b;
+            --card: rgba(20, 28, 48, 0.82);
+            --card-light: rgba(255, 255, 255, 0.06);
+            --border: rgba(255, 255, 255, 0.10);
+            --text: #f5f7fb;
+            --muted: #98a5ba;
+            --primary: #765cff;
+            --secondary: #ff5c93;
+            --success: #39d98a;
+            --danger: #ff627c;
+            --warning: #f5c451;
+            --shadow: 0 25px 70px rgba(0, 0, 0, 0.32);
+        }
+
+        body.light {
+            --bg: #eef2f8;
+            --bg-secondary: #dfe7f2;
+            --card: rgba(255, 255, 255, 0.84);
+            --card-light: rgba(20, 30, 50, 0.05);
+            --border: rgba(20, 30, 50, 0.10);
+            --text: #152033;
+            --muted: #647187;
+            --shadow: 0 25px 70px rgba(30, 50, 80, 0.12);
+        }
+
+        body {
+            min-height: 100vh;
+
+            font-family:
+                Inter,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            color: var(--text);
+
+            background:
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(118, 92, 255, 0.22),
+                    transparent 30%
+                ),
+
+                radial-gradient(
+                    circle at 90% 15%,
+                    rgba(255, 92, 147, 0.15),
+                    transparent 28%
+                ),
+
+                linear-gradient(
+                    135deg,
+                    var(--bg),
+                    var(--bg-secondary)
+                );
+
+            transition:
+                background 0.3s ease,
+                color 0.3s ease;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .container {
+            width: min(1200px, 92%);
+            margin: auto;
+        }
+
+        header {
+            padding: 45px 0 25px;
+        }
+
+        .header-row {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+        }
+
+        .brand h1 {
+            font-size:
+                clamp(2rem, 5vw, 3.6rem);
+
+            line-height: 1;
+
+            margin-bottom: 12px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #9183ff,
+                    #ff6da1
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            color: transparent;
+        }
+
+        .brand p {
+            color: var(--muted);
+
+            max-width: 720px;
+
+            line-height: 1.7;
+        }
+
+        .theme-button {
+            border:
+                1px solid var(--border);
+
+            background: var(--card);
+
+            color: var(--text);
+
+            padding: 12px 16px;
+
+            border-radius: 14px;
+
+            backdrop-filter: blur(18px);
+
+            transition: 0.25s ease;
+        }
+
+        .theme-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .search-section {
+            margin-top: 25px;
+
+            background: var(--card);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 25px;
+
+            padding: 20px;
+
+            box-shadow: var(--shadow);
+
+            backdrop-filter: blur(20px);
+        }
+
+        .search-form {
+            display: grid;
+
+            grid-template-columns: 1fr auto;
+
+            gap: 12px;
+        }
+
+        .search-input {
+            width: 100%;
+
+            border:
+                1px solid var(--border);
+
+            background: var(--card-light);
+
+            color: var(--text);
+
+            padding: 15px 17px;
+
+            border-radius: 14px;
+
+            outline: none;
+
+            transition: 0.25s ease;
+        }
+
+        .search-input::placeholder {
+            color: var(--muted);
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+
+            box-shadow:
+                0 0 0 4px
+                rgba(118, 92, 255, 0.12);
+        }
+
+        .search-button {
+            border: none;
+
+            padding: 14px 23px;
+
+            border-radius: 14px;
+
+            color: white;
+
+            font-weight: 700;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    #a05cff
+                );
+
+            transition: 0.25s ease;
+        }
+
+        .search-button:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 12px 30px
+                rgba(118, 92, 255, 0.25);
+        }
+
+        .recent-searches {
+            display: flex;
+
+            align-items: center;
+
+            flex-wrap: wrap;
+
+            gap: 8px;
+
+            margin-top: 15px;
+        }
+
+        .recent-label {
+            color: var(--muted);
+
+            font-size: 0.82rem;
+        }
+
+        .recent-button {
+            border:
+                1px solid var(--border);
+
+            background: transparent;
+
+            color: var(--muted);
+
+            padding: 7px 11px;
+
+            border-radius: 999px;
+
+            font-size: 0.78rem;
+
+            transition: 0.2s ease;
+        }
+
+        .recent-button:hover {
+            color: var(--text);
+
+            border-color: var(--primary);
+        }
+
+        .status {
+            min-height: 25px;
+
+            text-align: center;
+
+            margin-top: 14px;
+
+            color: var(--muted);
+        }
+
+        .status.error {
+            color: var(--danger);
+        }
+
+        .status.success {
+            color: var(--success);
+        }
+
+        .section-header {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin: 30px 0 18px;
+        }
+
+        .section-header h2 {
+            font-size: 1.35rem;
+        }
+
+        .results-count {
+            color: var(--muted);
+
+            font-size: 0.85rem;
+        }
+
+        .movies-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 20px;
+        }
+
+        .movie-card {
+            overflow: hidden;
+
+            background: var(--card);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 20px;
+
+            box-shadow: var(--shadow);
+
+            backdrop-filter: blur(18px);
+
+            transition:
+                transform 0.25s ease,
+                border-color 0.25s ease;
+
+            animation:
+                fadeUp 0.45s ease both;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-7px);
+
+            border-color:
+                rgba(118, 92, 255, 0.45);
+        }
+
+        .poster-container {
+            position: relative;
+
+            aspect-ratio: 2 / 3;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #151d31,
+                    #252d43
+                );
+
+            overflow: hidden;
+        }
+
+        .poster {
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+            display: block;
+
+            transition:
+                transform 0.4s ease;
+        }
+
+        .movie-card:hover .poster {
+            transform: scale(1.05);
+        }
+
+        .no-poster {
+            height: 100%;
+
+            display: grid;
+
+            place-items: center;
+
+            text-align: center;
+
+            padding: 20px;
+
+            color: var(--muted);
+
+            font-size: 2.5rem;
+        }
+
+        .favorite-button {
+            position: absolute;
+
+            top: 12px;
+            right: 12px;
+
+            width: 40px;
+            height: 40px;
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.18);
+
+            border-radius: 50%;
+
+            background:
+                rgba(0, 0, 0, 0.45);
+
+            color: white;
+
+            backdrop-filter: blur(10px);
+
+            font-size: 1.1rem;
+
+            transition: 0.2s ease;
+        }
+
+        .favorite-button:hover {
+            transform: scale(1.08);
+        }
+
+        .favorite-button.active {
+            color: #ff5d87;
+
+            background:
+                rgba(255, 93, 135, 0.18);
+        }
+
+        .movie-content {
+            padding: 17px;
+        }
+
+        .movie-title {
+            font-size: 1.05rem;
+
+            line-height: 1.35;
+
+            margin-bottom: 8px;
+
+            display: -webkit-box;
+
+            -webkit-line-clamp: 2;
+
+            -webkit-box-orient: vertical;
+
+            overflow: hidden;
+        }
+
+        .movie-meta {
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 10px;
+
+            margin-bottom: 10px;
+
+            color: var(--muted);
+
+            font-size: 0.78rem;
+        }
+
+        .rating {
+            color: var(--warning);
+
+            font-weight: 700;
+        }
+
+        .movie-genres {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 5px;
+        }
+
+        .genre {
+            padding: 5px 8px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(118, 92, 255, 0.10);
+
+            color: var(--muted);
+
+            font-size: 0.7rem;
+        }
+
+        .details-button {
+            width: 100%;
+
+            border:
+                1px solid var(--border);
+
+            background: transparent;
+
+            color: var(--text);
+
+            padding: 10px;
+
+            border-radius: 11px;
+
+            margin-top: 13px;
+
+            transition: 0.2s ease;
+        }
+
+        .details-button:hover {
+            border-color: var(--primary);
+
+            background:
+                rgba(118, 92, 255, 0.08);
+        }
+
+        .empty-state {
+            background: var(--card);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 25px;
+
+            padding: 65px 25px;
+
+            text-align: center;
+
+            box-shadow: var(--shadow);
+
+            backdrop-filter: blur(20px);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+
+            margin-bottom: 15px;
+        }
+
+        .empty-state h2 {
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: var(--muted);
+
+            max-width: 600px;
+
+            margin: auto;
+
+            line-height: 1.7;
+        }
+
+        .loading {
+            display: none;
+
+            padding: 65px 20px;
+
+            text-align: center;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+
+            border:
+                4px solid
+                rgba(255, 255, 255, 0.10);
+
+            border-top-color:
+                var(--primary);
+
+            border-radius: 50%;
+
+            margin:
+                0 auto 15px;
+
+            animation:
+                spin 0.8s linear infinite;
+        }
+
+        .pagination {
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin: 30px 0;
+        }
+
+        .page-button {
+            border:
+                1px solid var(--border);
+
+            background: var(--card);
+
+            color: var(--text);
+
+            padding: 11px 17px;
+
+            border-radius: 12px;
+
+            transition: 0.2s ease;
+        }
+
+        .page-button:hover:not(:disabled) {
+            border-color: var(--primary);
+
+            transform: translateY(-2px);
+        }
+
+        .page-button:disabled {
+            opacity: 0.35;
+
+            cursor: not-allowed;
+        }
+
+        .page-number {
+            color: var(--muted);
+
+            font-size: 0.9rem;
+        }
+
+        .modal {
+            position: fixed;
+
+            inset: 0;
+
+            display: none;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+            background:
+                rgba(0, 0, 0, 0.72);
+
+            z-index: 1000;
+
+            backdrop-filter: blur(8px);
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            width: min(800px, 100%);
+
+            max-height: 90vh;
+
+            overflow-y: auto;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #111b31,
+                    #18243e
+                );
+
+            color: white;
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.12);
+
+            border-radius: 25px;
+
+            padding: 28px;
+
+            position: relative;
+
+            box-shadow:
+                0 30px 100px
+                rgba(0, 0, 0, 0.5);
+
+            animation:
+                modalIn 0.3s ease;
+        }
+
+        body.light .modal-content {
+            background: #ffffff;
+
+            color: #152033;
+        }
+
+        .modal-close {
+            position: absolute;
+
+            top: 15px;
+            right: 15px;
+
+            width: 40px;
+            height: 40px;
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.15);
+
+            background:
+                rgba(255, 255, 255, 0.08);
+
+            color: inherit;
+
+            border-radius: 50%;
+
+            font-size: 1.2rem;
+        }
+
+        .modal-grid {
+            display: grid;
+
+            grid-template-columns:
+                220px 1fr;
+
+            gap: 25px;
+        }
+
+        .modal-poster {
+            width: 100%;
+
+            border-radius: 15px;
+
+            display: block;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+
+            margin-bottom: 12px;
+
+            padding-right: 40px;
+        }
+
+        .modal-info {
+            color: var(--muted);
+
+            line-height: 1.8;
+
+            font-size: 0.9rem;
+        }
+
+        .modal-summary {
+            margin-top: 18px;
+
+            line-height: 1.8;
+
+            color: var(--muted);
+        }
+
+        .modal-tags {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 7px;
+
+            margin-top: 15px;
+        }
+
+        .modal-tag {
+            padding: 6px 10px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(118, 92, 255, 0.12);
+
+            color: var(--muted);
+
+            font-size: 0.75rem;
+        }
+
+        footer {
+            text-align: center;
+
+            color: var(--muted);
+
+            font-size: 0.82rem;
+
+            padding: 40px 0;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(18px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+
+                transform:
+                    scale(0.95)
+                    translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    scale(1)
+                    translateY(0);
+            }
+        }
+
+        @media (max-width: 1000px) {
+
+            .movies-grid {
+                grid-template-columns:
+                    repeat(3, 1fr);
+            }
+
+        }
+
+        @media (max-width: 720px) {
+
+            .header-row {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+            .movies-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .modal-grid {
+                grid-template-columns: 150px 1fr;
+            }
+
+        }
+
+        @media (max-width: 520px) {
+
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+
+            .movies-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-poster {
+                width: 180px;
+            }
+
+            .modal-title {
+                font-size: 1.5rem;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <header>
+
+        <div class="container header-row">
+
+            <div class="brand">
+
+                <h1>Movie Search</h1>
+
+                <p>
+                    Search thousands of shows and discover information
+                    using JavaScript, APIs, Fetch and Async/Await.
+                </p>
+
+            </div>
+
+            <button
+                class="theme-button"
+                id="themeButton"
+                type="button">
+
+                🌙 Theme
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <main class="container">
+
+        <!-- SEARCH -->
+
+        <section class="search-section">
+
+            <form
+                class="search-form"
+                id="searchForm">
+
+                <input
+                    class="search-input"
+                    id="searchInput"
+                    type="search"
+                    placeholder="Search for a movie or TV show..."
+                    autocomplete="off"
+                    required>
+
+                <button
+                    class="search-button"
+                    type="submit">
+
+                    🔎 Search
+
+                </button>
+
+            </form>
+
+
+            <div
+                class="recent-searches"
+                id="recentSearches">
+            </div>
+
+
+            <div
+                class="status"
+                id="status">
+            </div>
+
+        </section>
+
+
+        <!-- SECTION HEADER -->
+
+        <div
+            class="section-header"
+            id="sectionHeader"
+            style="display: none;">
+
+            <h2 id="sectionTitle">
+                Search Results
+            </h2>
+
+            <span
+                class="results-count"
+                id="resultsCount">
+            </span>
+
+        </div>
+
+
+        <!-- LOADING -->
+
+        <div
+            class="loading"
+            id="loading">
+
+            <div class="spinner"></div>
+
+            <p>
+                Searching for titles...
+            </p>
+
+        </div>
+
+
+        <!-- EMPTY -->
+
+        <section
+            class="empty-state"
+            id="emptyState">
+
+            <div class="empty-icon">
+                🎬
+            </div>
+
+            <h2>
+                Find something to watch
+            </h2>
+
+            <p>
+                Search for a movie or television show above.
+                You can open individual titles for more information
+                and save your favorites.
+            </p>
+
+        </section>
+
+
+        <!-- RESULTS -->
+
+        <section
+            class="movies-grid"
+            id="moviesGrid">
+        </section>
+
+
+        <!-- PAGINATION -->
+
+        <div
+            class="pagination"
+            id="pagination"
+            style="display: none;">
+
+            <button
+                class="page-button"
+                id="previousButton"
+                type="button">
+
+                ← Previous
+
+            </button>
+
+            <span
+                class="page-number"
+                id="pageNumber">
+                Page 1
+            </span>
+
+            <button
+                class="page-button"
+                id="nextButton"
+                type="button">
+
+                Next →
+
+            </button>
+
+        </div>
+
+    </main>
+
+
+    <!-- DETAILS MODAL -->
+
+    <div
+        class="modal"
+        id="detailsModal">
+
+        <div class="modal-content">
+
+            <button
+                class="modal-close"
+                id="modalClose"
+                type="button">
+
+                ×
+
+            </button>
+
+            <div
+                class="modal-grid"
+                id="modalBody">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <footer>
+
+        <p>
+            JavaScript Project 19 • Movie Search Application
+        </p>
+
+        <p style="margin-top: 7px;">
+            Powered by TVMaze API
+        </p>
+
+    </footer>
+
+
+    <script>
+
+        // ==================================================
+        // JAVASCRIPT PROJECT 19
+        // MOVIE SEARCH APPLICATION
+        // ==================================================
+
+
+        // --------------------------------------------------
+        // API
+        // --------------------------------------------------
+
+        const API_URL =
+            "https://api.tvmaze.com/search/shows?q=";
+
+
+        // --------------------------------------------------
+        // DOM ELEMENTS
+        // --------------------------------------------------
+
+        const searchForm =
+            document.getElementById(
+                "searchForm"
+            );
+
+        const searchInput =
+            document.getElementById(
+                "searchInput"
+            );
+
+        const moviesGrid =
+            document.getElementById(
+                "moviesGrid"
+            );
+
+        const loading =
+            document.getElementById(
+                "loading"
+            );
+
+        const emptyState =
+            document.getElementById(
+                "emptyState"
+            );
+
+        const statusElement =
+            document.getElementById(
+                "status"
+            );
+
+        const sectionHeader =
+            document.getElementById(
+                "sectionHeader"
+            );
+
+        const sectionTitle =
+            document.getElementById(
+                "sectionTitle"
+            );
+
+        const resultsCount =
+            document.getElementById(
+                "resultsCount"
+            );
+
+        const pagination =
+            document.getElementById(
+                "pagination"
+            );
+
+        const previousButton =
+            document.getElementById(
+                "previousButton"
+            );
+
+        const nextButton =
+            document.getElementById(
+                "nextButton"
+            );
+
+        const pageNumber =
+            document.getElementById(
+                "pageNumber"
+            );
+
+        const recentSearches =
+            document.getElementById(
+                "recentSearches"
+            );
+
+        const detailsModal =
+            document.getElementById(
+                "detailsModal"
+            );
+
+        const modalClose =
+            document.getElementById(
+                "modalClose"
+            );
+
+        const modalBody =
+            document.getElementById(
+                "modalBody"
+            );
+
+        const themeButton =
+            document.getElementById(
+                "themeButton"
+            );
+
+
+        // --------------------------------------------------
+        // STATE
+        // --------------------------------------------------
+
+        let allResults = [];
+
+        let currentResults = [];
+
+        let currentQuery = "";
+
+        let currentPage = 1;
+
+        const resultsPerPage = 12;
+
+        let favoriteIds =
+            JSON.parse(
+                localStorage.getItem(
+                    "movieFavoriteIds"
+                )
+            ) || [];
+
+        let recentQueries =
+            JSON.parse(
+                localStorage.getItem(
+                    "movieRecentQueries"
+                )
+            ) || [];
+
+
+        // --------------------------------------------------
+        // HTML ESCAPE
+        // --------------------------------------------------
+
+        function escapeHTML(value) {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+            div.textContent =
+                value ?? "";
+
+            return div.innerHTML;
+
+        }
+
+
+        // --------------------------------------------------
+        // STRIP HTML
+        // --------------------------------------------------
+
+        function stripHTML(value) {
+
+            if (!value) {
+                return "No description available.";
+            }
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+            div.innerHTML =
+                value;
+
+            return (
+                div.textContent ||
+                div.innerText ||
+                ""
+            ).trim();
+
+        }
+
+
+        // --------------------------------------------------
+        // SET STATUS
+        // --------------------------------------------------
+
+        function setStatus(
+            message = "",
+            type = ""
+        ) {
+
+            statusElement.textContent =
+                message;
+
+            statusElement.className =
+                `status ${type}`;
+
+        }
+
+
+        // --------------------------------------------------
+        // LOADING
+        // --------------------------------------------------
+
+        function showLoading() {
+
+            loading.style.display =
+                "block";
+
+            emptyState.style.display =
+                "none";
+
+            moviesGrid.innerHTML =
+                "";
+
+            sectionHeader.style.display =
+                "none";
+
+            pagination.style.display =
+                "none";
+
+        }
+
+
+        function hideLoading() {
+
+            loading.style.display =
+                "none";
+
+        }
+
+
+        // --------------------------------------------------
+        // FETCH MOVIES
+        // --------------------------------------------------
+
+        async function searchMovies(
+            query
+        ) {
+
+            const cleanQuery =
+                query.trim();
+
+
+            if (!cleanQuery) {
+
+                setStatus(
+                    "Please enter a movie or show name.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                showLoading();
+
+                setStatus(
+                    "Searching..."
+                );
+
+
+                currentQuery =
+                    cleanQuery;
+
+
+                const response =
+                    await fetch(
+                        API_URL +
+                        encodeURIComponent(
+                            cleanQuery
+                        )
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Unable to contact the movie service."
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                allResults =
+                    data;
+
+
+                currentResults =
+                    data;
+
+
+                currentPage =
+                    1;
+
+
+                saveRecentQuery(
+                    cleanQuery
+                );
+
+
+                hideLoading();
+
+
+                if (data.length === 0) {
+
+                    showNoResults();
+
+                    return;
+
+                }
+
+
+                setStatus(
+                    `Found ${data.length} result${data.length === 1 ? "" : "s"}.`,
+                    "success"
+                );
+
+
+                renderResults();
+
+
+            } catch (error) {
+
+                hideLoading();
+
+                moviesGrid.innerHTML =
+                    "";
+
+                sectionHeader.style.display =
+                    "none";
+
+                pagination.style.display =
+                    "none";
+
+                emptyState.style.display =
+                    "block";
+
+                emptyState.innerHTML = `
+
+                    <div class="empty-icon">
+                        ⚠️
+                    </div>
+
+                    <h2>
+                        Something went wrong
+                    </h2>
+
+                    <p>
+                        ${escapeHTML(
+                            error.message
+                        )}
+                    </p>
+
+                `;
+
+                setStatus(
+                    "Search failed.",
+                    "error"
+                );
+
+            }
+
+        }
+
+
+        // --------------------------------------------------
+        // SHOW NO RESULTS
+        // --------------------------------------------------
+
+        function showNoResults() {
+
+            moviesGrid.innerHTML =
+                "";
+
+            sectionHeader.style.display =
+                "none";
+
+            pagination.style.display =
+                "none";
+
+            emptyState.style.display =
+                "block";
+
+            emptyState.innerHTML = `
+
+                <div class="empty-icon">
+                    🔍
+                </div>
+
+                <h2>
+                    No results found
+                </h2>
+
+                <p>
+                    We couldn't find anything matching
+                    "${escapeHTML(currentQuery)}".
+                    Try another title.
+                </p>
+
+            `;
+
+            setStatus(
+                "No matching titles found.",
+                "error"
+            );
+
+        }
+
+
+        // --------------------------------------------------
+        // RENDER RESULTS
+        // --------------------------------------------------
+
+        function renderResults() {
+
+            emptyState.style.display =
+                "none";
+
+            sectionHeader.style.display =
+                "flex";
+
+
+            const totalResults =
+                currentResults.length;
+
+
+            resultsCount.textContent =
+                `${totalResults} result${totalResults === 1 ? "" : "s"}`;
+
+
+            const start =
+                (currentPage - 1)
+                * resultsPerPage;
+
+
+            const end =
+                start + resultsPerPage;
+
+
+            const pageResults =
+                currentResults.slice(
+                    start,
+                    end
+                );
+
+
+            moviesGrid.innerHTML =
+                pageResults
+                    .map(
+                        (item, index) =>
+                            createMovieCard(
+                                item,
+                                index
+                            )
+                    )
+                    .join("");
+
+
+            renderPagination(
+                totalResults
+            );
+
+        }
+
+
+        // --------------------------------------------------
+        // CREATE MOVIE CARD
+        // --------------------------------------------------
+
+        function createMovieCard(
+            item,
+            index
+        ) {
+
+            const show =
+                item.show;
+
+
+            const image =
+                show.image &&
+                (
+                    show.image.medium ||
+                    show.image.original
+                );
+
+
+            const genres =
+                show.genres || [];
+
+
+            const rating =
+                show.rating &&
+                show.rating.average
+                    ? show.rating.average
+                    : "N/A";
+
+
+            const year =
+                show.premiered
+                    ? show.premiered.substring(
+                        0,
+                        4
+                    )
+                    : "Unknown";
+
+
+            const isFavorite =
+                favoriteIds.includes(
+                    show.id
+                );
+
+
+            return `
+
+                <article
+                    class="movie-card"
+                    style="animation-delay: ${index * 0.04}s;">
+
+                    <div class="poster-container">
+
+                        ${
+                            image
+                            ? `
+                                <img
+                                    class="poster"
+                                    src="${escapeHTML(image)}"
+                                    alt="${escapeHTML(show.name)} poster"
+                                    loading="lazy"
+                                >
+                            `
+                            : `
+                                <div class="no-poster">
+                                    🎬
+                                </div>
+                            `
+                        }
+
+                        <button
+                            class="favorite-button ${
+                                isFavorite
+                                    ? "active"
+                                    : ""
+                            }"
+                            type="button"
+                            data-favorite-id="${show.id}"
+                            title="Favorite">
+
+                            ${
+                                isFavorite
+                                    ? "♥"
+                                    : "♡"
+                            }
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="movie-content">
+
+                        <h3 class="movie-title">
+
+                            ${escapeHTML(
+                                show.name
+                            )}
+
+                        </h3>
+
+
+                        <div class="movie-meta">
+
+                            <span>
+                                ${year}
+                            </span>
+
+                            <span class="rating">
+                                ⭐ ${rating}
+                            </span>
+
+                        </div>
+
+
+                        <div class="movie-genres">
+
+                            ${
+                                genres
+                                    .slice(0, 3)
+                                    .map(
+                                        genre =>
+                                            `
+                                                <span class="genre">
+                                                    ${escapeHTML(
+                                                        genre
+                                                    )}
+                                                </span>
+                                            `
+                                    )
+                                    .join("")
+                            }
+
+                        </div>
+
+
+                        <button
+                            class="details-button"
+                            type="button"
+                            data-show-id="${show.id}">
+
+                            View Details
+
+                        </button>
+
+                    </div>
+
+                </article>
+
+            `;
+
+        }
+
+
+        // --------------------------------------------------
+        // PAGINATION
+        // --------------------------------------------------
+
+        function renderPagination(
+            totalResults
+        ) {
+
+            const totalPages =
+                Math.ceil(
+                    totalResults /
+                    resultsPerPage
+                );
+
+
+            if (totalPages <= 1) {
+
+                pagination.style.display =
+                    "none";
+
+                return;
+
+            }
+
+
+            pagination.style.display =
+                "flex";
+
+
+            pageNumber.textContent =
+                `Page ${currentPage} of ${totalPages}`;
+
+
+            previousButton.disabled =
+                currentPage === 1;
+
+
+            nextButton.disabled =
+                currentPage === totalPages;
+
+        }
+
+
+        previousButton.addEventListener(
+            "click",
+            () => {
+
+                if (currentPage > 1) {
+
+                    currentPage--;
+
+                    renderResults();
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    });
+
+                }
+
+            }
+        );
+
+
+        nextButton.addEventListener(
+            "click",
+            () => {
+
+                const totalPages =
+                    Math.ceil(
+                        currentResults.length /
+                        resultsPerPage
+                    );
+
+
+                if (
+                    currentPage <
+                    totalPages
+                ) {
+
+                    currentPage++;
+
+                    renderResults();
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    });
+
+                }
+
+            }
+        );
+
+
+        // --------------------------------------------------
+        // FAVORITES
+        // --------------------------------------------------
+
+        function toggleFavorite(
+            id
+        ) {
+
+            if (
+                favoriteIds.includes(id)
+            ) {
+
+                favoriteIds =
+                    favoriteIds.filter(
+                        favoriteId =>
+                            favoriteId !== id
+                    );
+
+            } else {
+
+                favoriteIds.push(id);
+
+            }
+
+
+            localStorage.setItem(
+                "movieFavoriteIds",
+                JSON.stringify(
+                    favoriteIds
+                )
+            );
+
+
+            renderResults();
+
+        }
+
+
+        // --------------------------------------------------
+        // OPEN DETAILS
+        // --------------------------------------------------
+
+        async function openDetails(
+            id
+        ) {
+
+            const item =
+                allResults.find(
+                    result =>
+                        result.show.id === id
+                );
+
+
+            if (!item) {
+                return;
+            }
+
+
+            const show =
+                item.show;
+
+
+            const image =
+                show.image &&
+                (
+                    show.image.original ||
+                    show.image.medium
+                );
+
+
+            const genres =
+                show.genres || [];
+
+
+            const rating =
+                show.rating &&
+                show.rating.average
+                    ? show.rating.average
+                    : "N/A";
+
+
+            const summary =
+                stripHTML(
+                    show.summary
+                );
+
+
+            modalBody.innerHTML = `
+
+                ${
+                    image
+                    ? `
+                        <img
+                            class="modal-poster"
+                            src="${escapeHTML(image)}"
+                            alt="${escapeHTML(show.name)} poster"
+                        >
+                    `
+                    : `
+                        <div class="no-poster">
+                            🎬
+                        </div>
+                    `
+                }
+
+
+                <div>
+
+                    <h2 class="modal-title">
+
+                        ${escapeHTML(
+                            show.name
+                        )}
+
+                    </h2>
+
+
+                    <p class="modal-info">
+
+                        ⭐ Rating:
+                        ${rating}
+                        <br>
+
+                        📅 Premiered:
+                        ${
+                            show.premiered ||
+                            "Unknown"
+                        }
+                        <br>
+
+                        🎭 Status:
+                        ${
+                            show.status ||
+                            "Unknown"
+                        }
+                        <br>
+
+                        ⏱️ Runtime:
+                        ${
+                            show.runtime
+                            ? `${show.runtime} minutes`
+                            : "Unknown"
+                        }
+
+                    </p>
+
+
+                    <div class="modal-tags">
+
+                        ${
+                            genres
+                                .map(
+                                    genre =>
+                                        `
+                                            <span class="modal-tag">
+                                                ${escapeHTML(
+                                                    genre
+                                                )}
+                                            </span>
+                                        `
+                                )
+                                .join("")
+                        }
+
+                    </div>
+
+
+                    <p class="modal-summary">
+
+                        ${escapeHTML(
+                            summary
+                        )}
+
+                    </p>
+
+                </div>
+
+            `;
+
+
+            detailsModal.classList.add(
+                "show"
+            );
+
+
+            document.body.style.overflow =
+                "hidden";
+
+        }
+
+
+        // --------------------------------------------------
+        // CLOSE MODAL
+        // --------------------------------------------------
+
+        function closeModal() {
+
+            detailsModal.classList.remove(
+                "show"
+            );
+
+            document.body.style.overflow =
+                "";
+
+        }
+
+
+        modalClose.addEventListener(
+            "click",
+            closeModal
+        );
+
+
+        detailsModal.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target ===
+                    detailsModal
+                ) {
+
+                    closeModal();
+
+                }
+
+            }
+        );
+
+
+        document.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key === "Escape"
+                ) {
+
+                    closeModal();
+
+                }
+
+            }
+        );
+
+
+        // --------------------------------------------------
+        // EVENT DELEGATION
+        // --------------------------------------------------
+
+        moviesGrid.addEventListener(
+            "click",
+            event => {
+
+                const favoriteButton =
+                    event.target.closest(
+                        "[data-favorite-id]"
+                    );
+
+
+                if (favoriteButton) {
+
+                    const id =
+                        Number(
+                            favoriteButton
+                                .dataset
+                                .favoriteId
+                        );
+
+
+                    toggleFavorite(id);
+
+                    return;
+
+                }
+
+
+                const detailsButton =
+                    event.target.closest(
+                        "[data-show-id]"
+                    );
+
+
+                if (detailsButton) {
+
+                    const id =
+                        Number(
+                            detailsButton
+                                .dataset
+                                .showId
+                        );
+
+
+                    openDetails(id);
+
+                }
+
+            }
+        );
+
+
+        // --------------------------------------------------
+        // RECENT SEARCHES
+        // --------------------------------------------------
+
+        function saveRecentQuery(
+            query
+        ) {
+
+            recentQueries =
+                recentQueries.filter(
+                    saved =>
+                        saved.toLowerCase()
+                        !== query.toLowerCase()
+                );
+
+
+            recentQueries.unshift(
+                query
+            );
+
+
+            recentQueries =
+                recentQueries.slice(
+                    0,
+                    5
+                );
+
+
+            localStorage.setItem(
+                "movieRecentQueries",
+                JSON.stringify(
+                    recentQueries
+                )
+            );
+
+
+            renderRecentSearches();
+
+        }
+
+
+        function renderRecentSearches() {
+
+            recentSearches.innerHTML =
+                "";
+
+
+            if (
+                recentQueries.length === 0
+            ) {
+
+                return;
+
+            }
+
+
+            const label =
+                document.createElement(
+                    "span"
+                );
+
+
+            label.className =
+                "recent-label";
+
+
+            label.textContent =
+                "Recent:";
+
+
+            recentSearches.appendChild(
+                label
+            );
+
+
+            recentQueries.forEach(
+                query => {
+
+                    const button =
+                        document.createElement(
+                            "button"
+                        );
+
+
+                    button.type =
+                        "button";
+
+
+                    button.className =
+                        "recent-button";
+
+
+                    button.textContent =
+                        query;
+
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            searchInput.value =
+                                query;
+
+                            searchMovies(
+                                query
+                            );
+
+                        }
+                    );
+
+
+                    recentSearches.appendChild(
+                        button
+                    );
+
+                }
+            );
+
+        }
+
+
+        // --------------------------------------------------
+        // SEARCH FORM
+        // --------------------------------------------------
+
+        searchForm.addEventListener(
+            "submit",
+            event => {
+
+                event.preventDefault();
+
+
+                searchMovies(
+                    searchInput.value
+                );
+
+            }
+        );
+
+
+        // --------------------------------------------------
+        // THEME
+        // --------------------------------------------------
+
+        themeButton.addEventListener(
+            "click",
+            () => {
+
+                document.body.classList.toggle(
+                    "light"
+                );
+
+
+                const lightMode =
+                    document.body.classList.contains(
+                        "light"
+                    );
+
+
+                themeButton.textContent =
+                    lightMode
+                        ? "☀️ Theme"
+                        : "🌙 Theme";
+
+
+                localStorage.setItem(
+                    "movieTheme",
+                    lightMode
+                        ? "light"
+                        : "dark"
+                );
+
+            }
+        );
+
+
+        // --------------------------------------------------
+        // LOAD THEME
+        // --------------------------------------------------
+
+        const savedTheme =
+            localStorage.getItem(
+                "movieTheme"
+            );
+
+
+        if (
+            savedTheme === "light"
+        ) {
+
+            document.body.classList.add(
+                "light"
+            );
+
+
+            themeButton.textContent =
+                "☀️ Theme";
+
+        }
+
+
+        // --------------------------------------------------
+        // INITIALIZE
+        // --------------------------------------------------
+
+        renderRecentSearches();
+
+    </script>
+
+</body>
+</html>
